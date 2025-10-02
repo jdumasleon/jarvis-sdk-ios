@@ -6,56 +6,40 @@
 //
 
 import SwiftUI
-import SwiftData
+import Jarvis
 
 struct ContentView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
+    @StateObject private var homeViewModel = HomeViewModel()
+    @StateObject private var inspectorViewModel = InspectorViewModel()
+    @StateObject private var preferencesViewModel = PreferencesViewModel()
+    @State private var selectedTab = 0
 
     var body: some View {
-        NavigationSplitView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
-                    } label: {
-                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
-                    }
+        TabView(selection: $selectedTab) {
+            HomeScreen(viewModel: homeViewModel)
+                .tabItem {
+                    Image(systemName: "house")
+                    Text("Home")
                 }
-                .onDelete(perform: deleteItems)
-            }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
-                    }
-                }
-            }
-        } detail: {
-            Text("Select an item")
-        }
-    }
+                .tag(0)
 
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
-        }
-    }
+            InspectorScreen(viewModel: inspectorViewModel)
+                .tabItem {
+                    Image(systemName: "network")
+                    Text("Inspector")
+                }
+                .tag(1)
 
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(items[index])
-            }
+            PreferencesScreen(viewModel: preferencesViewModel)
+                .tabItem {
+                    Image(systemName: "gearshape")
+                    Text("Preferences")
+                }
+                .tag(2)
         }
     }
 }
 
 #Preview {
     ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
 }
