@@ -42,7 +42,12 @@ class HTTPClient: HTTPClientProtocol {
             let httpResponseModel = HTTPResponse(
                 data: data,
                 statusCode: httpResponse.statusCode,
-                headers: httpResponse.allHeaderFields.compactMapValues { "\($0)" },
+                headers: httpResponse.allHeaderFields.compactMap { (key, value) -> (String, String)? in
+                    guard let key = key as? String else { return nil }
+                    return (key, "\(value)")
+                }.reduce(into: [String: String]()) { dict, pair in
+                    dict[pair.0] = pair.1
+                },
                 url: httpResponse.url?.absoluteString
             )
 

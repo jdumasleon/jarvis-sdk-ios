@@ -6,7 +6,8 @@
 //
 
 import SwiftUI
-import Jarvis
+// TODO: Enable once Jarvis SDK module is available
+// import Jarvis
 
 struct HomeScreen: View {
     @ObservedObject var viewModel: HomeViewModel
@@ -105,7 +106,7 @@ struct HomeScreen: View {
                 .fontWeight(.bold)
 
             Text("Network & Preferences Inspector")
-                .font(.subtitle)
+                .font(.subheadline)
                 .foregroundColor(.secondary)
         }
     }

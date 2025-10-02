@@ -7,7 +7,7 @@
 
 // MARK: - Environment Configuration
 
-enum Environment {
+enum AppEnvironment {
     case development
     case staging
     case production

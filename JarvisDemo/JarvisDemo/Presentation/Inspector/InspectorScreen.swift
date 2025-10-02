@@ -121,7 +121,7 @@ struct InspectorScreen: View {
                         viewModel.onEvent(.MethodFilterChanged(nil))
                     }
 
-                    ForEach(["GET", "POST", "PUT", "DELETE", "PATCH"], id: \\.self) { method in
+                    ForEach(["GET", "POST", "PUT", "DELETE", "PATCH"], id: \.self) { method in
                         filterChip(title: method, isSelected: uiData.selectedMethod == method) {
                             viewModel.onEvent(.MethodFilterChanged(method))
                         }
@@ -241,7 +241,7 @@ struct InspectorScreen: View {
                             .font(.headline)
 
                         LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 3), spacing: 8) {
-                            ForEach(["GET", "POST", "PUT", "DELETE", "PATCH"], id: \\.self) { method in
+                            ForEach(["GET", "POST", "PUT", "DELETE", "PATCH"], id: \.self) { method in
                                 filterChip(title: method, isSelected: uiData.selectedMethod == method) {
                                     let newMethod = uiData.selectedMethod == method ? nil : method
                                     viewModel.onEvent(.MethodFilterChanged(newMethod))

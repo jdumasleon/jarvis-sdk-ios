@@ -47,7 +47,7 @@ class InspectorViewModel: ObservableObject {
 
         Task {
             do {
-                let apiCalls = await performApiCallsUseCase.performInitialApiCalls()
+                let apiCalls = await performApiCallsUseCase.performInitialApiCalls(numberOfCalls: 15)
                 let uiData = createUiData(
                     apiCalls: apiCalls,
                     searchQuery: "",
@@ -141,7 +141,7 @@ class InspectorViewModel: ObservableObject {
 
         Task {
             do {
-                let newApiCalls = await performApiCallsUseCase.performRefreshApiCalls()
+                let newApiCalls = await performApiCallsUseCase.performRefreshApiCalls(numberOfCalls: 5)
                 let allApiCalls = newApiCalls + currentData.apiCalls
 
                 let updatedData = createUiData(

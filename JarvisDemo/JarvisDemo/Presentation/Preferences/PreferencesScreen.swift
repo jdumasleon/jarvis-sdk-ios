@@ -377,7 +377,7 @@ struct PreferenceRowView: View {
 
 struct AddPreferenceView: View {
     let viewModel: PreferencesViewModel
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.dismiss) var dismiss
 
     @State private var key = ""
     @State private var value = ""
@@ -409,7 +409,7 @@ struct AddPreferenceView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Cancel") {
-                        presentationMode.wrappedValue.dismiss()
+                        dismiss()
                     }
                 }
 
@@ -417,7 +417,7 @@ struct AddPreferenceView: View {
                     Button("Add") {
                         // In a real app, this would add to the actual storage
                         // For demo purposes, we just dismiss
-                        presentationMode.wrappedValue.dismiss()
+                        dismiss()
                     }
                     .disabled(key.isEmpty || value.isEmpty)
                 }

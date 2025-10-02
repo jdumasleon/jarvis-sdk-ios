@@ -7,7 +7,8 @@
 
 import SwiftUI
 import Combine
-import Jarvis
+// TODO: Enable once Jarvis SDK module is available
+// import Jarvis
 
 enum ResourceState<T> {
     case idle
@@ -53,12 +54,12 @@ class HomeViewModel: ObservableObject {
     }
 
     private func setupObservers() {
-        // Observe Jarvis SDK state changes
-        JarvisSDK.shared.$isActive
-            .sink { [weak self] _ in
-                self?.updateUiState()
-            }
-            .store(in: &cancellables)
+        // TODO: Observe Jarvis SDK state changes once module is available
+        // JarvisSDK.shared.$isActive
+        //     .sink { [weak self] _ in
+        //         self?.updateUiState()
+        //     }
+        //     .store(in: &cancellables)
     }
 
     private func loadInitialData() {
@@ -176,7 +177,9 @@ class HomeViewModel: ObservableObject {
     }
 
     private func showJarvisOverlay() {
-        JarvisSDK.shared.showOverlay()
+        // TODO: Show Jarvis overlay once module is available
+        // JarvisSDK.shared.showOverlay()
+        print("Show Jarvis overlay (stub)")
     }
 }
 

@@ -6,7 +6,8 @@
 //
 
 import Foundation
-import Jarvis
+// TODO: Enable once Jarvis SDK module is available
+// import Jarvis
 
 protocol ManageJarvisModeUseCaseProtocol {
     func activateJarvis()
@@ -19,22 +20,44 @@ protocol ManageJarvisModeUseCaseProtocol {
 class ManageJarvisModeUseCase: ManageJarvisModeUseCaseProtocol {
 
     func activateJarvis() {
-        JarvisSDK.shared.activate()
+        // TODO: Implement once JarvisSDK is available
+        // JarvisSDK.shared.activate()
+        print("Jarvis activated (stub)")
     }
 
     func deactivateJarvis() {
-        JarvisSDK.shared.deactivate()
+        // TODO: Implement once JarvisSDK is available
+        // JarvisSDK.shared.deactivate()
+        print("Jarvis deactivated (stub)")
     }
 
     func toggleJarvis() -> Bool {
-        return JarvisSDK.shared.toggle()
+        // TODO: Implement once JarvisSDK is available
+        // return JarvisSDK.shared.toggle()
+        print("Jarvis toggled (stub)")
+        return true
     }
 
     func isJarvisActive() -> Bool {
-        return JarvisSDK.shared.isActive
+        // TODO: Implement once JarvisSDK is available
+        // return JarvisSDK.shared.isActive
+        return false
     }
 
     func getJarvisConfiguration() -> JarvisConfig {
-        return JarvisSDK.shared.getConfiguration()
+        // TODO: Implement once JarvisSDK is available
+        // return JarvisSDK.shared.getConfiguration()
+        return JarvisConfig(
+            enableDebugLogging: true,
+            enableShakeDetection: true,
+            networkInspection: NetworkInspectionConfig(
+                enableNetworkLogging: true,
+                enableRequestLogging: true,
+                enableResponseLogging: true
+            ),
+            preferences: PreferencesConfig(
+                enableUserDefaultsMonitoring: true
+            )
+        )
     }
 }

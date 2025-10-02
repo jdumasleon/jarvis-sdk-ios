@@ -6,7 +6,8 @@
 //
 
 import SwiftUI
-import Jarvis
+// TODO: Enable once Jarvis SDK module is available
+// import Jarvis
 
 struct ContentView: View {
     @StateObject private var homeViewModel = HomeViewModel()

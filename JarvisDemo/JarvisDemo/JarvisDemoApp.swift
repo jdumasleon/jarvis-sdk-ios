@@ -6,27 +6,16 @@
 //
 
 import SwiftUI
-import SwiftData
-import Jarvis
+// TODO: Enable Jarvis SDK integration once package dependencies are properly resolved in Xcode
+// import Jarvis
 
 @main
 struct JarvisDemoApp: App {
-    var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Item.self,
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-
-        do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
-        }
-    }()
-
     var body: some Scene {
         WindowGroup {
             ContentView()
+            // TODO: Uncomment once Jarvis SDK module is available
+            /*
                 .jarvisSDK(
                     config: JarvisConfig.Builder()
                         .enableDebugLogging(true)
@@ -41,7 +30,7 @@ struct JarvisDemoApp: App {
                         }
                         .build()
                 )
+            */
         }
-        .modelContainer(sharedModelContainer)
     }
 }

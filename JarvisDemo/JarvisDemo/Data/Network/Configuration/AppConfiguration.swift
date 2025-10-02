@@ -10,7 +10,7 @@
 class AppConfiguration {
     static let shared = AppConfiguration()
 
-    let currentEnvironment: Environment
+    let currentEnvironment: AppEnvironment
     let networkConfiguration: NetworkConfiguration
 
     private init() {
