@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import Jarvis
 
 @main
 struct JarvisDemoApp: App {
@@ -26,6 +27,20 @@ struct JarvisDemoApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .jarvisSDK(
+                    config: JarvisConfig.Builder()
+                        .enableDebugLogging(true)
+                        .enableShakeDetection(true)
+                        .networkInspection { config in
+                            config.enableNetworkLogging(true)
+                                .enableRequestLogging(true)
+                                .enableResponseLogging(true)
+                        }
+                        .preferences { config in
+                            config.enableUserDefaultsMonitoring(true)
+                        }
+                        .build()
+                )
         }
         .modelContainer(sharedModelContainer)
     }
