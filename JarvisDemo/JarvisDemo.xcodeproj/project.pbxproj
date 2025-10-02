@@ -7,7 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2A82D19E2E25CE2100C65589 /* JarvisSdk in Frameworks */ = {isa = PBXBuildFile; productRef = 2A82D19D2E25CE2100C65589 /* JarvisSdk */; };
+		2A82D19E2E25CE2100C65589 /* Jarvis in Frameworks */ = {isa = PBXBuildFile; productRef = 2A82D19D2E25CE2100C65589 /* Jarvis */; };
+		2A91B1952E8AB6CF00EB5F09 /* JarvisPreferences in Frameworks */ = {isa = PBXBuildFile; productRef = 2A91B1942E8AB6CF00EB5F09 /* JarvisPreferences */; };
+		2A91B1982E8AB6DE00EB5F09 /* JarvisInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 2A91B1972E8AB6DE00EB5F09 /* JarvisInspector */; };
+		2A91B19B2E8AB6F300EB5F09 /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = 2A91B19A2E8AB6F300EB5F09 /* Common */; };
+		2A91B19D2E8AB6F300EB5F09 /* JarvisCore in Frameworks */ = {isa = PBXBuildFile; productRef = 2A91B19C2E8AB6F300EB5F09 /* JarvisCore */; };
+		2A91B19F2E8AB6F300EB5F09 /* Data in Frameworks */ = {isa = PBXBuildFile; productRef = 2A91B19E2E8AB6F300EB5F09 /* Data */; };
+		2A91B1A12E8AB6F300EB5F09 /* DesignSystem in Frameworks */ = {isa = PBXBuildFile; productRef = 2A91B1A02E8AB6F300EB5F09 /* DesignSystem */; };
+		2A91B1A32E8AB6F300EB5F09 /* Domain in Frameworks */ = {isa = PBXBuildFile; productRef = 2A91B1A22E8AB6F300EB5F09 /* Domain */; };
+		2A91B1A62E8AB70500EB5F09 /* Jarvis in Frameworks */ = {isa = PBXBuildFile; productRef = 2A91B1A52E8AB70500EB5F09 /* Jarvis */; };
+		2A91B1CC2E8B4B1900EB5F09 /* Jarvis in Frameworks */ = {isa = PBXBuildFile; productRef = 2A91B1CB2E8B4B1900EB5F09 /* Jarvis */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,7 +65,16 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2A82D19E2E25CE2100C65589 /* JarvisSdk in Frameworks */,
+				2A91B19D2E8AB6F300EB5F09 /* JarvisCore in Frameworks */,
+				2A91B19F2E8AB6F300EB5F09 /* Data in Frameworks */,
+				2A91B19B2E8AB6F300EB5F09 /* Common in Frameworks */,
+				2A91B1A32E8AB6F300EB5F09 /* Domain in Frameworks */,
+				2A91B1982E8AB6DE00EB5F09 /* JarvisInspector in Frameworks */,
+				2A91B1CC2E8B4B1900EB5F09 /* Jarvis in Frameworks */,
+				2A91B1A62E8AB70500EB5F09 /* Jarvis in Frameworks */,
+				2A91B1952E8AB6CF00EB5F09 /* JarvisPreferences in Frameworks */,
+				2A82D19E2E25CE2100C65589 /* Jarvis in Frameworks */,
+				2A91B1A12E8AB6F300EB5F09 /* DesignSystem in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -117,7 +135,16 @@
 			);
 			name = JarvisDemo;
 			packageProductDependencies = (
-				2A82D19D2E25CE2100C65589 /* JarvisSdk */,
+				2A82D19D2E25CE2100C65589 /* Jarvis */,
+				2A91B1942E8AB6CF00EB5F09 /* JarvisPreferences */,
+				2A91B1972E8AB6DE00EB5F09 /* JarvisInspector */,
+				2A91B19A2E8AB6F300EB5F09 /* Common */,
+				2A91B19C2E8AB6F300EB5F09 /* JarvisCore */,
+				2A91B19E2E8AB6F300EB5F09 /* Data */,
+				2A91B1A02E8AB6F300EB5F09 /* DesignSystem */,
+				2A91B1A22E8AB6F300EB5F09 /* Domain */,
+				2A91B1A52E8AB70500EB5F09 /* Jarvis */,
+				2A91B1CB2E8B4B1900EB5F09 /* Jarvis */,
 			);
 			productName = JarvisDemo;
 			productReference = 2A82D16D2E25CDFC00C65589 /* JarvisDemo.app */;
@@ -202,7 +229,7 @@
 			mainGroup = 2A82D1642E25CDFC00C65589;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				2A82D19F2E25CEDB00C65589 /* XCLocalSwiftPackageReference "../Jarvis" */,
+				2A91B1CA2E8B4B1900EB5F09 /* XCLocalSwiftPackageReference "../Jarvis" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 2A82D16E2E25CDFC00C65589 /* Products */;
@@ -569,16 +596,52 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		2A82D19F2E25CEDB00C65589 /* XCLocalSwiftPackageReference "../Jarvis" */ = {
+		2A91B1CA2E8B4B1900EB5F09 /* XCLocalSwiftPackageReference "../Jarvis" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../Jarvis;
 		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		2A82D19D2E25CE2100C65589 /* JarvisSdk */ = {
+		2A82D19D2E25CE2100C65589 /* Jarvis */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = JarvisSdk;
+			productName = Jarvis;
+		};
+		2A91B1942E8AB6CF00EB5F09 /* JarvisPreferences */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisPreferences;
+		};
+		2A91B1972E8AB6DE00EB5F09 /* JarvisInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisInspector;
+		};
+		2A91B19A2E8AB6F300EB5F09 /* Common */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Common;
+		};
+		2A91B19C2E8AB6F300EB5F09 /* JarvisCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisCore;
+		};
+		2A91B19E2E8AB6F300EB5F09 /* Data */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Data;
+		};
+		2A91B1A02E8AB6F300EB5F09 /* DesignSystem */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DesignSystem;
+		};
+		2A91B1A22E8AB6F300EB5F09 /* Domain */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Domain;
+		};
+		2A91B1A52E8AB70500EB5F09 /* Jarvis */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Jarvis;
+		};
+		2A91B1CB2E8B4B1900EB5F09 /* Jarvis */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Jarvis;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

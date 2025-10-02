@@ -14,7 +14,7 @@ import SwiftUI
 ///
 /// Usage:
 /// ```swift
-/// import JarvisDesignSystem
+/// import DesignSystem
 ///
 /// // Use foundation elements
 /// Text("Hello")

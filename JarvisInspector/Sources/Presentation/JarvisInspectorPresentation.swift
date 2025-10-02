@@ -1,8 +1,9 @@
 import SwiftUI
-import JarvisCommon
-import JarvisDesignSystem
-import JarvisNavigation
-import JarvisPresentation
+import Common
+import DesignSystem
+import Navigation
+import Presentation
+import Domain
 import JarvisInspectorDomain
 import JarvisInspectorData
 
@@ -33,7 +34,7 @@ public class InspectorViewModel: BaseViewModel {
 
         do {
             let data = try await repository.fetchAll()
-            let viewModels = data.map { NetworkTransactionViewModel(data: $0) }
+            let viewModels = data.map { NetworkTransactionViewModel(transaction: $0) }
 
             if viewModels.isEmpty {
                 transactions = .empty
@@ -85,14 +86,14 @@ public class NetworkTransactionViewModel: ObservableObject, Identifiable {
     public let endTime: Date?
     public let status: String
 
-    public init(data: NetworkTransactionData) {
-        self.id = data.id
-        self.method = data.method
-        self.url = data.url
-        self.statusCode = data.statusCode
-        self.startTime = data.startTime
-        self.endTime = data.endTime
-        self.status = data.status
+    public init(transaction: NetworkTransaction) {
+        self.id = transaction.id
+        self.method = transaction.request.method.rawValue
+        self.url = transaction.request.url
+        self.statusCode = transaction.response?.statusCode
+        self.startTime = transaction.startTime
+        self.endTime = transaction.endTime
+        self.status = transaction.status.rawValue
     }
 
     public var displayTitle: String {
@@ -183,7 +184,23 @@ public struct InspectorListView: View {
 
                 case .loaded(let transactions):
                     List(transactions) { transaction in
-                        NetworkTransactionRowView(transaction: transaction)
+                        VStack(alignment: .leading, spacing: DSSpacing.xs) {
+                            HStack {
+                                Text(transaction.method)
+                                    .setTextStyle(.labelSmall)
+                                    .foregroundColor(.blue)
+                                Spacer()
+                                if let statusCode = transaction.statusCode {
+                                    Text("\\(statusCode)")
+                                        .setTextStyle(.labelSmall)
+                                        .foregroundColor(transaction.isSuccess ? .green : .red)
+                                }
+                            }
+                            Text(transaction.url)
+                                .setTextStyle(.bodySmall)
+                                .lineLimit(2)
+                        }
+                        .dsPadding(DSSpacing.s)
                     }
                     .listStyle(.plain)
 
@@ -240,36 +257,6 @@ public struct InspectorListView: View {
     }
 }
 
-// MARK: - Network Transaction Row View
-
-private struct NetworkTransactionRowView: View {
-    let transaction: NetworkTransactionViewModel
-
-    var body: some View {
-        DSListRow(.init(
-            title: transaction.displayTitle,
-            subtitle: transaction.displaySubtitle,
-            leadingIcon: transaction.statusIcon,
-            trailingView: AnyView(
-                VStack(alignment: .trailing, spacing: DSSpacing.xxs) {
-                    if let statusCode = transaction.statusCode {
-                        DSBadge(
-                            text: "\(statusCode)",
-                            style: transaction.isSuccess ? .success : .error
-                        )
-                    }
-
-                    Text(transaction.duration)
-                        .setTextStyle(.labelSmall)
-                        .foregroundColor(DSColor.Text.secondary)
-                }
-            ),
-            action: {
-                // Navigate to detail view
-            }
-        ))
-    }
-}
 
 // MARK: - Preview
 

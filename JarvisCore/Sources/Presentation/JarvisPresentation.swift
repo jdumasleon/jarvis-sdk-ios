@@ -1,5 +1,5 @@
 import SwiftUI
-import JarvisDesignSystem
+import DesignSystem
 
 /// Presentation layer for the Jarvis SDK
 /// Contains ViewModels, ViewStates, and presentation logic

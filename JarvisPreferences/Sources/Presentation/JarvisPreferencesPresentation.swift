@@ -1,8 +1,8 @@
 import SwiftUI
-import JarvisCommon
-import JarvisDesignSystem
-import JarvisNavigation
-import JarvisPresentation
+import Common
+import DesignSystem
+import Navigation
+import Presentation
 import JarvisPreferencesDomain
 import JarvisPreferencesData
 
@@ -19,7 +19,7 @@ public class PreferencesViewModel: BaseViewModel {
     @Published public var preferences: ListViewState<PreferenceChangeViewModel> = .idle
     @Published public var selectedFilter: PreferenceFilter = .all
 
-    private let repository = PreferencesRepository()
+    private let repository = PreferenceChangeRepository()
 
     public override init() {
         super.init()
@@ -30,7 +30,7 @@ public class PreferencesViewModel: BaseViewModel {
 
         do {
             let data = try await repository.fetchAll()
-            let viewModels = data.map { PreferenceChangeViewModel(data: $0) }
+            let viewModels = data.map { PreferenceChangeViewModel(change: $0) }
 
             if viewModels.isEmpty {
                 preferences = .empty
@@ -59,13 +59,13 @@ public class PreferenceChangeViewModel: ObservableObject, Identifiable {
     public let timestamp: Date
     public let source: String
 
-    public init(data: PreferenceChangeData) {
-        self.id = data.id
-        self.key = data.key
-        self.oldValue = data.oldValue
-        self.newValue = data.newValue
-        self.timestamp = data.timestamp
-        self.source = data.source
+    public init(change: PreferenceChange) {
+        self.id = change.id
+        self.key = change.key
+        self.oldValue = change.oldValue != nil ? "\\(change.oldValue!)" : nil
+        self.newValue = change.newValue != nil ? "\\(change.newValue!)" : nil
+        self.timestamp = change.timestamp
+        self.source = change.source.rawValue
     }
 
     public var displayTitle: String {
