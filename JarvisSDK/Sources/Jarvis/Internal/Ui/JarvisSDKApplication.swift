@@ -8,6 +8,7 @@
 
 import SwiftUI
 import DesignSystem
+import JarvisResources
 
 /// Main Jarvis SDK Application with scaffold structure
 /// Provides top navigation bar, bottom tab navigation, and content area
@@ -43,7 +44,6 @@ public struct JarvisSDKApplication: View {
                     SettingsTabView()
                         .tag(JarvisTab.settings)
                 }
-                .tabViewStyle(.page(indexDisplayMode: .never))
 
                 // Bottom Tab Bar
                 JarvisBottomTabBar(
@@ -53,7 +53,7 @@ public struct JarvisSDKApplication: View {
             .background(DSColor.Extra.background0)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .principal) {
+                ToolbarItem(placement: .navigationBarLeading) {
                     JarvisTopBarLogo()
                 }
 
@@ -81,19 +81,7 @@ public struct JarvisSDKApplication: View {
 private struct HomeTabView: View {
     var body: some View {
         VStack {
-            DSText(
-                "Home Dashboard",
-                style: .headlineLarge
-            )
-            .padding()
-
-            DSText(
-                "System information and quick actions",
-                style: .bodyMedium,
-                color: DSColor.Neutral.neutral80
-            )
-
-            Spacer()
+            HomeScreen()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(DSColor.Extra.background0)
@@ -150,19 +138,7 @@ private struct PreferencesTabView: View {
 private struct SettingsTabView: View {
     var body: some View {
         VStack {
-            DSText(
-                "Settings",
-                style: .headlineLarge
-            )
-            .padding()
-
-            DSText(
-                "Configure Jarvis SDK options",
-                style: .bodyMedium,
-                color: DSColor.Neutral.neutral80
-            )
-
-            Spacer()
+            SettingsScreen()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(DSColor.Extra.background0)
@@ -175,11 +151,11 @@ private struct SettingsTabView: View {
 private struct JarvisTopBarLogo: View {
     var body: some View {
         HStack(spacing: DSSpacing.xs) {
-            Image("jarvis-shape-logo", bundle: JarvisResourcesBundle.bundle)
+            Image("jarvis-logo", bundle: JarvisResourcesBundle.bundle)
                 .resizable()
                 .renderingMode(.template)
                 .aspectRatio(contentMode: .fit)
-                .frame(width: DSDimensions.l, height: DSDimensions.l)
+                .frame(width: DSDimensions.xxl, height: DSDimensions.xxl)
                 .foregroundStyle(
                     LinearGradient(
                         colors: [DSColor.Extra.jarvisPink, DSColor.Extra.jarvisBlue],
@@ -187,17 +163,6 @@ private struct JarvisTopBarLogo: View {
                         endPoint: .trailing
                     )
                 )
-
-            DSText(
-                "JARVIS",
-                style: .titleMedium,
-                gradient: LinearGradient(
-                    colors: [DSColor.Extra.jarvisPink, DSColor.Extra.jarvisBlue],
-                    startPoint: .leading,
-                    endPoint: .trailing
-                ),
-                fontWeight: .semibold
-            )
         }
     }
 }
@@ -244,7 +209,7 @@ private struct TabBarItem: View {
                 DSText(
                     tab.title,
                     style: .labelSmall,
-                    color: isSelected ? DSColor.Primary.primary100 : DSColor.Neutral.neutral60
+                    gradient: gradient
                 )
             }
             .frame(maxWidth: .infinity)
@@ -295,7 +260,7 @@ enum JarvisTab: String, CaseIterable {
         case .preferences:
             return isSelected ? DSIcons.Jarvis.preferencesFilled : DSIcons.Jarvis.preferences
         case .settings:
-            return isSelected ? DSIcons.Navigation.settingsFilled : DSIcons.Navigation.settings
+            return isSelected ? DSIcons.System.settingsFilled : DSIcons.System.settings
         }
     }
 }

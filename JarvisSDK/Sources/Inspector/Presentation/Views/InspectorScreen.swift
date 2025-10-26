@@ -4,7 +4,7 @@ import Domain
 import JarvisInspectorDomain
 
 /// Main network inspector view with search, filters, and pagination
-public struct NetworkInspectorView: View {
+public struct InspectorScreen: View {
     @StateObject private var viewModel: NetworkInspectorViewModel
     @State private var showClearConfirmation = false
 
