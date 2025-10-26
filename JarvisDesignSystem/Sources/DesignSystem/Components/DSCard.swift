@@ -63,7 +63,7 @@ public struct DSCard<Content: View>: View {
     private var backgroundColor: Color {
         switch style {
         case .elevated, .outlined:
-            return DSColor.Extra.white
+            return DSColor.Extra.surface
         case .filled:
             return DSColor.Neutral.neutral0
         case .transparent:

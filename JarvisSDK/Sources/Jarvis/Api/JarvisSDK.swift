@@ -155,10 +155,14 @@ public final class JarvisSDK: ObservableObject {
 
     // MARK: - SwiftUI Integration
 
-    /// Main Jarvis overlay view
+    /// Main Jarvis SDK application view with scaffold structure
     public func mainView() -> some View {
-        JarvisMainView()
-            .environmentObject(self)
+        JarvisSDKApplication(onDismiss: {
+            Task { @MainActor in
+                self.deactivate()
+            }
+        })
+        .environmentObject(self)
     }
 
     // MARK: - Private Methods
