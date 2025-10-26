@@ -6,31 +6,38 @@
 //
 
 import SwiftUI
-// TODO: Enable Jarvis SDK integration once package dependencies are properly resolved in Xcode
-// import Jarvis
+import Jarvis
+import JarvisPreferencesDomain
 
 @main
 struct JarvisDemoApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-            // TODO: Uncomment once Jarvis SDK module is available
-            /*
-                .jarvisSDK(
-                    config: JarvisConfig.Builder()
-                        .enableDebugLogging(true)
-                        .enableShakeDetection(true)
-                        .networkInspection { config in
-                            config.enableNetworkLogging(true)
-                                .enableRequestLogging(true)
-                                .enableResponseLogging(true)
-                        }
-                        .preferences { config in
-                            config.enableUserDefaultsMonitoring(true)
-                        }
-                        .build()
-                )
-            */
+                .jarvisSDK(config: createJarvisConfig())
         }
+    }
+
+    // MARK: - Jarvis SDK Configuration
+
+    /// Configure Jarvis SDK
+    /// The SDK will automatically scan ALL UserDefaults and Keychain items from the host app
+    /// No registration needed - iOS can read .plist files and query Keychain directly!
+    private func createJarvisConfig() -> JarvisConfig {
+        return JarvisConfig(
+            preferences: PreferencesConfig(
+                configuration: PreferencesConfiguration(
+                    autoDiscoverUserDefaults: true, // Scan all .plist files
+                    autoDiscoverKeychain: true, // Query all Keychain items
+                    enablePreferenceEditing: true, // Allow editing from SDK UI
+                    showSystemPreferences: false // Hide Apple*, NS* keys
+                )
+            ),
+            networkInspection: NetworkInspectionConfig(
+                enableNetworkLogging: true
+            ),
+            enableDebugLogging: true,
+            enableShakeDetection: true
+        )
     }
 }

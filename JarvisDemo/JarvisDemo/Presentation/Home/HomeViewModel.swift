@@ -7,8 +7,7 @@
 
 import SwiftUI
 import Combine
-// TODO: Enable once Jarvis SDK module is available
-// import Jarvis
+import Jarvis
 
 enum ResourceState<T> {
     case idle
@@ -22,12 +21,16 @@ struct HomeUiData {
     let jarvisConfiguration: JarvisConfig
     let recentApiCalls: [ApiCallResult]
     let isRefreshing: Bool
+    let lastRefreshDate: Date?
+    let appVersion: String
 
     static let empty = HomeUiData(
         isJarvisActive: false,
         jarvisConfiguration: JarvisConfig(),
         recentApiCalls: [],
-        isRefreshing: false
+        isRefreshing: false,
+        lastRefreshDate: nil,
+        appVersion: ""
     )
 }
 
@@ -49,17 +52,8 @@ class HomeViewModel: ObservableObject {
         self.refreshDataUseCase = refreshDataUseCase
         self.performApiCallsUseCase = performApiCallsUseCase
 
-        setupObservers()
         loadInitialData()
-    }
-
-    private func setupObservers() {
-        // TODO: Observe Jarvis SDK state changes once module is available
-        // JarvisSDK.shared.$isActive
-        //     .sink { [weak self] _ in
-        //         self?.updateUiState()
-        //     }
-        //     .store(in: &cancellables)
+        observeJarvisState()
     }
 
     private func loadInitialData() {
@@ -73,22 +67,43 @@ class HomeViewModel: ObservableObject {
     }
 
     private func getCurrentUiData() -> HomeUiData {
+        let appVersion = getAppVersion()
+
         switch uiState {
         case .success(let data):
             return HomeUiData(
                 isJarvisActive: manageJarvisModeUseCase.isJarvisActive(),
                 jarvisConfiguration: manageJarvisModeUseCase.getJarvisConfiguration(),
                 recentApiCalls: data.recentApiCalls,
-                isRefreshing: data.isRefreshing
+                isRefreshing: data.isRefreshing,
+                lastRefreshDate: data.lastRefreshDate,
+                appVersion: appVersion
             )
         default:
             return HomeUiData(
                 isJarvisActive: manageJarvisModeUseCase.isJarvisActive(),
                 jarvisConfiguration: manageJarvisModeUseCase.getJarvisConfiguration(),
                 recentApiCalls: [],
-                isRefreshing: false
+                isRefreshing: false,
+                lastRefreshDate: nil,
+                appVersion: appVersion
             )
         }
+    }
+
+    private func getAppVersion() -> String {
+        let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
+        let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "1"
+        return "v\(version) (\(build))"
+    }
+
+    private func observeJarvisState() {
+        // Observe JarvisSDK.shared.isActive changes
+        JarvisSDK.shared.$isActive
+            .sink { [weak self] _ in
+                self?.updateUiState()
+            }
+            .store(in: &cancellables)
     }
 
     // MARK: - Events
@@ -115,16 +130,6 @@ class HomeViewModel: ObservableObject {
 
     private func refreshData() {
         Task {
-            if case .success(let currentData) = uiState {
-                let refreshingData = HomeUiData(
-                    isJarvisActive: currentData.isJarvisActive,
-                    jarvisConfiguration: currentData.jarvisConfiguration,
-                    recentApiCalls: currentData.recentApiCalls,
-                    isRefreshing: true
-                )
-                uiState = .success(refreshingData)
-            }
-
             do {
                 let apiCalls = await refreshDataUseCase.refreshData()
 
@@ -133,7 +138,9 @@ class HomeViewModel: ObservableObject {
                         isJarvisActive: currentData.isJarvisActive,
                         jarvisConfiguration: currentData.jarvisConfiguration,
                         recentApiCalls: apiCalls,
-                        isRefreshing: false
+                        isRefreshing: false,
+                        lastRefreshDate: Date(),
+                        appVersion: currentData.appVersion
                     )
                     uiState = .success(updatedData)
                 }
@@ -154,7 +161,9 @@ class HomeViewModel: ObservableObject {
                         isJarvisActive: currentData.isJarvisActive,
                         jarvisConfiguration: currentData.jarvisConfiguration,
                         recentApiCalls: Array(newApiCalls.prefix(10)), // Keep only last 10
-                        isRefreshing: false
+                        isRefreshing: false,
+                        lastRefreshDate: currentData.lastRefreshDate,
+                        appVersion: currentData.appVersion
                     )
                     uiState = .success(updatedData)
                 }
@@ -170,16 +179,16 @@ class HomeViewModel: ObservableObject {
                 isJarvisActive: currentData.isJarvisActive,
                 jarvisConfiguration: currentData.jarvisConfiguration,
                 recentApiCalls: [],
-                isRefreshing: false
+                isRefreshing: false,
+                lastRefreshDate: currentData.lastRefreshDate,
+                appVersion: currentData.appVersion
             )
             uiState = .success(clearedData)
         }
     }
 
     private func showJarvisOverlay() {
-        // TODO: Show Jarvis overlay once module is available
-        // JarvisSDK.shared.showOverlay()
-        print("Show Jarvis overlay (stub)")
+        JarvisSDK.shared.showOverlay()
     }
 }
 

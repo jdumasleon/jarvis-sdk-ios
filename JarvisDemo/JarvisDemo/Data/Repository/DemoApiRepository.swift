@@ -230,7 +230,7 @@ class DemoApiRepository: DemoApiRepositoryProtocol {
                 )
 
             case .getObject:
-                let objectId = String(Int.random(in: 1...10))
+                let objectId = String(Int.random(in: 1...50))
                 _ = try await restfulApi.getObject(id: objectId)
                 return createSuccessResult(
                     url: RestfulAPIEndpoint.object(id: objectId).fullURL,
@@ -249,7 +249,7 @@ class DemoApiRepository: DemoApiRepositoryProtocol {
                 )
 
             case .updateObject:
-                let objectId = String(Int.random(in: 1...10))
+                let objectId = String(Int.random(in: 1...50))
                 let device = generateSampleUpdateDevice()
                 _ = try await restfulApi.updateObject(id: objectId, device: device)
                 return createSuccessResult(
@@ -259,7 +259,7 @@ class DemoApiRepository: DemoApiRepositoryProtocol {
                 )
 
             case .patchObject:
-                let objectId = String(Int.random(in: 1...10))
+                let objectId = String(Int.random(in: 1...50))
                 let device = generateSampleUpdateDevice(partialUpdate: true)
                 _ = try await restfulApi.patchObject(id: objectId, device: device)
                 return createSuccessResult(
@@ -269,7 +269,7 @@ class DemoApiRepository: DemoApiRepositoryProtocol {
                 )
 
             case .deleteObject:
-                let objectId = String(Int.random(in: 1...10))
+                let objectId = String(Int.random(in: 1...50))
                 try await restfulApi.deleteObject(id: objectId)
                 return createSuccessResult(
                     url: RestfulAPIEndpoint.object(id: objectId).fullURL,

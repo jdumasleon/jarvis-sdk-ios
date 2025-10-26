@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ApiCallResult: Identifiable {
+struct ApiCallResult: Identifiable, Hashable {
     let id = UUID()
     let url: String
     let host: String

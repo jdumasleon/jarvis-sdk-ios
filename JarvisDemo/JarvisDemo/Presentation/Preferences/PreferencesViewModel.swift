@@ -3,22 +3,23 @@
 //  JarvisDemo
 //
 //  Created by Jose Luis Dumas Leon on 2/10/25.
+//  Manages demo app's own preferences (independent from Jarvis SDK)
 //
 
 import SwiftUI
 import Combine
 
 struct PreferencesUiData {
-    let preferences: [PreferenceItem]
-    let filteredPreferences: [PreferenceItem]
-    let selectedStorageType: PreferenceStorageType
+    let preferences: [DemoPreferenceItem]
+    let filteredPreferences: [DemoPreferenceItem]
+    let selectedStorageType: DemoPreferenceStorageType?
     let searchQuery: String
     let isRefreshing: Bool
 
     static let empty = PreferencesUiData(
         preferences: [],
         filteredPreferences: [],
-        selectedStorageType: .userDefaults,
+        selectedStorageType: nil,
         searchQuery: "",
         isRefreshing: false
     )
@@ -28,10 +29,10 @@ struct PreferencesUiData {
 class PreferencesViewModel: ObservableObject {
     @Published var uiState: ResourceState<PreferencesUiData> = .idle
 
-    private let managePreferencesUseCase: ManagePreferencesUseCaseProtocol
+    private let managePreferencesUseCase: ManageDemoPreferencesUseCaseProtocol
     private var cancellables = Set<AnyCancellable>()
 
-    init(managePreferencesUseCase: ManagePreferencesUseCaseProtocol = ManagePreferencesUseCase()) {
+    init(managePreferencesUseCase: ManageDemoPreferencesUseCaseProtocol = ManageDemoPreferencesUseCase()) {
         self.managePreferencesUseCase = managePreferencesUseCase
         loadInitialData()
     }
@@ -39,34 +40,86 @@ class PreferencesViewModel: ObservableObject {
     private func loadInitialData() {
         uiState = .loading
 
-        let preferences = managePreferencesUseCase.getAllPreferences()
+        // Generate sample data on first load
+        managePreferencesUseCase.generateSampleData()
+
+        // Subscribe to preferences updates
+        managePreferencesUseCase.getAllPreferences()
+            .sink { [weak self] preferences in
+                guard let self = self else { return }
+                self.handlePreferencesLoaded(preferences)
+            }
+            .store(in: &cancellables)
+    }
+
+    private func handlePreferencesLoaded(_ preferences: [DemoPreferenceItem]) {
+        // Preserve current selection if it exists, otherwise auto-select first available
+        let currentSelectedType: DemoPreferenceStorageType?
+        if case .success(let currentData) = uiState {
+            currentSelectedType = currentData.selectedStorageType
+        } else {
+            currentSelectedType = nil
+        }
+
+        let availableStorageTypes = DemoPreferenceStorageType.allCases.filter { storageType in
+            preferences.contains { $0.storageType == storageType }
+        }
+
+        // Use current selection if still valid, otherwise select first available
+        let selectedType: DemoPreferenceStorageType?
+        if let current = currentSelectedType, availableStorageTypes.contains(current) {
+            selectedType = current
+        } else {
+            selectedType = availableStorageTypes.first
+        }
+
+        let currentSearchQuery: String
+        if case .success(let currentData) = uiState {
+            currentSearchQuery = currentData.searchQuery
+        } else {
+            currentSearchQuery = ""
+        }
+
         let filteredPreferences = managePreferencesUseCase.filteredPreferences(
             allPreferences: preferences,
-            storageType: .userDefaults,
-            searchQuery: ""
+            storageType: selectedType,
+            searchQuery: currentSearchQuery
         )
-
+        
         let uiData = PreferencesUiData(
             preferences: preferences,
             filteredPreferences: filteredPreferences,
-            selectedStorageType: .userDefaults,
-            searchQuery: "",
+            selectedStorageType: selectedType,
+            searchQuery: currentSearchQuery,
             isRefreshing: false
         )
 
         uiState = .success(uiData)
     }
 
+    private enum UpdateValue<T> {
+        case keep
+        case update(T)
+    }
+
     private func updateUiData(
-        preferences: [PreferenceItem]? = nil,
-        selectedStorageType: PreferenceStorageType? = nil,
+        preferences: [DemoPreferenceItem]? = nil,
+        selectedStorageType: UpdateValue<DemoPreferenceStorageType?> = .keep,
         searchQuery: String? = nil,
         isRefreshing: Bool? = nil
     ) {
         guard case .success(let currentData) = uiState else { return }
 
         let updatedPreferences = preferences ?? currentData.preferences
-        let updatedStorageType = selectedStorageType ?? currentData.selectedStorageType
+
+        let updatedStorageType: DemoPreferenceStorageType?
+        switch selectedStorageType {
+        case .keep:
+            updatedStorageType = currentData.selectedStorageType
+        case .update(let newType):
+            updatedStorageType = newType
+        }
+
         let updatedSearchQuery = searchQuery ?? currentData.searchQuery
         let updatedIsRefreshing = isRefreshing ?? currentData.isRefreshing
 
@@ -95,59 +148,65 @@ class PreferencesViewModel: ObservableObject {
             selectStorageType(storageType)
         case .UpdateSearchQuery(let query):
             updateSearchQuery(query)
-        case .UpdatePreference(let key, let value, let type):
-            updatePreference(key: key, value: value, type: type)
+        case .UpdatePreference(let key, let value, let type, let suite):
+            updatePreference(key: key, value: value, type: type, suite: suite)
         case .RefreshPreferences:
             refreshPreferences()
         case .ClearSearch:
             clearSearch()
+        case .GenerateSampleData:
+            generateSampleData()
         }
     }
 
-    private func selectStorageType(_ storageType: PreferenceStorageType) {
-        updateUiData(selectedStorageType: storageType)
+    private func selectStorageType(_ storageType: DemoPreferenceStorageType?) {
+        updateUiData(selectedStorageType: .update(storageType))
     }
 
     private func updateSearchQuery(_ query: String) {
         updateUiData(searchQuery: query)
     }
 
-    private func updatePreference(key: String, value: String, type: PreferenceType) {
+    private func updatePreference(key: String, value: String, type: DemoPreferenceType, suite: String) {
         guard case .success(let currentData) = uiState else { return }
 
-        var updatedPreferences = currentData.preferences
-        if let index = updatedPreferences.firstIndex(where: { $0.key == key }) {
-            let existingPreference = updatedPreferences[index]
-            updatedPreferences[index] = PreferenceItem(
-                key: key,
-                value: value,
-                type: type,
-                storageType: existingPreference.storageType
-            )
+        // Find the existing preference to get its storage type
+        guard let existingPreference = currentData.preferences.first(where: { $0.key == key }) else {
+            return
         }
 
-        updateUiData(preferences: updatedPreferences)
+        // Update through use case
+        managePreferencesUseCase.updatePreference(
+            key: key,
+            value: value,
+            type: type,
+            storageType: existingPreference.storageType,
+            suite: suite
+        )
+
+        // The publisher will automatically update the UI
     }
 
     private func refreshPreferences() {
-        updateUiData(isRefreshing: true)
-
-        // Simulate refresh with a small delay
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-            let preferences = self?.managePreferencesUseCase.getAllPreferences() ?? []
-            self?.updateUiData(preferences: preferences, isRefreshing: false)
-        }
+        // The publisher already handles continuous updates
+        updateUiData(isRefreshing: false)
     }
 
     private func clearSearch() {
         updateUiData(searchQuery: "")
     }
+
+    private func generateSampleData() {
+        managePreferencesUseCase.generateSampleData()
+        // The publisher will automatically update the UI
+    }
 }
 
 enum PreferencesEvent {
-    case SelectStorageType(PreferenceStorageType)
+    case SelectStorageType(DemoPreferenceStorageType?)
     case UpdateSearchQuery(String)
-    case UpdatePreference(key: String, value: String, type: PreferenceType)
+    case UpdatePreference(key: String, value: String, type: DemoPreferenceType, suite: String)
     case RefreshPreferences
     case ClearSearch
+    case GenerateSampleData
 }

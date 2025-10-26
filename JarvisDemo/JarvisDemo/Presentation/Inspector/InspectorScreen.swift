@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import DesignSystem
 
 struct InspectorScreen: View {
     @ObservedObject var viewModel: InspectorViewModel
@@ -16,19 +17,21 @@ struct InspectorScreen: View {
             VStack(spacing: 0) {
                 contentView
             }
-            .navigationTitle("Network Inspector")
+            .navigationTitle("Inspector")
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Filters") {
-                        showingFilters.toggle()
+                    DSIconButton(
+                        icon: DSIcons.Action.add,
+                        style: .ghost,
+                        tint: DSColor.Primary.primary60
+                    ) {
+                        viewModel.onEvent(.PerformRandomApiCall)
                     }
                 }
             }
-            .sheet(isPresented: $showingFilters) {
-                filtersView
-            }
         }
+        
     }
 
     @ViewBuilder
@@ -46,6 +49,8 @@ struct InspectorScreen: View {
                     .foregroundColor(.secondary)
                     .padding(.top)
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            
 
         case .success(let uiData):
             successContent(uiData: uiData)
@@ -75,90 +80,25 @@ struct InspectorScreen: View {
 
     private func successContent(uiData: InspectorUiData) -> some View {
         VStack(spacing: 0) {
-            // Search and Filter Header
-            headerSection(uiData: uiData)
-
-            // Statistics Summary
-            statsSection(uiData: uiData)
-
-            // API Calls List
             if uiData.filteredApiCalls.isEmpty {
                 emptyStateView(uiData: uiData)
             } else {
+                // API Calls List
                 apiCallsList(uiData: uiData)
             }
         }
         .refreshable {
             viewModel.onEvent(.RefreshApiCalls)
         }
+        .background(DSColor.Extra.background0)
     }
 
-    private func headerSection(uiData: InspectorUiData) -> some View {
-        VStack(spacing: 12) {
-            // Search Bar
-            HStack {
-                Image(systemName: "magnifyingglass")
-                    .foregroundColor(.secondary)
-
-                TextField("Search API calls...", text: Binding(
-                    get: { uiData.searchQuery },
-                    set: { viewModel.onEvent(.SearchQueryChanged($0)) }
-                ))
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-
-                if !uiData.searchQuery.isEmpty {
-                    Button("Clear") {
-                        viewModel.onEvent(.SearchQueryChanged(""))
-                    }
-                    .foregroundColor(.blue)
-                }
-            }
-
-            // Method Filter Chips
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 8) {
-                    filterChip(title: "All", isSelected: uiData.selectedMethod == nil) {
-                        viewModel.onEvent(.MethodFilterChanged(nil))
-                    }
-
-                    ForEach(["GET", "POST", "PUT", "DELETE", "PATCH"], id: \.self) { method in
-                        filterChip(title: method, isSelected: uiData.selectedMethod == method) {
-                            viewModel.onEvent(.MethodFilterChanged(method))
-                        }
-                    }
-                }
-                .padding(.horizontal)
-            }
-        }
-        .padding()
-        .background(Color(.systemGray6))
-    }
-
-    private func statsSection(uiData: InspectorUiData) -> some View {
-        HStack {
-            statItem(title: "Total", value: "\\(uiData.totalCalls)", color: .blue)
-            Divider()
-            statItem(title: "Success", value: "\\(uiData.successfulCalls)", color: .green)
-            Divider()
-            statItem(title: "Failed", value: "\\(uiData.failedCalls)", color: .red)
-            Divider()
-            statItem(title: "Filtered", value: "\\(uiData.filteredApiCalls.count)", color: .orange)
-        }
-        .padding()
-        .background(Color(.systemGray6))
-    }
-
-    private func statItem(title: String, value: String, color: Color) -> some View {
-        VStack(spacing: 4) {
-            Text(value)
-                .font(.headline)
-                .fontWeight(.bold)
-                .foregroundColor(color)
-            Text(title)
-                .font(.caption)
-                .foregroundColor(.secondary)
-        }
-        .frame(maxWidth: .infinity)
+    private func headerSection() -> some View {
+        DSAlert(
+            style: .info,
+            title: "Network Inspector",
+            message: "Monitor and analyze all network requests. Filter by status, method, or search for specific endpoints to debug API interactions."
+        )
     }
 
     private func emptyStateView(uiData: InspectorUiData) -> some View {
@@ -202,259 +142,195 @@ struct InspectorScreen: View {
                         .scaleEffect(0.8)
                     Text("Refreshing...")
                         .foregroundColor(.secondary)
+                        
                 }
+                .frame(maxWidth: .infinity, alignment: .center)
                 .listRowSeparator(.hidden)
+                .listRowBackground(DSColor.Extra.background0)
             }
 
+            headerSection()
+                .listRowSeparator(.hidden)
+                .listRowInsets(
+                    EdgeInsets(
+                        top: DSSpacing.xs, leading: DSSpacing.m, bottom: DSSpacing.xs, trailing:  DSSpacing.m
+                    )
+                )
+                .listRowBackground(DSColor.Extra.background0)
+            
             ForEach(uiData.filteredApiCalls) { apiCall in
-                NavigationLink(destination: ApiCallDetailView(apiCall: apiCall)) {
-                    ApiCallRowView(apiCall: apiCall)
-                }
+                ApiCallRowView(apiCall: apiCall)
+                    .listRowSeparator(.hidden)
             }
+            .listRowBackground(DSColor.Extra.background0)
+            .listRowInsets(
+                EdgeInsets(
+                    top: DSSpacing.xs, leading: DSSpacing.m, bottom: DSSpacing.xs, trailing:  DSSpacing.m
+                )
+            )
         }
-        .listStyle(PlainListStyle())
-    }
-
-    private func filterChip(title: String, isSelected: Bool, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            Text(title)
-                .font(.caption)
-                .fontWeight(.medium)
-                .padding(.horizontal, 12)
-                .padding(.vertical, 6)
-                .background(isSelected ? Color.blue : Color(.systemGray5))
-                .foregroundColor(isSelected ? .white : .primary)
-                .cornerRadius(16)
-        }
-    }
-
-    private var filtersView: some View {
-        NavigationView {
-            VStack(spacing: 20) {
-                Text("Filter Options")
-                    .font(.title2)
-                    .fontWeight(.bold)
-
-                if case .success(let uiData) = viewModel.uiState {
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("HTTP Methods")
-                            .font(.headline)
-
-                        LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 3), spacing: 8) {
-                            ForEach(["GET", "POST", "PUT", "DELETE", "PATCH"], id: \.self) { method in
-                                filterChip(title: method, isSelected: uiData.selectedMethod == method) {
-                                    let newMethod = uiData.selectedMethod == method ? nil : method
-                                    viewModel.onEvent(.MethodFilterChanged(newMethod))
-                                }
-                            }
-                        }
-                    }
-                }
-
-                Spacer()
-
-                Button("Clear All Filters") {
-                    viewModel.onEvent(.ClearFilters)
-                }
-                .foregroundColor(.red)
-            }
-            .padding()
-            .navigationTitle("Filters")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
-                        showingFilters = false
-                    }
-                }
-            }
-        }
+        .listStyle(.plain)
     }
 }
 
 struct ApiCallRowView: View {
     let apiCall: ApiCallResult
+    private let maxDuration: Double = 2000.0 // ms
 
-    var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                // HTTP Method Badge
-                methodBadge
+       var body: some View {
+           DSCard(style: .elevated) {
+               VStack(alignment: .leading, spacing: DSSpacing.xs) {
+                   // URL + Host + Status
+                   HStack(alignment: .center) {
+                       VStack(alignment: .leading, spacing: DSSpacing.xxxs) {
+                           DSText(
+                            apiCall.url,
+                            style: .bodyMedium
+                           )
+                           .lineLimit(2)
+                           .multilineTextAlignment(.leading)
+                           
+                           DSText(
+                            apiCall.host,
+                            style: .bodySmall,
+                            color: DSColor.Neutral.neutral40
+                           )
+                       }
+                       .frame(maxWidth: .infinity, alignment: .leading)
+                       
+                       StatusIndicator(isSuccess: apiCall.isSuccess, statusCode: apiCall.statusCode)
+                   }
+                   
+                   // Method badge + time + duration text
+                   HStack(alignment: .center, spacing: DSSpacing.s) {
+                       MethodBadge(text: apiCall.method, background: methodColor(for: apiCall.method))
+                       
+                       DSText(
+                        apiCall.timestamp,
+                        style: .bodySmall,
+                        color: DSColor.Neutral.neutral80
+                       )
+                       
+                       Spacer()
+                       
+                       DSText(
+                        "\(Int(apiCall.duration))ms",
+                        style: .bodySmall,
+                        color: DSColor.Neutral.neutral80
+                       )
+                   }
+                   
+                   // Duration progress (visual)
+                   if apiCall.duration > 0 {
+                       let progress = min(Double(apiCall.duration) / maxDuration, 1.0)
+                       LinearProgressBar(
+                        progress: progress,
+                        barColor: apiCall.isSuccess ? DSColor.Success.success100 : DSColor.Error.error100,
+                        height: DSDimensions.xs,
+                        cornerRadius: DSRadius.xs
+                       )
+                   }
+                   
+                   // Error message (if any)
+                   if let error = apiCall.error, !error.isEmpty {
+                       DSText(
+                        error,
+                        style: .bodySmall,
+                        color: DSColor.Error.error100
+                       )
+                   }
+               }
+               .background(DSColor.Extra.white)
+               .frame(maxWidth: .infinity, alignment: .leading)
+           }
+       }
 
-                // Status Badge
-                statusBadge
+       // MARK: - Helpers
 
-                Spacer()
+       private func methodColor(for method: String) -> Color {
+           switch method.uppercased() {
+           case "GET":    return DSColor.Chart.blue
+           case "POST":   return DSColor.Chart.green
+           case "PUT":    return DSColor.Chart.orange
+           case "PATCH":  return DSColor.Chart.purple
+           case "DELETE": return DSColor.Chart.red
+           default:       return DSColor.Neutral.neutral100
+           }
+       }
+   }
 
-                // Duration
-                Text("\\(apiCall.duration)ms")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
+   // MARK: - Subviews
 
-            // URL
-            Text(apiCall.url)
-                .font(.body)
-                .lineLimit(2)
+   struct StatusIndicator: View {
+       let isSuccess: Bool
+       let statusCode: Int
 
-            // Host and Timestamp
-            HStack {
-                Text(apiCall.host)
-                    .font(.caption)
-                    .foregroundColor(.secondary)
+       var body: some View {
+           HStack(spacing: DSSpacing.xs) {
+               Circle()
+                   .fill(isSuccess ? DSColor.Success.success100 : DSColor.Error.error100)
+                   .frame(width: DSDimensions.m, height: DSDimensions.m)
 
-                Spacer()
+               if statusCode > 0 {
+                   DSText(
+                    "\(statusCode)",
+                    style: .bodySmall,
+                    color: isSuccess ? DSColor.Success.success100 : DSColor.Error.error100
+                   )
+               }
+           }
+           .accessibilityElement(children: .combine)
+           .accessibilityLabel("Estado HTTP")
+           .accessibilityValue(statusCode > 0 ? "\(statusCode)" : (isSuccess ? "OK" : "Error"))
+       }
+   }
 
-                Text(apiCall.timestamp)
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
-        }
-        .padding(.vertical, 4)
-    }
+   struct MethodBadge: View {
+       let text: String
+       let background: Color
 
-    private var methodBadge: some View {
-        Text(apiCall.method)
-            .font(.caption)
-            .fontWeight(.bold)
-            .padding(.horizontal, 8)
-            .padding(.vertical, 4)
-            .background(methodColor.opacity(0.2))
-            .foregroundColor(methodColor)
-            .cornerRadius(4)
-    }
+       var body: some View {
+           DSText(
+            text.uppercased(),
+            style: .labelLarge,
+            color: DSColor.Extra.white
+           )
+           .padding(.vertical, DSSpacing.xxs)
+           .padding(.horizontal, DSSpacing.s)
+           .background(
+                RoundedRectangle(cornerRadius: DSRadius.s, style: .continuous)
+                    .fill(background)
+           )
+           .accessibilityLabel("Método HTTP")
+           .accessibilityValue(text.uppercased())
+       }
+   }
 
-    private var statusBadge: some View {
-        Text("\\(apiCall.statusCode)")
-            .font(.caption)
-            .fontWeight(.bold)
-            .padding(.horizontal, 8)
-            .padding(.vertical, 4)
-            .background(statusColor.opacity(0.2))
-            .foregroundColor(statusColor)
-            .cornerRadius(4)
-    }
+   // Barra de progreso lineal con esquinas redondeadas y altura fija.
+   struct LinearProgressBar: View {
+       let progress: Double        // 0.0 ... 1.0
+       let barColor: Color
+       let height: CGFloat
+       let cornerRadius: CGFloat
 
-    private var methodColor: Color {
-        switch apiCall.method {
-        case "GET": return .blue
-        case "POST": return .green
-        case "PUT": return .orange
-        case "DELETE": return .red
-        case "PATCH": return .purple
-        default: return .gray
-        }
-    }
+       var body: some View {
+           GeometryReader { geo in
+               ZStack(alignment: .leading) {
+                   RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                       .fill(Color.black.opacity(0.07))
 
-    private var statusColor: Color {
-        switch apiCall.statusCode {
-        case 200..<300: return .green
-        case 300..<400: return .yellow
-        case 400..<500: return .orange
-        case 500..<600: return .red
-        default: return .gray
-        }
-    }
-}
-
-struct ApiCallDetailView: View {
-    let apiCall: ApiCallResult
-
-    var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 16) {
-                // Request Section
-                requestSection
-
-                // Response Section
-                responseSection
-
-                // Timing Section
-                timingSection
-            }
-            .padding()
-        }
-        .navigationTitle("Call Details")
-        .navigationBarTitleDisplayMode(.inline)
-    }
-
-    private var requestSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Request")
-                .font(.headline)
-                .fontWeight(.bold)
-
-            VStack(alignment: .leading, spacing: 8) {
-                detailRow(title: "Method", value: apiCall.method)
-                detailRow(title: "URL", value: apiCall.url)
-                detailRow(title: "Host", value: apiCall.host)
-            }
-            .padding()
-            .background(Color(.systemGray6))
-            .cornerRadius(8)
-        }
-    }
-
-    private var responseSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Response")
-                .font(.headline)
-                .fontWeight(.bold)
-
-            VStack(alignment: .leading, spacing: 8) {
-                detailRow(title: "Status Code", value: "\\(apiCall.statusCode)")
-                detailRow(title: "Success", value: apiCall.isSuccess ? "Yes" : "No")
-                if let error = apiCall.error {
-                    detailRow(title: "Error", value: error)
-                }
-            }
-            .padding()
-            .background(Color(.systemGray6))
-            .cornerRadius(8)
-        }
-    }
-
-    private var timingSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Timing")
-                .font(.headline)
-                .fontWeight(.bold)
-
-            VStack(alignment: .leading, spacing: 8) {
-                let startDate = Date(timeIntervalSince1970: TimeInterval(apiCall.startTime) / 1000.0)
-                let endDate = Date(timeIntervalSince1970: TimeInterval(apiCall.endTime) / 1000.0)
-
-                detailRow(title: "Start Time", value: DateFormatter.detailFormatter.string(from: startDate))
-                detailRow(title: "End Time", value: DateFormatter.detailFormatter.string(from: endDate))
-                detailRow(title: "Duration", value: "\\(apiCall.duration)ms")
-                detailRow(title: "Timestamp", value: apiCall.timestamp)
-            }
-            .padding()
-            .background(Color(.systemGray6))
-            .cornerRadius(8)
-        }
-    }
-
-    private func detailRow(title: String, value: String) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(title)
-                .font(.caption)
-                .foregroundColor(.secondary)
-            Text(value)
-                .font(.body)
-                .textSelection(.enabled)
-        }
-    }
-}
-
-extension DateFormatter {
-    static let detailFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .short
-        formatter.timeStyle = .medium
-        return formatter
-    }()
-}
+                   RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                       .fill(barColor)
+                       .frame(width: max(0, geo.size.width * progress))
+                       .animation(.easeInOut(duration: 0.25), value: progress)
+               }
+           }
+           .frame(height: height)
+           .accessibilityElement(children: .ignore)
+           .accessibilityLabel("Duración")
+           .accessibilityValue("\(Int(progress * 100)) por ciento")
+       }
+   }
 
 #Preview {
     InspectorScreen(viewModel: InspectorViewModel())
