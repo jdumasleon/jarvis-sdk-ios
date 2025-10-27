@@ -51,26 +51,6 @@ public struct JarvisSDKApplication: View {
                 )
             }
             .background(DSColor.Extra.background0)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    JarvisTopBarLogo()
-                }
-
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: onDismiss) {
-                        DSIcons.Navigation.close
-                            .font(.system(size: DSIconSize.m))
-                            .foregroundStyle(
-                                LinearGradient(
-                                    colors: [DSColor.Extra.jarvisPink, DSColor.Extra.jarvisBlue],
-                                    startPoint: .leading,
-                                    endPoint: .trailing
-                                )
-                            )
-                    }
-                }
-            }
         }
     }
 }
@@ -142,28 +122,6 @@ private struct SettingsTabView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(DSColor.Extra.background0)
-    }
-}
-
-// MARK: - Top Bar Components
-
-@MainActor
-private struct JarvisTopBarLogo: View {
-    var body: some View {
-        HStack(spacing: DSSpacing.xs) {
-            Image("jarvis-logo", bundle: JarvisResourcesBundle.bundle)
-                .resizable()
-                .renderingMode(.template)
-                .aspectRatio(contentMode: .fit)
-                .frame(width: DSDimensions.xxl, height: DSDimensions.xxl)
-                .foregroundStyle(
-                    LinearGradient(
-                        colors: [DSColor.Extra.jarvisPink, DSColor.Extra.jarvisBlue],
-                        startPoint: .leading,
-                        endPoint: .trailing
-                    )
-                )
-        }
     }
 }
 
