@@ -7,64 +7,86 @@
 import SwiftUI
 import Presentation
 import DesignSystem
+import Common
+
+/// Home navigation view with coordinator-based routing
+@MainActor
+struct HomeNavigationView: View {
+    @ObservedObject private var coordinator: HomeCoordinator
+    @ObservedObject private var viewModel: HomeViewModel
+
+    init(coordinator: HomeCoordinator, viewModel: HomeViewModel) {
+        self.coordinator = coordinator
+        self.viewModel = viewModel
+    }
+
+    var body: some View {
+        NavigationStack(path: $coordinator.routes) {
+            HomeScreen(coordinator: coordinator, viewModel: viewModel)
+                .navigationDestination(for: HomeCoordinator.Route.self) { route in
+                    EmptyView()
+                }
+        }
+    }
+}
 
 // MARK: - Home View
-
 public struct HomeScreen: View {
-    @StateObject private var viewModel = HomeViewModel()
-    
-    let onDismiss: () -> Void
-    
-    public init(onDismiss: @escaping () -> Void = {}) {
-        self.onDismiss = onDismiss
+    @SwiftUI.Environment(\.dismiss) var dismiss
+    let coordinator: HomeCoordinator
+    @ObservedObject var viewModel: HomeViewModel
+
+    init(
+        coordinator: HomeCoordinator,
+        viewModel: HomeViewModel
+    ) {
+        self.coordinator = coordinator
+        self.viewModel = viewModel
     }
     
     public var body: some View {
-        NavigationView {
-            ScrollView {
-                LazyVStack(spacing: DSSpacing.l) {
-                    // Welcome section
-                    DSHeaderCard(
-                        title: "Jarvis Inspector",
-                        subtitle: "Monitor your app's network activity and preferences"
+        ScrollView {
+            LazyVStack(spacing: DSSpacing.l) {
+                DSAlert(
+                    style: .info,
+                    title: "Wealth Dashboard",
+                    message: "Welcome to your comprehensive analytics overview. Track performance, monitor network activity, and optimize your app\'s health in real-time with wealth-grade insights."
+                )
+                .padding()
+            }
+            .navigationTitle("Home")
+            #if os(iOS)
+            .navigationBarTitleDisplayMode(.large)
+            #endif
+            .toolbar {
+                #if os(iOS)
+                ToolbarItem(placement: .navigationBarLeading) {
+                    JarvisTopBarLogo()
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    DSIconButton(
+                        icon: DSIcons.Navigation.close,
+                        style: .ghost,
+                        size: .small,
+                        tint: DSColor.Neutral.neutral100
                     ) {
-                        Text("Debug and inspect your app's behavior with powerful monitoring tools.")
-                            .dsTextStyle(.bodySmall)
-                            .foregroundColor(DSColor.Neutral.neutral80)
+                        coordinator.onDismissSDK?()
                     }
                 }
-                .navigationTitle("Home")
-                .navigationBarTitleDisplayMode(.large)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        JarvisTopBarLogo
-                    }
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        DSIconButton(
-                            icon: DSIcons.Action.add,
-                            style: .ghost,
-                            tint: DSColor.Primary.primary60
-                        ) {
-                            
-                        }
-                    }
-                }
-                .task {
-                    await viewModel.loadStats()
-                }
-                .refreshable {
-                    await viewModel.loadStats()
-                }
+                #endif
             }
         }
+        
     }
 }
 
 // MARK: - Preview
 
 #if DEBUG
-@available(iOS 17.0, *)
 #Preview("Home View") {
-    HomeScreen()
+    HomeScreen(
+        coordinator: HomeCoordinator(),
+        viewModel: HomeViewModel()
+    )
 }
 #endif

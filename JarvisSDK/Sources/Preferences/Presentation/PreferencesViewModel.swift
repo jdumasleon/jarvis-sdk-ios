@@ -4,26 +4,31 @@ import Presentation
 import Domain
 import JarvisPreferencesDomain
 import JarvisPreferencesData
+import Common
 
 /// View model for preferences inspector
 @MainActor
 public class PreferencesViewModel: BaseViewModel {
     @Published public var uiState = PreferencesUIState()
 
-    private let getPreferencesUseCase: GetPreferencesUseCase
-    private let updatePreferenceUseCase: UpdatePreferenceUseCase
-    private let deletePreferenceUseCase: DeletePreferenceUseCase
+    @Injected private var getPreferencesUseCase: GetPreferencesUseCase
+    @Injected private var updatePreferenceUseCase: UpdatePreferenceUseCase
+    @Injected private var deletePreferenceUseCase: DeletePreferenceUseCase
 
-    public init(
-        getPreferencesUseCase: GetPreferencesUseCase? = nil,
-        updatePreferenceUseCase: UpdatePreferenceUseCase? = nil,
-        deletePreferenceUseCase: DeletePreferenceUseCase? = nil
-    ) {
-        let repository = PreferenceRepository()
-        self.getPreferencesUseCase = getPreferencesUseCase ?? GetPreferencesUseCase(repository: repository)
-        self.updatePreferenceUseCase = updatePreferenceUseCase ?? UpdatePreferenceUseCase(repository: repository)
-        self.deletePreferenceUseCase = deletePreferenceUseCase ?? DeletePreferenceUseCase(repository: repository)
+    public override init() {
         super.init()
+    }
+
+    /// Initializer for testing with custom use cases
+    public init(
+        getPreferencesUseCase: GetPreferencesUseCase,
+        updatePreferenceUseCase: UpdatePreferenceUseCase,
+        deletePreferenceUseCase: DeletePreferenceUseCase
+    ) {
+        super.init()
+        self.getPreferencesUseCase = getPreferencesUseCase
+        self.updatePreferenceUseCase = updatePreferenceUseCase
+        self.deletePreferenceUseCase = deletePreferenceUseCase
     }
 
     public func loadPreferences() {

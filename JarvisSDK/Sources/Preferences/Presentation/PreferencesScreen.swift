@@ -1,14 +1,45 @@
 import SwiftUI
 import DesignSystem
 import Domain
+import Presentation
 import JarvisPreferencesDomain
 
-/// Main preferences inspector view
-public struct PreferencesView: View {
-    @StateObject private var viewModel: PreferencesViewModel
 
-    public init(viewModel: PreferencesViewModel) {
-        self._viewModel = StateObject(wrappedValue: viewModel)
+/// Preferences navigation view with coordinator-based routing
+@MainActor
+public struct PreferencesNavigationView: View {
+    @ObservedObject private var coordinator: PreferencesCoordinator
+    @ObservedObject private var viewModel: PreferencesViewModel
+
+    public init(coordinator: PreferencesCoordinator, viewModel: PreferencesViewModel) {
+        self.coordinator = coordinator
+        self.viewModel = viewModel
+    }
+
+    public var body: some View {
+        NavigationStack(path: $coordinator.routes) {
+            PreferencesScreen(coordinator: coordinator, viewModel: viewModel)
+                .navigationDestination(for: PreferencesCoordinator.Route.self) { route in
+                    switch route {
+                    case .preferenceDetail(let route):
+                        PreferenceDetailView(preference: route.value)
+                    case .editPreference(let route):
+                        EditPreferenceView(preference: route.value)
+                    }
+                }
+        }
+    }
+}
+
+/// Main preferences inspector view
+public struct PreferencesScreen: View {
+    @SwiftUI.Environment(\.dismiss) var dismiss
+    let coordinator: PreferencesCoordinator
+    @ObservedObject var viewModel: PreferencesViewModel
+
+    init(coordinator: PreferencesCoordinator, viewModel: PreferencesViewModel) {
+        self.coordinator = coordinator
+        self.viewModel = viewModel
     }
 
     public var body: some View {
@@ -81,15 +112,21 @@ public struct PreferencesView: View {
             }
             .navigationTitle("Host App Preferences")
             .toolbar {
-                ToolbarItem(placement: .primaryAction) {
-                    DSIconButton(
-                        icon: DSIcons.Action.refresh,
-                        style: .ghost,
-                        action: {
-                            viewModel.loadPreferences()
-                        }
-                    )
+                #if os(iOS)
+                ToolbarItem(placement: .navigationBarLeading) {
+                    JarvisTopBarLogo()
                 }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    DSIconButton(
+                        icon: DSIcons.Navigation.close,
+                        style: .ghost,
+                        size: .small,
+                        tint: DSColor.Neutral.neutral100
+                    ) {
+                        coordinator.onDismissSDK?()
+                    }
+                }
+                #endif
             }
             .onAppear {
                 viewModel.loadPreferences()

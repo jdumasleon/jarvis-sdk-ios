@@ -49,6 +49,10 @@ public struct DSIcons {
         public static let favoriteFilled = Image(systemName: "heart.fill")
         public static let bookmark = Image(systemName: "bookmark")
         public static let bookmarkFilled = Image(systemName: "bookmark.fill")
+        public static let star = Image(systemName: "star")
+        public static let starFilled = Image(systemName: "star.fill")
+        public static let starCircle = Image(systemName: "star.circle")
+        public static let starCircleFilled = Image(systemName: "star.circle.fill")
     }
 
     // MARK: - Status Icons
@@ -118,6 +122,8 @@ public struct DSIcons {
         public static let clock = Image(systemName: "clock")
         public static let location = Image(systemName: "location")
         public static let locationFilled = Image(systemName: "location.fill")
+        public static let app = Image(systemName: "app")
+        public static let apple = Image(systemName: "apple.logo")
     }
 
     // MARK: - Jarvis Specific Icons

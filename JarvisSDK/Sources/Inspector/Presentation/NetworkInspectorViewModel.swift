@@ -3,28 +3,34 @@ import Combine
 import Presentation
 import Domain
 import JarvisInspectorDomain
+import Common
 
 /// View model for network inspector
 @MainActor
 public class NetworkInspectorViewModel: BaseViewModel {
     @Published public var uiState = NetworkInspectorUIState()
 
-    private let monitorUseCase: MonitorNetworkTransactionsUseCase
-    private let getTransactionUseCase: GetNetworkTransactionUseCase
-    private let filterUseCase: FilterNetworkTransactionsUseCase
-    private let repository: NetworkTransactionRepositoryProtocol
+    @Injected private var monitorUseCase: MonitorNetworkTransactionsUseCase
+    @Injected private var getTransactionUseCase: GetNetworkTransactionUseCase
+    @Injected private var filterUseCase: FilterNetworkTransactionsUseCase
+    @Injected private var repository: NetworkTransactionRepositoryProtocol
 
-    public init(
-        monitorUseCase: MonitorNetworkTransactionsUseCase,
-        getTransactionUseCase: GetNetworkTransactionUseCase,
-        filterUseCase: FilterNetworkTransactionsUseCase,
-        repository: NetworkTransactionRepositoryProtocol
-    ) {
-        self.monitorUseCase = monitorUseCase
-        self.getTransactionUseCase = getTransactionUseCase
-        self.filterUseCase = filterUseCase
-        self.repository = repository
+    public override init() {
         super.init()
+    }
+
+    /// Initializer for testing with custom use cases
+    public init(
+        monitorNetworkTransactionsUseCase: MonitorNetworkTransactionsUseCase,
+        getNetworkTransactionUseCase: GetNetworkTransactionUseCase,
+        filterNetworkTransactionsUseCase: FilterNetworkTransactionsUseCase
+    ) {
+        super.init()
+        self.monitorUseCase = monitorNetworkTransactionsUseCase
+        self.getTransactionUseCase = getNetworkTransactionUseCase
+        self.filterUseCase = filterNetworkTransactionsUseCase
+        // Repository is still injected, as it's only used for deleteAll
+        self.repository = DependencyContainer.shared.resolve(NetworkTransactionRepositoryProtocol.self)
     }
 
     // MARK: - Public Methods

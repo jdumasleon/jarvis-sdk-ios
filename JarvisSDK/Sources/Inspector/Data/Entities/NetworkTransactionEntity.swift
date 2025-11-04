@@ -1,22 +1,19 @@
 import Foundation
-import SwiftData
 
-/// SwiftData entity for persistent network transaction storage
-@available(iOS 17.0, *)
-@Model
-public final class NetworkTransactionEntity {
-    @Attribute(.unique) public var id: String
+/// Entity for network transaction storage (iOS 16+ compatible)
+public final class NetworkTransactionEntity: Codable {
+    public var id: String
     public var requestId: String
     public var responseId: String?
     public var method: String
     public var url: String
 
-    // Store headers as JSON string for SwiftData compatibility
+    // Store headers as JSON string
     public var requestHeadersJSON: String
     public var responseHeadersJSON: String?
 
-    @Attribute(.externalStorage) public var requestBody: Data?
-    @Attribute(.externalStorage) public var responseBody: Data?
+    public var requestBody: Data?
+    public var responseBody: Data?
 
     public var statusCode: Int?
     public var startTime: Date

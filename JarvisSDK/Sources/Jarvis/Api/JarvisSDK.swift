@@ -1,7 +1,6 @@
 import Foundation
 import SwiftUI
 import Combine
-// Import all required modules
 import Platform
 import Domain
 import JarvisInspectorDomain
@@ -19,6 +18,7 @@ public final class JarvisSDK: ObservableObject {
     @Published public private(set) var isActive = false
     @Published public private(set) var isShowing = false
     @Published public private(set) var isInitialized = false
+    @Published private var targetTab: Int = 0  // 0=home, 1=inspector, 2=preferences, 3=settings
 
     // MARK: - Private Properties
     private var configuration = JarvisConfig()
@@ -119,14 +119,15 @@ public final class JarvisSDK: ObservableObject {
     }
 
     /// Show the main Jarvis overlay
-    public func showOverlay() {
+    public func showOverlay(tab: Int = 0) {
         guard isActive else {
             JarvisLogger.shared.warning("Cannot show overlay: SDK not active")
             return
         }
 
+        targetTab = tab
         isShowing = true
-        JarvisLogger.shared.debug("Jarvis overlay shown")
+        JarvisLogger.shared.debug("Jarvis overlay shown on tab \(tab)")
     }
 
     /// Hide the main Jarvis overlay
@@ -157,11 +158,24 @@ public final class JarvisSDK: ObservableObject {
 
     /// Main Jarvis SDK application view with scaffold structure
     public func mainView() -> some View {
-        JarvisSDKApplication(onDismiss: {
-            Task { @MainActor in
-                self.hideOverlay()
+        let tab: AppCoordinator.Tab = {
+            switch targetTab {
+            case 0: return .home
+            case 1: return .inspector
+            case 2: return .preferences
+            case 3: return .settings
+            default: return .home
             }
-        })
+        }()
+
+        return JarvisSDKApplication(
+            onDismiss: {
+                Task { @MainActor in
+                    self.hideOverlay()
+                }
+            },
+            initialTab: tab
+        )
         .environmentObject(self)
     }
 
@@ -183,6 +197,9 @@ public final class JarvisSDK: ObservableObject {
     }
 
     private func performInitialization() async {
+        // Initialize dependency injection container
+        await initializeDependencyInjection()
+
         // Initialize core systems
         await initializeCore()
 
@@ -203,6 +220,11 @@ public final class JarvisSDK: ObservableObject {
         if previousShowingState {
             isShowing = previousShowingState
         }
+    }
+
+    private func initializeDependencyInjection() async {
+        JarvisDI.registerAll()
+        JarvisLogger.shared.debug("Dependency injection configured")
     }
 
     private func initializeCore() async {
@@ -254,13 +276,13 @@ public struct JarvisSDKModifier: ViewModifier {
             if jarvis.isActive {
                 JarvisFabButton(
                     onInspectorTap: {
-                        jarvis.showOverlay()
+                        jarvis.showOverlay(tab: 1)  // Inspector tab
                     },
                     onPreferencesTap: {
-                        jarvis.showOverlay()
+                        jarvis.showOverlay(tab: 2)  // Preferences tab
                     },
                     onHomeTap: {
-                        jarvis.showOverlay()
+                        jarvis.showOverlay(tab: 0)  // Home tab
                     },
                     onCloseTap: {
                         jarvis.deactivate()

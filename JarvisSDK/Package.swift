@@ -53,13 +53,9 @@ let package = Package(
                 "Presentation",
                 "JarvisResources",
 
-                // Feature dependencies
-                "JarvisInspectorDomain",
-                "JarvisInspectorData",
                 "JarvisInspectorPresentation",
-                "JarvisPreferencesDomain",
-                "JarvisPreferencesData",
                 "JarvisPreferencesPresentation"
+                
             ],
             path: "Sources/Jarvis"
         ),

@@ -1,144 +1,267 @@
 //
 //  SettingsScreen.swift
-//  Jarvis
+//  JarvisSDK
 //
-//  Created by Jose Luis Dumas Leon   on 30/9/25.
+//  Main Settings screen
 //
+
 import SwiftUI
 import DesignSystem
+import Presentation
+import Common
 
-// MARK: - Settings View
+/// Settings navigation view with coordinator-based routing
+@MainActor
+public struct SettingsNavigationView: View {
+    @ObservedObject private var coordinator: SettingsCoordinator
+    @ObservedObject private var viewModel: SettingsViewModel
 
-public struct SettingsScreen: View {
-    @StateObject private var viewModel = SettingsViewModel()
-    @State private var showResetAlert = false
+    let onNavigateToInspector: () -> Void
+    let onNavigateToPreferences: () -> Void
 
-    public init() {}
+    public init(
+        coordinator: SettingsCoordinator,
+        viewModel: SettingsViewModel,
+        onNavigateToInspector: @escaping () -> Void,
+        onNavigateToPreferences: @escaping () -> Void
+    ) {
+        self.coordinator = coordinator
+        self.viewModel = viewModel
+        self.onNavigateToInspector = onNavigateToInspector
+        self.onNavigateToPreferences = onNavigateToPreferences
+    }
 
     public var body: some View {
-        NavigationView {
-            List {
-                // Monitoring settings
-                Section("Monitoring") {
-                    DSToggle(
-                        isOn: $viewModel.isInspectorEnabled,
-                        label: "Network Inspector",
-                        description: "Monitor network requests and responses"
-                    )
-                    .onChange(of: viewModel.isInspectorEnabled) { _ in
-                        viewModel.saveSettings()
-                    }
-
-                    DSToggle(
-                        isOn: $viewModel.isPreferencesEnabled,
-                        label: "Preferences Monitor",
-                        description: "Track changes to app preferences"
-                    )
-                    .onChange(of: viewModel.isPreferencesEnabled) { _ in
-                        viewModel.saveSettings()
-                    }
+        NavigationStack(path: $coordinator.routes) {
+            SettingsScreen(
+                coordinator: coordinator,
+                viewModel: viewModel,
+                onNavigateToInspector: onNavigateToInspector,
+                onNavigateToPreferences: onNavigateToPreferences
+            )
+            .navigationDestination(for: SettingsCoordinator.Route.self) { route in
+                switch route {
+                case .logging:
+                    LoggingView()
                 }
-
-                // Data settings
-                Section("Data Management") {
-                    DSPicker(
-                        selection: $viewModel.retentionDays,
-                        label: "Data Retention",
-                        options: [
-                            (1, "1 Day"),
-                            (7, "1 Week"),
-                            (30, "1 Month"),
-                            (90, "3 Months")
-                        ]
-                    )
-                    .onChange(of: viewModel.retentionDays) { _ in
-                        viewModel.saveSettings()
-                    }
-
-                    DSListRow(.init(
-                        title: "Clear All Data",
-                        subtitle: "Remove all monitoring data",
-                        leadingIcon: DSIcons.Action.delete,
-                        action: {
-                            // Show confirmation and clear data
-                        }
-                    ))
-
-                    DSListRow(.init(
-                        title: "Export Data",
-                        subtitle: "Export monitoring data as JSON",
-                        leadingIcon: DSIcons.File.export,
-                        action: {
-                            // Export data
-                        }
-                    ))
-                }
-
-                // Notification settings
-                Section("Notifications") {
-                    DSToggle(
-                        isOn: $viewModel.showNotifications,
-                        label: "Enable Notifications",
-                        description: "Show alerts for network errors and issues"
-                    )
-                    .onChange(of: viewModel.showNotifications) { _ in
-                        viewModel.saveSettings()
-                    }
-                }
-
-                // About section
-                Section("About") {
-                    DSListRow(.init(
-                        title: "Version",
-                        subtitle: JarvisSettings.version,
-                        leadingIcon: DSIcons.Status.info
-                    ))
-
-                    DSListRow(.init(
-                        title: "Privacy Policy",
-                        subtitle: "View our privacy policy",
-                        leadingIcon: DSIcons.System.security,
-                        action: {
-                            // Open privacy policy
-                        }
-                    ))
-
-                    DSListRow(.init(
-                        title: "Support",
-                        subtitle: "Get help and support",
-                        leadingIcon: DSIcons.Communication.message,
-                        action: {
-                            // Open support
-                        }
-                    ))
-                }
-
-                // Reset section
-                Section {
-                    DSButton.destructive("Reset All Settings") {
-                        showResetAlert = true
-                    }
-                    .frame(maxWidth: .infinity)
-                }
-            }
-            .navigationTitle("Settings")
-            .alert("Reset Settings", isPresented: $showResetAlert) {
-                Button("Cancel", role: .cancel) { }
-                Button("Reset", role: .destructive) {
-                    viewModel.resetSettings()
-                }
-            } message: {
-                Text("This will reset all Jarvis settings to their default values. This action cannot be undone.")
             }
         }
+        .sheet(isPresented: $coordinator.showAppDetails) {
+            if let appInfo = viewModel.uiState.appInfo {
+                AppDetailsSheet(appInfo: appInfo) {
+                    coordinator.dismissAppDetails()
+                }
+            }
+        }
+    }
+}
+
+/// Main Settings screen displaying all settings groups
+public struct SettingsScreen: View {
+    @SwiftUI.Environment(\.dismiss) var dismiss
+    let coordinator: SettingsCoordinator
+    @ObservedObject var viewModel: SettingsViewModel
+
+    @State private var showAppDetails = false
+
+    // Navigation callbacks
+    let onNavigateToInspector: () -> Void
+    let onNavigateToPreferences: () -> Void
+    let onNavigateToLogging: () -> Void
+    
+    init(
+        coordinator: SettingsCoordinator,
+        viewModel: SettingsViewModel,
+        onNavigateToInspector: @escaping () -> Void,
+        onNavigateToPreferences: @escaping () -> Void
+    ) {
+        self.coordinator = coordinator
+        self.viewModel = viewModel
+        self.onNavigateToInspector = onNavigateToInspector
+        self.onNavigateToPreferences = onNavigateToPreferences
+        self.onNavigateToLogging = { coordinator.showLogging() }
+    }
+
+    public var body: some View {
+        ScrollView {
+            LazyVStack(spacing: DSSpacing.l, pinnedViews: []) {
+                ForEach(viewModel.uiState.settingsGroups) { group in
+                    settingsGroupView(group)
+                }
+            }
+            .padding(.top, DSSpacing.m)
+            .padding(.bottom, DSSpacing.l)
+        }
+        .background(DSColor.Extra.background0)
+        .navigationTitle("Settings")
+        #if os(iOS)
+        .navigationBarTitleDisplayMode(.large)
+        #endif
+        .toolbar {
+            #if os(iOS)
+            ToolbarItem(placement: .navigationBarLeading) {
+                JarvisTopBarLogo()
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                DSIconButton(
+                    icon: DSIcons.Navigation.close,
+                    style: .ghost,
+                    size: .small,
+                    tint: DSColor.Neutral.neutral100
+                ) {
+                    coordinator.onDismissSDK?()
+                }
+            }
+            #endif
+        }
+        .onAppear {
+            viewModel.loadSettings()
+        }
+        .sheet(isPresented: $showAppDetails) {
+            if let appInfo = viewModel.uiState.appInfo {
+                AppDetailsSheet(appInfo: appInfo) {
+                    showAppDetails = false
+                    viewModel.dismissAppDetails()
+                }
+            }
+        }
+        .onChange(of: viewModel.uiState.showAppDetails) { newValue in
+            showAppDetails = newValue
+        }
+        .sheet(isPresented: Binding(
+            get: { viewModel.uiState.showRatingDialog },
+            set: { if !$0 { viewModel.hideRatingDialog() } }
+        )) {
+            RatingSheet(
+                ratingData: RatingData(
+                    stars: viewModel.uiState.ratingStars,
+                    description: viewModel.uiState.ratingDescription,
+                    isSubmitting: viewModel.uiState.isSubmittingRating
+                ),
+                onRatingChange: { stars in
+                    viewModel.updateRatingStars(stars)
+                },
+                onDescriptionChange: { description in
+                    viewModel.updateRatingDescription(description)
+                },
+                onSubmit: {
+                    viewModel.submitRating()
+                },
+                onCancel: {
+                    viewModel.hideRatingDialog()
+                }
+            )
+        }
+    }
+
+    // MARK: - Settings Group View
+
+    @ViewBuilder
+    private func settingsGroupView(_ group: SettingsGroup) -> some View {
+        VStack(alignment: .leading, spacing: DSSpacing.s) {
+            // Group Header
+            DSText(
+                group.title.uppercased(),
+                style: .bodyMedium,
+                color: DSColor.Neutral.neutral100
+            )
+            .padding(.horizontal, DSSpacing.m)
+            .padding(.top, DSSpacing.xs)
+
+            // Group Items
+            VStack(spacing: 0) {
+                ForEach(Array(group.items.enumerated()), id: \.element.id) { index, item in
+                    SettingsItemRow(item: item) {
+                        handleItemTap(item)
+                    }
+
+                    if index < group.items.count - 1 {
+                        Divider()
+                            .padding(.leading, DSSpacing.m)
+                    }
+                }
+            }
+            .background(DSColor.Extra.white)
+            .cornerRadius(DSSpacing.xs)
+            .dsShadow(DSElevation.Shadow.medium)
+            .padding(.horizontal, DSSpacing.m)
+        }
+    }
+
+    // MARK: - Actions
+
+    private func handleItemTap(_ item: SettingsItem) {
+        guard item.isEnabled else { return }
+
+        switch item.action {
+        // Navigation actions - handled by screen
+        case .navigateToInspector:
+            onNavigateToInspector()
+        case .navigateToPreferences:
+            onNavigateToPreferences()
+        case .navigateToLogging:
+            onNavigateToLogging()
+
+        // UI presentation actions - handled by screen
+        case .showCallingAppDetails:
+            showAppDetails = true
+        case .rateApp:
+            viewModel.showRatingDialog()
+        case .shareApp(let url):
+            shareApp(url: url)
+
+        // Other actions - delegated to ViewModel
+        case .version, .openUrl, .openEmail:
+            viewModel.handleAction(item.action)
+        }
+    }
+
+    private func shareApp(url: String) {
+        #if canImport(UIKit)
+        guard let urlToShare = URL(string: url) else {
+            print("Invalid URL for sharing: \(url)")
+            return
+        }
+
+        let activityVC = UIActivityViewController(
+            activityItems: [urlToShare],
+            applicationActivities: nil
+        )
+
+        // Find the topmost view controller to present from
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+           let window = windowScene.windows.first(where: { $0.isKeyWindow }) ?? windowScene.windows.first,
+           let rootVC = window.rootViewController {
+
+            var topVC = rootVC
+            while let presented = topVC.presentedViewController {
+                topVC = presented
+            }
+
+            // For iPad, need to set sourceView for popover
+            if let popoverController = activityVC.popoverPresentationController {
+                popoverController.sourceView = topVC.view
+                popoverController.sourceRect = CGRect(x: topVC.view.bounds.midX, y: topVC.view.bounds.midY, width: 0, height: 0)
+                popoverController.permittedArrowDirections = []
+            }
+
+            topVC.present(activityVC, animated: true)
+        } else {
+            print("Could not find view controller to present share sheet")
+        }
+        #endif
     }
 }
 
 // MARK: - Preview
 
 #if DEBUG
-@available(iOS 17.0, *)
-#Preview("Settings View") {
-    SettingsScreen()
+#Preview("Settings Screen") {
+    SettingsScreen(
+        coordinator: SettingsCoordinator(),
+        viewModel: SettingsViewModel(getSettingsItemsUseCase: GetSettingsItemsUseCase(repository: SettingsRepository())),
+        onNavigateToInspector: { print("Navigate to Inspector") },
+        onNavigateToPreferences: { print("Navigate to Preferences") }
+    )
 }
 #endif

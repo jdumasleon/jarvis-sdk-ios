@@ -1,172 +1,196 @@
 import SwiftUI
 import DesignSystem
 import Domain
+import Presentation
 import JarvisInspectorDomain
 
-/// Main network inspector view with search, filters, and pagination
-public struct InspectorScreen: View {
-    @StateObject private var viewModel: NetworkInspectorViewModel
-    @State private var showClearConfirmation = false
+/// Inspector navigation view with coordinator-based routing
+@MainActor
+public struct InspectorNavigationView: View {
+    @ObservedObject private var coordinator: InspectorCoordinator
+    @ObservedObject private var viewModel: NetworkInspectorViewModel
 
-    public init(viewModel: NetworkInspectorViewModel) {
-        self._viewModel = StateObject(wrappedValue: viewModel)
+    public init(coordinator: InspectorCoordinator, viewModel: NetworkInspectorViewModel) {
+        self.coordinator = coordinator
+        self.viewModel = viewModel
     }
 
     public var body: some View {
-        NavigationView {
-            VStack(spacing: DSSpacing.none) {
-                // Search and Filters Section
-                VStack(spacing: DSSpacing.s) {
-                    // Search Field
-                    DSSearchField(
-                        text: .constant(viewModel.uiState.searchQuery),
-                        placeholder: "Search URL or method...",
-                        onSearchSubmit: { query in
-                            viewModel.search(query)
-                        }
-                    )
+        NavigationStack(path: $coordinator.routes) {
+            InspectorScreen(coordinator: coordinator, viewModel: viewModel)
+                .navigationDestination(for: InspectorCoordinator.Route.self) { route in
+                    switch route {
+                    case .transactionDetail(let id):
+                        TransactionDetailView(transactionId: id)
+                    }
+                }
+        }
+    }
+}
 
-                    // Method Filter Chips
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: DSSpacing.xs) {
-                            // All Methods chip
+/// Main network inspector view with search, filters, and pagination
+public struct InspectorScreen: View {
+    @SwiftUI.Environment(\.dismiss) var dismiss
+    let coordinator: InspectorCoordinator
+    @ObservedObject var viewModel: NetworkInspectorViewModel
+    @State private var showClearConfirmation = false
+
+    init(coordinator: InspectorCoordinator, viewModel: NetworkInspectorViewModel) {
+        self.coordinator = coordinator
+        self.viewModel = viewModel
+    }
+
+    public var body: some View {
+        VStack(spacing: DSSpacing.none) {
+            // Search and Filters Section
+            VStack(spacing: DSSpacing.s) {
+                // Search Field
+                DSSearchField(
+                    text: .constant(viewModel.uiState.searchQuery),
+                    placeholder: "Search URL or method...",
+                    onSearchSubmit: { query in
+                        viewModel.search(query)
+                    }
+                )
+                
+                // Method Filter Chips
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: DSSpacing.xs) {
+                        // All Methods chip
+                        FilterChip(
+                            title: "All",
+                            isSelected: viewModel.uiState.selectedMethod == nil,
+                            action: {
+                                viewModel.filterByMethod(nil)
+                            }
+                        )
+                        
+                        // Individual method chips
+                        ForEach([HTTPMethod.GET, .POST, .PUT, .DELETE, .PATCH], id: \.self) { method in
                             FilterChip(
-                                title: "All",
-                                isSelected: viewModel.uiState.selectedMethod == nil,
+                                title: method.rawValue,
+                                isSelected: viewModel.uiState.selectedMethod == method,
                                 action: {
-                                    viewModel.filterByMethod(nil)
+                                    viewModel.filterByMethod(method)
                                 }
                             )
-
-                            // Individual method chips
-                            ForEach([HTTPMethod.GET, .POST, .PUT, .DELETE, .PATCH], id: \.self) { method in
-                                FilterChip(
-                                    title: method.rawValue,
-                                    isSelected: viewModel.uiState.selectedMethod == method,
-                                    action: {
-                                        viewModel.filterByMethod(method)
-                                    }
-                                )
-                            }
                         }
+                    }
+                    .dsPadding(.horizontal, DSSpacing.m)
+                }
+                
+                // Status Category Filter
+                DSSegmentedControl(
+                    selectedSegment: Binding(
+                        get: { viewModel.uiState.selectedStatusCategory?.rawValue ?? StatusCategory.all.rawValue },
+                        set: { selectedId in
+                            let category = StatusCategory.allCases.first { $0.rawValue == selectedId }
+                            viewModel.filterByStatusCategory(category)
+                        }
+                    ),
+                    segments: StatusCategory.allCases.map { category in
+                        DSSegmentedControl.Segment(
+                            id: category.rawValue,
+                            title: category.rawValue
+                        )
+                    }
+                )
+            }
+            .dsPadding(.horizontal, DSSpacing.m)
+            .dsPadding(.top, DSSpacing.s)
+            
+            // Content Section
+            if viewModel.isLoading {
+                DSLoadingState(message: "Loading network requests...")
+                    .frame(maxHeight: .infinity)
+            } else if let error = viewModel.uiState.error {
+                DSStatusCard(
+                    status: .error,
+                    title: "Failed to Load Requests",
+                    message: error.localizedDescription,
+                    actionTitle: "Retry",
+                    action: {
+                        viewModel.loadTransactions()
+                    }
+                )
+                .dsPadding(DSSpacing.m)
+            } else if viewModel.uiState.filteredTransactions.isEmpty {
+                DSEmptyState(
+                    icon: "network",
+                    title: "No Network Requests",
+                    description: viewModel.uiState.searchQuery.isEmpty ?
+                    "Network requests will appear here when your app makes them" :
+                        "No requests match your search criteria",
+                    primaryAction: viewModel.uiState.searchQuery.isEmpty ? nil : ("Clear Filters", {
+                        viewModel.search("")
+                        viewModel.filterByMethod(nil)
+                        viewModel.filterByStatusCategory(.all)
+                    })
+                )
+            } else {
+                VStack(spacing: DSSpacing.none) {
+                    // Transaction List
+                    List {
+                        ForEach(viewModel.uiState.filteredTransactions, id: \.id) { transaction in
+                            NetworkTransactionRow(transaction: transaction)
+                                .onTapGesture {
+                                    viewModel.selectTransaction(transaction)
+                                }
+                        }
+                    }
+                    .listStyle(.plain)
+                    .refreshable {
+                        await viewModel.loadTransactions()
+                    }
+                    
+                    // Pagination Controls
+                    if viewModel.uiState.totalPages > 1 {
+                        PaginationControls(
+                            currentPage: viewModel.uiState.currentPage,
+                            totalPages: viewModel.uiState.totalPages,
+                            itemsPerPage: viewModel.uiState.itemsPerPage,
+                            onPrevious: { viewModel.previousPage() },
+                            onNext: { viewModel.nextPage() },
+                            onItemsPerPageChanged: { count in
+                                viewModel.setItemsPerPage(count)
+                            }
+                        )
                         .dsPadding(.horizontal, DSSpacing.m)
-                    }
-
-                    // Status Category Filter
-                    DSSegmentedControl(
-                        selectedSegment: Binding(
-                            get: { viewModel.uiState.selectedStatusCategory?.rawValue ?? StatusCategory.all.rawValue },
-                            set: { selectedId in
-                                let category = StatusCategory.allCases.first { $0.rawValue == selectedId }
-                                viewModel.filterByStatusCategory(category)
-                            }
-                        ),
-                        segments: StatusCategory.allCases.map { category in
-                            DSSegmentedControl.Segment(
-                                id: category.rawValue,
-                                title: category.rawValue
-                            )
-                        }
-                    )
-                }
-                .dsPadding(.horizontal, DSSpacing.m)
-                .dsPadding(.top, DSSpacing.s)
-
-                // Content Section
-                if viewModel.isLoading {
-                    DSLoadingState(message: "Loading network requests...")
-                        .frame(maxHeight: .infinity)
-                } else if let error = viewModel.uiState.error {
-                    DSStatusCard(
-                        status: .error,
-                        title: "Failed to Load Requests",
-                        message: error.localizedDescription,
-                        actionTitle: "Retry",
-                        action: {
-                            viewModel.loadTransactions()
-                        }
-                    )
-                    .dsPadding(DSSpacing.m)
-                } else if viewModel.uiState.filteredTransactions.isEmpty {
-                    DSEmptyState(
-                        icon: "network",
-                        title: "No Network Requests",
-                        description: viewModel.uiState.searchQuery.isEmpty ?
-                            "Network requests will appear here when your app makes them" :
-                            "No requests match your search criteria",
-                        primaryAction: viewModel.uiState.searchQuery.isEmpty ? nil : ("Clear Filters", {
-                            viewModel.search("")
-                            viewModel.filterByMethod(nil)
-                            viewModel.filterByStatusCategory(.all)
-                        })
-                    )
-                } else {
-                    VStack(spacing: DSSpacing.none) {
-                        // Transaction List
-                        List {
-                            ForEach(viewModel.uiState.filteredTransactions, id: \.id) { transaction in
-                                NetworkTransactionRow(transaction: transaction)
-                                    .onTapGesture {
-                                        viewModel.selectTransaction(transaction)
-                                    }
-                            }
-                        }
-                        .listStyle(.plain)
-                        .refreshable {
-                            await viewModel.loadTransactions()
-                        }
-
-                        // Pagination Controls
-                        if viewModel.uiState.totalPages > 1 {
-                            PaginationControls(
-                                currentPage: viewModel.uiState.currentPage,
-                                totalPages: viewModel.uiState.totalPages,
-                                itemsPerPage: viewModel.uiState.itemsPerPage,
-                                onPrevious: { viewModel.previousPage() },
-                                onNext: { viewModel.nextPage() },
-                                onItemsPerPageChanged: { count in
-                                    viewModel.setItemsPerPage(count)
-                                }
-                            )
-                            .dsPadding(.horizontal, DSSpacing.m)
-                            .dsPadding(.vertical, DSSpacing.s)
-                            .background(DSColor.Extra.background0)
-                        }
+                        .dsPadding(.vertical, DSSpacing.s)
+                        .background(DSColor.Extra.background0)
                     }
                 }
-            }
-            .navigationTitle("Network Inspector")
-            .toolbar {
-                ToolbarItem(placement: .primaryAction) {
-                    Menu {
-                        Button("Clear All", role: .destructive) {
-                            showClearConfirmation = true
-                        }
-
-                        Menu("Items per page") {
-                            ForEach([20, 50, 100], id: \.self) { count in
-                                Button("\(count) items") {
-                                    viewModel.setItemsPerPage(count)
-                                }
-                            }
-                        }
-                    } label: {
-                        Image(systemName: "ellipsis.circle")
-                    }
-                }
-            }
-            .confirmationDialog("Clear All Requests?", isPresented: $showClearConfirmation) {
-                Button("Clear All", role: .destructive) {
-                    viewModel.clearAll()
-                }
-                Button("Cancel", role: .cancel) {}
-            } message: {
-                Text("This will permanently delete all captured network requests.")
-            }
-            .onAppear {
-                viewModel.loadTransactions()
             }
         }
+        .navigationTitle("Network Inspector")
+        .toolbar {
+            #if os(iOS)
+            ToolbarItem(placement: .navigationBarLeading) {
+                JarvisTopBarLogo()
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                DSIconButton(
+                    icon: DSIcons.Navigation.close,
+                    style: .ghost,
+                    size: .small,
+                    tint: DSColor.Neutral.neutral100
+                ) {
+                    coordinator.onDismissSDK?()
+                }
+            }
+            #endif
+        }
+        .confirmationDialog("Clear All Requests?", isPresented: $showClearConfirmation) {
+            Button("Clear All", role: .destructive) {
+                viewModel.clearAll()
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("This will permanently delete all captured network requests.")
+        }
+        .onAppear {
+            viewModel.loadTransactions()
+        }   
     }
 }
 
