@@ -19,18 +19,6 @@ public class PreferencesViewModel: BaseViewModel {
         super.init()
     }
 
-    /// Initializer for testing with custom use cases
-    public init(
-        getPreferencesUseCase: GetPreferencesUseCase,
-        updatePreferenceUseCase: UpdatePreferenceUseCase,
-        deletePreferenceUseCase: DeletePreferenceUseCase
-    ) {
-        super.init()
-        self.getPreferencesUseCase = getPreferencesUseCase
-        self.updatePreferenceUseCase = updatePreferenceUseCase
-        self.deletePreferenceUseCase = deletePreferenceUseCase
-    }
-
     public func loadPreferences() {
         Task {
             isLoading = true

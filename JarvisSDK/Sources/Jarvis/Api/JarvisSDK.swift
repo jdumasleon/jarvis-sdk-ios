@@ -4,6 +4,7 @@ import Combine
 import Platform
 import Domain
 import JarvisInspectorDomain
+import JarvisInspectorData
 import Common
 import DesignSystem
 
@@ -32,6 +33,8 @@ public final class JarvisSDK: ObservableObject {
     // MARK: - Initialization
     private init() {
         setupShakeDetection()
+        // Start network monitoring immediately so interception is ready before explicit initialization.
+        NetworkInterceptor.shared.startMonitoring()
     }
 
     // MARK: - Public API
@@ -154,6 +157,25 @@ public final class JarvisSDK: ObservableObject {
         return configuration
     }
 
+    // MARK: - Manual URLSession Configuration
+
+    /// Configure a URLSessionConfiguration to use Jarvis network interception
+    /// Use this if you need explicit control over when interception is enabled
+    /// - Parameter configuration: The URLSessionConfiguration to configure
+    /// - Returns: The configured URLSessionConfiguration (for chaining)
+    @discardableResult
+    public nonisolated static func configureURLSession(_ configuration: inout URLSessionConfiguration) -> URLSessionConfiguration {
+        if let interceptorClass = NSClassFromString("Platform.URLSessionInterceptor") as? URLProtocol.Type {
+            var protocolClasses = configuration.protocolClasses ?? []
+            // Only add if not already present
+            if !protocolClasses.contains(where: { $0 == interceptorClass }) {
+                protocolClasses.insert(interceptorClass, at: 0)
+                configuration.protocolClasses = protocolClasses
+            }
+        }
+        return configuration
+    }
+
     // MARK: - SwiftUI Integration
 
     /// Main Jarvis SDK application view with scaffold structure
@@ -206,6 +228,9 @@ public final class JarvisSDK: ObservableObject {
         // Initialize network inspection
         if configuration.networkInspection.enableNetworkLogging {
             await initializeNetworkInspection()
+        } else {
+            NetworkInterceptor.shared.stopMonitoring()
+            JarvisLogger.shared.info("Network inspection disabled via configuration")
         }
 
         // Initialize preferences monitoring
@@ -223,7 +248,7 @@ public final class JarvisSDK: ObservableObject {
     }
 
     private func initializeDependencyInjection() async {
-        JarvisDI.registerAll()
+        DependencyConfiguration.registerAll()
         JarvisLogger.shared.debug("Dependency injection configured")
     }
 
@@ -233,8 +258,8 @@ public final class JarvisSDK: ObservableObject {
     }
 
     private func initializeNetworkInspection() async {
-        // TODO: Initialize inspection monitoring
-        JarvisLogger.shared.debug("Network inspection initialized")
+        NetworkInterceptor.shared.startMonitoring()
+        JarvisLogger.shared.info("Network inspection initialized")
     }
 
     private func initializePreferencesMonitoring() async {
@@ -244,6 +269,7 @@ public final class JarvisSDK: ObservableObject {
 
     private func performCleanup() async {
         // Stop network interception
+        NetworkInterceptor.shared.stopMonitoring()
 
         // Stop shake detection
         shakeDetector.stopDetection()
@@ -251,7 +277,7 @@ public final class JarvisSDK: ObservableObject {
         // Clear subscriptions
         cancellables.removeAll()
 
-        JarvisLogger.shared.debug("SDK cleanup completed")
+        JarvisLogger.shared.info("SDK cleanup completed")
     }
 }
 
@@ -291,7 +317,12 @@ public struct JarvisSDKModifier: ViewModifier {
                 .transition(.scale.combined(with: .opacity))
             }
         }
-        .sheet(isPresented: $showingInspector) {
+        .sheet(isPresented: $showingInspector, onDismiss: {
+            // Sync Jarvis state when sheet is dismissed by user swipe
+            if jarvis.isShowing {
+                jarvis.hideOverlay()
+            }
+        }) {
             jarvis.mainView()
         }
         .onChange(of: jarvis.isShowing) { isShowing in

@@ -54,11 +54,11 @@ public struct SettingsDependencyRegistration {
 
         // Rating Repository (Singleton)
         container.register(
-            RatingRepository.self,
+            RatingRepositoryProtocol.self,
             scope: .singleton
         ) {
             let apiService = container.resolve(RatingApiService.self)
-            return RatingRepositoryImpl(ratingApiService: apiService)
+            return RatingRepository(ratingApiService: apiService)
         }
     }
 
@@ -77,7 +77,7 @@ public struct SettingsDependencyRegistration {
             SubmitRatingUseCase.self,
             scope: .transient
         ) {
-            let repository = container.resolve(RatingRepository.self)
+            let repository = container.resolve(RatingRepositoryProtocol.self)
             return SubmitRatingUseCase(ratingRepository: repository)
         }
     }

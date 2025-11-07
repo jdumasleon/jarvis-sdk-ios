@@ -259,7 +259,7 @@ public struct SettingsScreen: View {
 #Preview("Settings Screen") {
     SettingsScreen(
         coordinator: SettingsCoordinator(),
-        viewModel: SettingsViewModel(getSettingsItemsUseCase: GetSettingsItemsUseCase(repository: SettingsRepository())),
+        viewModel: SettingsViewModel(),
         onNavigateToInspector: { print("Navigate to Inspector") },
         onNavigateToPreferences: { print("Navigate to Preferences") }
     )

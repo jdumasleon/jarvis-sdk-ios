@@ -15,13 +15,8 @@ import Common
 public class SettingsViewModel: BaseViewModel {
     @Published public var uiState = SettingsUIState()
 
-    private let getSettingsItemsUseCase: GetSettingsItemsUseCase
+    @Injected private var getSettingsItemsUseCase: GetSettingsItemsUseCase
     @Injected private var submitRatingUseCase: SubmitRatingUseCase
-
-    public init(getSettingsItemsUseCase: GetSettingsItemsUseCase) {
-        self.getSettingsItemsUseCase = getSettingsItemsUseCase
-        super.init()
-    }
 
     public func loadSettings() {
         Task {

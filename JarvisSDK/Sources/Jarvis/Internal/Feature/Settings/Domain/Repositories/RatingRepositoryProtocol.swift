@@ -8,7 +8,7 @@
 import Foundation
 
 /// Repository interface for rating operations
-public protocol RatingRepository {
+public protocol RatingRepositoryProtocol {
     /// Submit a rating for the SDK
     /// - Parameter rating: The rating to submit
     /// - Returns: Result containing submission result

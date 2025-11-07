@@ -43,18 +43,9 @@ public final class AppCoordinator: ObservableObject {
     @Injected private var deletePreferenceUseCase: DeletePreferenceUseCase
 
     private lazy var homeViewModel = HomeViewModel()
-
     private lazy var inspectorViewModel = NetworkInspectorViewModel()
-
-    private lazy var preferencesViewModel = PreferencesViewModel(
-        getPreferencesUseCase: getPreferencesUseCase,
-        updatePreferenceUseCase: updatePreferenceUseCase,
-        deletePreferenceUseCase: deletePreferenceUseCase
-    )
-
-    private lazy var settingsViewModel = SettingsViewModel(
-        getSettingsItemsUseCase: getSettingsItemsUseCase
-    )
+    private lazy var preferencesViewModel = PreferencesViewModel()
+    private lazy var settingsViewModel = SettingsViewModel()
 
     // MARK: - Initialization
 

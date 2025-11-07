@@ -20,6 +20,17 @@ public final class NetworkTransactionEntity: Codable {
     public var endTime: Date?
     public var status: String
 
+    // New fields for enhanced detail view
+    public var httpProtocol: String?
+    public var path: String?
+    public var host: String?
+    public var requestTimestamp: Int64
+    public var requestBodySize: Int64
+    public var responseTimestamp: Int64
+    public var responseBodySize: Int64
+    public var statusMessage: String?
+    public var error: String?
+
     public init(
         id: String,
         requestId: String,
@@ -33,7 +44,16 @@ public final class NetworkTransactionEntity: Codable {
         statusCode: Int? = nil,
         startTime: Date,
         endTime: Date? = nil,
-        status: String
+        status: String,
+        httpProtocol: String? = nil,
+        path: String? = nil,
+        host: String? = nil,
+        requestTimestamp: Int64 = 0,
+        requestBodySize: Int64 = 0,
+        responseTimestamp: Int64 = 0,
+        responseBodySize: Int64 = 0,
+        statusMessage: String? = nil,
+        error: String? = nil
     ) {
         self.id = id
         self.requestId = requestId
@@ -48,6 +68,15 @@ public final class NetworkTransactionEntity: Codable {
         self.startTime = startTime
         self.endTime = endTime
         self.status = status
+        self.httpProtocol = httpProtocol
+        self.path = path
+        self.host = host
+        self.requestTimestamp = requestTimestamp
+        self.requestBodySize = requestBodySize
+        self.responseTimestamp = responseTimestamp
+        self.responseBodySize = responseBodySize
+        self.statusMessage = statusMessage
+        self.error = error
     }
 
     // Helper to convert headers dictionary to JSON

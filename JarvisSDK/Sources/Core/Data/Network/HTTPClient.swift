@@ -1,50 +1,78 @@
 //
 //  HTTPClient.swift
-//  JarvisDemo
+//  JarvisSDK
 //
-//  Created by Jose Luis Dumas Leon   on 1/10/25.
+//  HTTP client for executing network requests
 //
 
 import Foundation
-import Jarvis
+import Domain
 
 // MARK: - HTTP Client Protocol
 
-protocol HTTPClientProtocol {
+/// Protocol for HTTP client abstraction
+public protocol HTTPClientProtocol: Sendable {
+    /// Execute an HTTP request and return the raw response
+    /// - Parameter request: The HTTP request to execute
+    /// - Returns: HTTPResponse containing status code, data, headers
+    /// - Throws: HTTPError if the request fails
     func execute(_ request: HTTPRequest) async throws -> HTTPResponse
+
+    /// Execute an HTTP request and decode the response to a specific type
+    /// - Parameters:
+    ///   - request: The HTTP request to execute
+    ///   - responseType: The type to decode the response to
+    /// - Returns: Decoded instance of type T
+    /// - Throws: HTTPError if the request or decoding fails
     func execute<T: Codable>(_ request: HTTPRequest, responseType: T.Type) async throws -> T
+
+    /// Execute an HTTP request without expecting a response body
+    /// - Parameter request: The HTTP request to execute
+    /// - Throws: HTTPError if the request fails
     func executeVoid(_ request: HTTPRequest) async throws
 }
 
 // MARK: - Default HTTP Client Implementation
 
-class HTTPClient: HTTPClientProtocol {
+/// Default implementation of HTTPClientProtocol
+public final class HTTPClient: HTTPClientProtocol {
     private let session: URLSession
     private let decoder: JSONDecoder
+    private let enableLogging: Bool
 
-    init(
+    /// Initialize HTTPClient
+    /// - Parameters:
+    ///   - session: Optional URLSession to use. If nil, creates a new session with default configuration
+    ///   - decoder: JSON decoder for response decoding (default: JSONDecoder())
+    ///   - enableLogging: Whether to log requests/responses (default: false)
+    public init(
         session: URLSession? = nil,
-        decoder: JSONDecoder = JSONDecoder()
+        decoder: JSONDecoder = JSONDecoder(),
+        enableLogging: Bool = false
     ) {
-        if let session = session {
-            self.session = session
-        } else {
-            // Use default configuration and ensure Jarvis interceptor is registered up front.
-            var configuration = URLSessionConfiguration.default
-            JarvisSDK.configureURLSession(&configuration)
-            self.session = URLSession(configuration: configuration)
-        }
+        self.session = session ?? URLSession(configuration: .default)
         self.decoder = decoder
+        self.enableLogging = enableLogging
     }
 
-    func execute(_ request: HTTPRequest) async throws -> HTTPResponse {
+    public func execute(_ request: HTTPRequest) async throws -> HTTPResponse {
         let urlRequest = try buildURLRequest(from: request)
+
+        // Log request if enabled
+        if enableLogging {
+            logRequest(urlRequest, body: request.body)
+        }
 
         do {
             let (data, response) = try await session.data(for: urlRequest)
 
             guard let httpResponse = response as? HTTPURLResponse else {
                 throw HTTPError.invalidResponse
+            }
+
+            // Log response if enabled
+            if enableLogging {
+                logResponse(httpResponse, data: data)
             }
 
             let httpResponseModel = HTTPResponse(
@@ -77,7 +105,7 @@ class HTTPClient: HTTPClientProtocol {
         }
     }
 
-    func execute<T: Codable>(_ request: HTTPRequest, responseType: T.Type) async throws -> T {
+    public func execute<T: Codable>(_ request: HTTPRequest, responseType: T.Type) async throws -> T {
         let response = try await execute(request)
 
         do {
@@ -87,7 +115,7 @@ class HTTPClient: HTTPClientProtocol {
         }
     }
 
-    func executeVoid(_ request: HTTPRequest) async throws {
+    public func executeVoid(_ request: HTTPRequest) async throws {
         _ = try await execute(request)
     }
 
@@ -111,68 +139,34 @@ class HTTPClient: HTTPClientProtocol {
         if urlRequest.value(forHTTPHeaderField: "Content-Type") == nil {
             urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         }
+        if urlRequest.value(forHTTPHeaderField: "Accept") == nil {
+            urlRequest.setValue("application/json", forHTTPHeaderField: "Accept")
+        }
 
         // Set body
         urlRequest.httpBody = request.body
 
         return urlRequest
     }
-}
 
-// MARK: - Mock HTTP Client (for testing)
-
-class MockHTTPClient: HTTPClientProtocol {
-    var mockResponse: HTTPResponse?
-    var mockError: Error?
-    var shouldSimulateDelay: Bool = true
-    var simulatedDelay: TimeInterval = 1.0
-
-    func execute(_ request: HTTPRequest) async throws -> HTTPResponse {
-        if shouldSimulateDelay {
-            try await Task.sleep(nanoseconds: UInt64(simulatedDelay * 1_000_000_000))
+    private func logRequest(_ request: URLRequest, body: Data?) {
+        print("📤 HTTP Request")
+        print("   URL: \(request.url?.absoluteString ?? "N/A")")
+        print("   Method: \(request.httpMethod ?? "N/A")")
+        if let headers = request.allHTTPHeaderFields, !headers.isEmpty {
+            print("   Headers: \(headers)")
         }
-
-        if let error = mockError {
-            throw error
+        if let body = body, let bodyString = String(data: body, encoding: .utf8) {
+            print("   Body: \(bodyString)")
         }
+    }
 
-        guard let response = mockResponse else {
-            throw HTTPError.noData
+    private func logResponse(_ response: HTTPURLResponse, data: Data) {
+        print("📥 HTTP Response")
+        print("   URL: \(response.url?.absoluteString ?? "N/A")")
+        print("   Status: \(response.statusCode)")
+        if let responseString = String(data: data, encoding: .utf8) {
+            print("   Body: \(responseString)")
         }
-
-        return response
-    }
-
-    func execute<T: Codable>(_ request: HTTPRequest, responseType: T.Type) async throws -> T {
-        let response = try await execute(request)
-        return try response.decode(responseType)
-    }
-
-    func executeVoid(_ request: HTTPRequest) async throws {
-        _ = try await execute(request)
-    }
-
-    // MARK: - Mock Configuration
-
-    func setMockResponse<T: Codable>(_ object: T, statusCode: Int = 200) throws {
-        let encoder = JSONEncoder()
-        let data = try encoder.encode(object)
-        mockResponse = HTTPResponse(
-            data: data,
-            statusCode: statusCode,
-            headers: [:],
-            url: nil
-        )
-        mockError = nil
-    }
-
-    func setMockError(_ error: Error) {
-        mockError = error
-        mockResponse = nil
-    }
-
-    func reset() {
-        mockResponse = nil
-        mockError = nil
     }
 }

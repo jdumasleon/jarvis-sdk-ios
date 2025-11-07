@@ -2,87 +2,122 @@
 //  RatingApiService.swift
 //  JarvisSDK
 //
-//  API service for rating operations
+//  API service for rating operations using GraphQL
 //
 
 import Foundation
+import Data
 
-/// API service for rating operations
+/// API service for rating operations using GraphQL
 protocol RatingApiService {
-    /// Submit a rating to the server
-    /// - Parameter rating: The rating DTO to submit
+    /// Submit a rating to the server via GraphQL
+    /// - Parameter rating: The rating to submit
     /// - Returns: Rating submission response
-    func submitRating(_ rating: RatingDto) async throws -> RatingSubmissionResponseDto
+    func submitRating(_ rating: Rating) async throws -> RatingSubmissionResult
 }
 
-/// Default implementation of RatingApiService
+/// Default implementation of RatingApiService using HTTPClient
 class RatingApiServiceImpl: RatingApiService {
     private let baseURL: String
-    private let session: URLSession
+    private let httpClient: HTTPClientProtocol
 
     init(
-        baseURL: String = "https://api.jarvis-sdk.com/v1",
-        session: URLSession = .shared
+        baseURL: String = APIConfiguration.RatingAPI.baseURL,
+        httpClient: HTTPClientProtocol? = nil
     ) {
         self.baseURL = baseURL
-        self.session = session
+        self.httpClient = httpClient ?? HTTPClient(enableLogging: true)
     }
 
-    func submitRating(_ rating: RatingDto) async throws -> RatingSubmissionResponseDto {
-        // Construct URL
-        guard let url = URL(string: "\(baseURL)/ratings") else {
-            throw RatingApiError.invalidURL
+    func submitRating(_ rating: Rating) async throws -> RatingSubmissionResult {
+        // Convert rating to GraphQL input
+        let input = rating.toGraphQLInput()
+
+        // Build GraphQL request
+        let graphQLRequest = GraphQLRequest(
+            query: RatingMutations.submitRating,
+            variables: RatingMutationVariables(data: input)
+        )
+
+        do {
+            // Create HTTP request using the new HTTPClient
+            let httpRequest = try HTTPRequest.post(
+                url: baseURL,
+                body: graphQLRequest
+            )
+
+            // Execute request and get raw response
+            let httpResponse = try await httpClient.execute(httpRequest)
+
+            // Decode GraphQL response
+            let graphQLResponse = try httpResponse.decode(
+                GraphQLResponse<SubmitRatingData>.self
+            )
+
+            // Handle GraphQL errors
+            if let errors = graphQLResponse.errors, !errors.isEmpty {
+                let errorMessage = errors.map { $0.message }.joined(separator: ", ")
+                throw RatingApiError.graphQLError(message: errorMessage)
+            }
+
+            // Extract and convert response
+            guard let data = graphQLResponse.data else {
+                throw RatingApiError.emptyResponse
+            }
+
+            return data.submitRating.toDomain()
+
+        } catch let error as HTTPError {
+            // Map HTTPError to RatingApiError
+            throw mapHTTPError(error)
+        } catch let error as RatingApiError {
+            // Re-throw RatingApiError
+            throw error
+        } catch {
+            // Wrap unexpected errors
+            throw RatingApiError.networkError(error)
         }
+    }
 
-        // Create request
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("application/json", forHTTPHeaderField: "Accept")
+    // MARK: - Private Methods
 
-        // Encode body
-        let encoder = JSONEncoder()
-        encoder.keyEncodingStrategy = .convertToSnakeCase
-        request.httpBody = try encoder.encode(rating)
-
-        // Perform request
-        let (data, response) = try await session.data(for: request)
-
-        // Validate response
-        guard let httpResponse = response as? HTTPURLResponse else {
-            throw RatingApiError.invalidResponse
+    private func mapHTTPError(_ error: HTTPError) -> RatingApiError {
+        switch error {
+        case .invalidURL(let url):
+            return .invalidURL(url)
+        case .statusCode(let code, let message):
+            return .httpError(statusCode: code, message: message)
+        case .decodingError(let error):
+            return .decodingError(error)
+        default:
+            return .networkError(error)
         }
-
-        guard (200...299).contains(httpResponse.statusCode) else {
-            throw RatingApiError.httpError(statusCode: httpResponse.statusCode)
-        }
-
-        // Decode response
-        let decoder = JSONDecoder()
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
-        let responseDto = try decoder.decode(RatingSubmissionResponseDto.self, from: data)
-
-        return responseDto
     }
 }
 
 /// Errors that can occur in rating API operations
 enum RatingApiError: LocalizedError {
-    case invalidURL
-    case invalidResponse
-    case httpError(statusCode: Int)
+    case invalidURL(String)
+    case httpError(statusCode: Int, message: String?)
     case networkError(Error)
+    case graphQLError(message: String)
+    case emptyResponse
+    case decodingError(Error)
 
     var errorDescription: String? {
         switch self {
-        case .invalidURL:
-            return "Invalid API URL"
-        case .invalidResponse:
-            return "Invalid response from server"
-        case .httpError(let statusCode):
-            return "HTTP error: \(statusCode)"
+        case .invalidURL(let url):
+            return "Invalid API URL: \(url)"
+        case .httpError(let statusCode, let message):
+            return "HTTP \(statusCode): \(message ?? "Unknown error")"
         case .networkError(let error):
             return "Network error: \(error.localizedDescription)"
+        case .graphQLError(let message):
+            return "GraphQL error: \(message)"
+        case .emptyResponse:
+            return "Empty response from server"
+        case .decodingError(let error):
+            return "Failed to decode response: \(error.localizedDescription)"
         }
     }
 }

@@ -103,7 +103,7 @@ public struct JarvisSDKApplication: View {
 
 private struct PreviewWrapper: View {
     init() {
-        JarvisDI.registerAll()
+        DependencyConfiguration.registerAll()
     }
 
     var body: some View {

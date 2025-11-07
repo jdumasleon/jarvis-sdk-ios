@@ -43,7 +43,7 @@ public struct PreferencesScreen: View {
     }
 
     public var body: some View {
-        NavigationView {
+        ScrollView {
             VStack(spacing: DSSpacing.none) {
                 // Search and filter
                 VStack(spacing: DSSpacing.s) {
@@ -110,7 +110,11 @@ public struct PreferencesScreen: View {
                     .listStyle(.plain)
                 }
             }
-            .navigationTitle("Host App Preferences")
+            .background(DSColor.Extra.background0)
+            .navigationTitle("Preferences")
+            #if os(iOS)
+            .navigationBarTitleDisplayMode(.large)
+            #endif
             .toolbar {
                 #if os(iOS)
                 ToolbarItem(placement: .navigationBarLeading) {

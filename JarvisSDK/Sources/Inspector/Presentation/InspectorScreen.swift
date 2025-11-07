@@ -28,12 +28,14 @@ public struct InspectorNavigationView: View {
     }
 }
 
-/// Main network inspector view with search, filters, and pagination
+/// Main network inspector view with search, filters, and infinite scroll
 public struct InspectorScreen: View {
     @SwiftUI.Environment(\.dismiss) var dismiss
     let coordinator: InspectorCoordinator
     @ObservedObject var viewModel: NetworkInspectorViewModel
     @State private var showClearConfirmation = false
+    @State private var isSearchAndFiltersVisible = true
+    @State private var accumulatedScrollDelta: CGFloat = 0
 
     init(coordinator: InspectorCoordinator, viewModel: NetworkInspectorViewModel) {
         self.coordinator = coordinator
@@ -41,128 +43,197 @@ public struct InspectorScreen: View {
     }
 
     public var body: some View {
-        VStack(spacing: DSSpacing.none) {
-            // Search and Filters Section
-            VStack(spacing: DSSpacing.s) {
-                // Search Field
-                DSSearchField(
-                    text: .constant(viewModel.uiState.searchQuery),
-                    placeholder: "Search URL or method...",
-                    onSearchSubmit: { query in
-                        viewModel.search(query)
-                    }
-                )
-                
-                // Method Filter Chips
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: DSSpacing.xs) {
-                        // All Methods chip
-                        FilterChip(
-                            title: "All",
-                            isSelected: viewModel.uiState.selectedMethod == nil,
-                            action: {
-                                viewModel.filterByMethod(nil)
+        ScrollView {
+            VStack(spacing: DSSpacing.none) {
+                // Search and Filters Section (Collapsible)
+                if isSearchAndFiltersVisible {
+                    VStack(spacing: DSSpacing.s) {
+                        // Search Field
+                        DSSearchField(
+                            text: Binding(
+                                get: { viewModel.uiState.searchQuery },
+                                set: { viewModel.search($0) }
+                            ),
+                            placeholder: "Search URL or method...",
+                            onSearchSubmit: { query in
+                                viewModel.search(query)
                             }
                         )
                         
-                        // Individual method chips
-                        ForEach([HTTPMethod.GET, .POST, .PUT, .DELETE, .PATCH], id: \.self) { method in
-                            FilterChip(
-                                title: method.rawValue,
-                                isSelected: viewModel.uiState.selectedMethod == method,
-                                action: {
-                                    viewModel.filterByMethod(method)
-                                }
+                        // HTTP Methods Label
+                        HStack {
+                            DSText(
+                                "HTTP Methods",
+                                style: .bodyMedium,
+                                color: DSColor.Neutral.neutral100
                             )
+                            Spacer()
+                        }
+                        .dsPadding(.horizontal, DSSpacing.m)
+                        
+                        // Method Filter Chips
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: DSSpacing.xs) {
+                                // All Methods chip
+                                FilterChip(
+                                    title: "All",
+                                    isSelected: viewModel.uiState.selectedMethod == nil,
+                                    action: {
+                                        viewModel.filterByMethod(nil)
+                                    }
+                                )
+                                
+                                // Individual method chips
+                                ForEach([HTTPMethod.GET, .POST, .PUT, .DELETE, .PATCH], id: \.self) { method in
+                                    FilterChip(
+                                        title: method.rawValue,
+                                        isSelected: viewModel.uiState.selectedMethod == method,
+                                        action: {
+                                            viewModel.filterByMethod(method)
+                                        }
+                                    )
+                                }
+                            }
+                            .dsPadding(.horizontal, DSSpacing.m)
+                        }
+                        
+                        // Status Label
+                        HStack {
+                            DSText(
+                                "Status",
+                                style: .bodyMedium,
+                                color: DSColor.Neutral.neutral100
+                            )
+                            Spacer()
+                        }
+                        .dsPadding(.horizontal, DSSpacing.m)
+                        
+                        // Status Category Filter Chips
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: DSSpacing.xs) {
+                                ForEach(StatusCategory.allCases, id: \.self) { category in
+                                    FilterChip(
+                                        title: category.rawValue,
+                                        isSelected: viewModel.uiState.selectedStatusCategory == category ||
+                                        (category == .all && viewModel.uiState.selectedStatusCategory == nil),
+                                        action: {
+                                            viewModel.filterByStatusCategory(category == .all ? nil : category)
+                                        }
+                                    )
+                                }
+                            }
+                            .dsPadding(.horizontal, DSSpacing.m)
                         }
                     }
-                    .dsPadding(.horizontal, DSSpacing.m)
+                    .dsPadding(.top, DSSpacing.s)
+                    .transition(.move(edge: .top).combined(with: .opacity))
                 }
                 
-                // Status Category Filter
-                DSSegmentedControl(
-                    selectedSegment: Binding(
-                        get: { viewModel.uiState.selectedStatusCategory?.rawValue ?? StatusCategory.all.rawValue },
-                        set: { selectedId in
-                            let category = StatusCategory.allCases.first { $0.rawValue == selectedId }
-                            viewModel.filterByStatusCategory(category)
-                        }
-                    ),
-                    segments: StatusCategory.allCases.map { category in
-                        DSSegmentedControl.Segment(
-                            id: category.rawValue,
-                            title: category.rawValue
-                        )
-                    }
-                )
-            }
-            .dsPadding(.horizontal, DSSpacing.m)
-            .dsPadding(.top, DSSpacing.s)
-            
-            // Content Section
-            if viewModel.isLoading {
-                DSLoadingState(message: "Loading network requests...")
-                    .frame(maxHeight: .infinity)
-            } else if let error = viewModel.uiState.error {
-                DSStatusCard(
-                    status: .error,
-                    title: "Failed to Load Requests",
-                    message: error.localizedDescription,
-                    actionTitle: "Retry",
-                    action: {
-                        viewModel.loadTransactions()
-                    }
-                )
-                .dsPadding(DSSpacing.m)
-            } else if viewModel.uiState.filteredTransactions.isEmpty {
-                DSEmptyState(
-                    icon: "network",
-                    title: "No Network Requests",
-                    description: viewModel.uiState.searchQuery.isEmpty ?
-                    "Network requests will appear here when your app makes them" :
-                        "No requests match your search criteria",
-                    primaryAction: viewModel.uiState.searchQuery.isEmpty ? nil : ("Clear Filters", {
-                        viewModel.search("")
-                        viewModel.filterByMethod(nil)
-                        viewModel.filterByStatusCategory(.all)
-                    })
-                )
-            } else {
-                VStack(spacing: DSSpacing.none) {
-                    // Transaction List
-                    List {
-                        ForEach(viewModel.uiState.filteredTransactions, id: \.id) { transaction in
-                            NetworkTransactionRow(transaction: transaction)
-                                .onTapGesture {
-                                    viewModel.selectTransaction(transaction)
-                                }
-                        }
-                    }
-                    .listStyle(.plain)
-                    .refreshable {
-                        await viewModel.loadTransactions()
-                    }
+                // Transaction count and actions
+                HStack {
+                    DSText(
+                        "TRANSACTIONS (\(viewModel.uiState.filteredTransactions.count))",
+                        style: .bodyMedium,
+                        color: DSColor.Neutral.neutral100
+                    )
+                    .textCase(.uppercase)
                     
-                    // Pagination Controls
-                    if viewModel.uiState.totalPages > 1 {
-                        PaginationControls(
-                            currentPage: viewModel.uiState.currentPage,
-                            totalPages: viewModel.uiState.totalPages,
-                            itemsPerPage: viewModel.uiState.itemsPerPage,
-                            onPrevious: { viewModel.previousPage() },
-                            onNext: { viewModel.nextPage() },
-                            onItemsPerPageChanged: { count in
-                                viewModel.setItemsPerPage(count)
+                    Spacer()
+                    
+                    Menu {
+                        Button(role: .destructive, action: {
+                            showClearConfirmation = true
+                        }) {
+                            Label("Clear All", systemImage: "trash")
+                        }
+                    } label: {
+                        Image(systemName: "ellipsis")
+                            .foregroundStyle(
+                                LinearGradient(
+                                    colors: [DSColor.Extra.jarvisPink, DSColor.Extra.jarvisBlue],
+                                    startPoint: .leading,
+                                    endPoint: .trailing
+                                )
+                            )
+                            .font(.title3)
+                    }
+                }
+                .dsPadding(.horizontal, DSSpacing.m)
+                .dsPadding(.vertical, DSSpacing.xs)
+                
+                // Content Section
+                if viewModel.isLoading && viewModel.uiState.filteredTransactions.isEmpty {
+                    DSLoadingState(message: "Loading network requests...")
+                        .frame(maxHeight: .infinity)
+                } else if let error = viewModel.uiState.error {
+                    DSStatusCard(
+                        status: .error,
+                        title: "Failed to Load Requests",
+                        message: error.localizedDescription,
+                        actionTitle: "Retry",
+                        action: {
+                            viewModel.loadTransactions()
+                        }
+                    )
+                    .dsPadding(DSSpacing.m)
+                } else if viewModel.uiState.filteredTransactions.isEmpty {
+                    DSEmptyState(
+                        icon: "network",
+                        title: "No Network Requests",
+                        description: viewModel.uiState.searchQuery.isEmpty ?
+                        "Network requests will appear here when your app makes them" :
+                            "No requests match your search criteria",
+                        primaryAction: viewModel.uiState.searchQuery.isEmpty ? nil : ("Clear Filters", {
+                            viewModel.search("")
+                            viewModel.filterByMethod(nil)
+                            viewModel.filterByStatusCategory(nil)
+                        })
+                    )
+                } else {
+                    // Infinite Scroll List with Scroll Detection
+                    ScrollViewWithOffsetTracking(
+                        onOffsetChange: { offset, delta in
+                            handleScrollOffset(offset: offset, delta: delta)
+                        }
+                    ) {
+                        LazyVStack(spacing: DSSpacing.s) {
+                            ForEach(viewModel.uiState.filteredTransactions, id: \.id) { transaction in
+                                NetworkTransactionRow(transaction: transaction)
+                                    .onTapGesture {
+                                        coordinator.showTransactionDetail(id: transaction.id)
+                                    }
+                                    .onAppear {
+                                        // Load more when reaching near the end
+                                        if transaction.id == viewModel.uiState.filteredTransactions.last?.id {
+                                            viewModel.loadMoreTransactions()
+                                        }
+                                    }
                             }
-                        )
+                            
+                            // Load More Indicator
+                            if viewModel.uiState.hasMorePages {
+                                LoadMoreIndicator(
+                                    isLoading: viewModel.uiState.isLoadingMore,
+                                    onLoadMore: {
+                                        viewModel.loadMoreTransactions()
+                                    }
+                                )
+                            }
+                        }
                         .dsPadding(.horizontal, DSSpacing.m)
-                        .dsPadding(.vertical, DSSpacing.s)
-                        .background(DSColor.Extra.background0)
+                        .dsPadding(.vertical, DSSpacing.xs)
+                    }
+                    .refreshable {
+                        await viewModel.refreshTransactions()
                     }
                 }
             }
         }
-        .navigationTitle("Network Inspector")
+        .background(DSColor.Extra.background0)
+        .navigationTitle("Inspector")
+        #if os(iOS)
+        .navigationBarTitleDisplayMode(.large)
+        #endif
         .toolbar {
             #if os(iOS)
             ToolbarItem(placement: .navigationBarLeading) {
@@ -190,7 +261,110 @@ public struct InspectorScreen: View {
         }
         .onAppear {
             viewModel.loadTransactions()
-        }   
+        }
+    }
+
+    // Handle scroll offset to show/hide search and filters
+    private func handleScrollOffset(offset: CGFloat, delta: CGFloat) {
+        let topResetThreshold: CGFloat = 16
+        let collapseDistance: CGFloat = 70
+        let expandThreshold: CGFloat = 20
+
+        // Close to top? Always show.
+        if offset <= topResetThreshold {
+            if !isSearchAndFiltersVisible {
+                print("Inspector: near top -> expand header. offset=\(offset)")
+                withAnimation(.spring(response: 0.28, dampingFraction: 0.85)) {
+                    isSearchAndFiltersVisible = true
+                }
+            }
+            accumulatedScrollDelta = 0
+            return
+        }
+
+        var newAccumulated = accumulatedScrollDelta
+
+        if delta > 0 {
+            print("Inspector: scrolling down delta=\(delta)")
+            newAccumulated = min(collapseDistance, newAccumulated + delta)
+        } else if delta < 0 {
+            print("Inspector: scrolling up delta=\(delta)")
+            newAccumulated = max(0, newAccumulated + delta)
+        }
+
+        if newAccumulated >= collapseDistance && isSearchAndFiltersVisible {
+            print("Inspector: collapse triggered accumulate=\(newAccumulated)")
+            withAnimation(.spring(response: 0.28, dampingFraction: 0.85)) {
+                isSearchAndFiltersVisible = false
+            }
+        } else if newAccumulated <= expandThreshold && !isSearchAndFiltersVisible {
+            print("Inspector: expand triggered accumulate=\(newAccumulated)")
+            withAnimation(.spring(response: 0.28, dampingFraction: 0.85)) {
+                isSearchAndFiltersVisible = true
+            }
+        }
+
+        accumulatedScrollDelta = newAccumulated
+    }
+}
+
+// MARK: - ScrollView with Offset Tracking
+
+private struct ScrollViewWithOffsetTracking<Content: View>: View {
+    let onOffsetChange: (CGFloat, CGFloat) -> Void
+    let content: Content
+
+    @State private var initialOffset: CGFloat?
+    @State private var lastOffset: CGFloat = 0
+
+    init(
+        onOffsetChange: @escaping (CGFloat, CGFloat) -> Void,
+        @ViewBuilder content: () -> Content
+    ) {
+        self.onOffsetChange = onOffsetChange
+        self.content = content()
+    }
+
+    var body: some View {
+        ScrollView {
+            GeometryReader { proxy in
+                let offset = proxy.frame(in: .named("InspectorScroll")).minY
+                Color.clear
+                    .preference(key: ScrollOffsetPreferenceKey.self, value: offset)
+            }
+            .frame(height: 0)
+
+            content
+        }
+        .coordinateSpace(name: "InspectorScroll")
+        .onPreferenceChange(ScrollOffsetPreferenceKey.self) { value in
+            guard value.isFinite else { return }
+
+            if initialOffset == nil {
+                initialOffset = value
+                lastOffset = 0
+                onOffsetChange(0, 0)
+                return
+            }
+
+            guard let initialOffset else { return }
+
+            let offset = initialOffset - value
+            let delta = offset - lastOffset
+
+            if abs(delta) > 0.5 {
+                onOffsetChange(offset, delta)
+                lastOffset = offset
+            }
+        }
+    }
+}
+
+private struct ScrollOffsetPreferenceKey: PreferenceKey {
+    static var defaultValue: CGFloat = 0
+
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = nextValue()
     }
 }
 
@@ -202,12 +376,27 @@ private struct FilterChip: View {
     let action: () -> Void
 
     var body: some View {
-        DSButton(
-            title,
-            style: isSelected ? .primary : .secondary,
-            size: .small,
-            action: action
-        )
+        Button(action: action) {
+            Text(title)
+                .dsTextStyle(.labelSmall)
+                .dsPadding(.horizontal, DSSpacing.s)
+                .dsPadding(.vertical, DSSpacing.xs)
+                .background(
+                    isSelected ?
+                        LinearGradient(
+                            colors: [DSColor.Extra.jarvisPink, DSColor.Extra.jarvisBlue],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        ) :
+                        LinearGradient(
+                            colors: [DSColor.Neutral.neutral20, DSColor.Neutral.neutral20],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                )
+                .foregroundColor(isSelected ? .white : DSColor.Neutral.neutral80)
+                .dsCornerRadius(DSRadius.m)
+        }
     }
 }
 
@@ -237,6 +426,14 @@ private struct NetworkTransactionRow: View {
                         .background(statusColor(response.statusCode).opacity(0.2))
                         .foregroundColor(statusColor(response.statusCode))
                         .dsCornerRadius(DSRadius.xs)
+                } else {
+                    Text(statusText)
+                        .dsTextStyle(.labelSmall)
+                        .dsPadding(.horizontal, DSSpacing.xs)
+                        .dsPadding(.vertical, DSSpacing.xxs)
+                        .background(statusColor(0).opacity(0.2))
+                        .foregroundColor(statusColor(0))
+                        .dsCornerRadius(DSRadius.xs)
                 }
 
                 Spacer()
@@ -244,6 +441,10 @@ private struct NetworkTransactionRow: View {
                 // Duration
                 if let duration = transaction.duration {
                     Text(formatDuration(duration))
+                        .dsTextStyle(.labelSmall)
+                        .foregroundColor(DSColor.Neutral.neutral80)
+                } else if let response = transaction.response {
+                    Text("\(Int(response.responseTime * 1000))ms")
                         .dsTextStyle(.labelSmall)
                         .foregroundColor(DSColor.Neutral.neutral80)
                 }
@@ -261,12 +462,15 @@ private struct NetworkTransactionRow: View {
                 .foregroundColor(DSColor.Neutral.neutral60)
         }
         .dsPadding(DSSpacing.s)
+        .background(DSColor.Extra.white)
+        .dsCornerRadius(DSRadius.m)
+        .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
     }
 
     private var methodColor: Color {
         switch transaction.request.method {
-        case .GET: return DSColor.Info.info100
-        case .POST: return DSColor.Success.success100
+        case .GET: return DSColor.Success.success100
+        case .POST: return DSColor.Info.info100
         case .PUT: return DSColor.Warning.warning100
         case .DELETE: return DSColor.Error.error100
         case .PATCH: return DSColor.Primary.primary100
@@ -274,7 +478,25 @@ private struct NetworkTransactionRow: View {
         }
     }
 
+    private var statusText: String {
+        switch transaction.status {
+        case .completed: return "Completed"
+        case .failed: return "Failed"
+        case .pending: return "Pending"
+        case .cancelled: return "Cancelled"
+        }
+    }
+
     private func statusColor(_ code: Int) -> Color {
+        if code == 0 {
+            switch transaction.status {
+            case .completed: return DSColor.Success.success100
+            case .failed: return DSColor.Error.error100
+            case .pending: return DSColor.Warning.warning100
+            case .cancelled: return DSColor.Neutral.neutral60
+            }
+        }
+
         switch code {
         case 200..<300: return DSColor.Success.success100
         case 300..<400: return DSColor.Info.info100
@@ -299,44 +521,45 @@ private struct NetworkTransactionRow: View {
     }
 }
 
-// MARK: - Pagination Controls
+// MARK: - Load More Indicator
 
-private struct PaginationControls: View {
-    let currentPage: Int
-    let totalPages: Int
-    let itemsPerPage: Int
-    let onPrevious: () -> Void
-    let onNext: () -> Void
-    let onItemsPerPageChanged: (Int) -> Void
+private struct LoadMoreIndicator: View {
+    let isLoading: Bool
+    let onLoadMore: () -> Void
 
     var body: some View {
-        HStack {
-            // Previous Button
-            DSButton(
-                "Previous",
-                style: .secondary,
-                size: .small,
-                isEnabled: currentPage > 0,
-                action: onPrevious
-            )
+        VStack {
+            if isLoading {
+                HStack(spacing: DSSpacing.s) {
+                    ProgressView()
+                        .progressViewStyle(.circular)
+                        .tint(DSColor.Primary.primary100)
 
-            Spacer()
-
-            // Page Info
-            Text("Page \(currentPage + 1) of \(totalPages)")
-                .dsTextStyle(.bodySmall)
-                .foregroundColor(DSColor.Neutral.neutral80)
-
-            Spacer()
-
-            // Next Button
-            DSButton(
-                "Next",
-                style: .secondary,
-                size: .small,
-                isEnabled: currentPage < totalPages - 1,
-                action: onNext
-            )
+                    DSText(
+                        "Loading more transactions...",
+                        style: .bodyMedium,
+                        color: DSColor.Neutral.neutral80
+                    )
+                }
+                .dsPadding(DSSpacing.m)
+                .frame(maxWidth: .infinity)
+                .background(DSColor.Extra.white)
+                .dsCornerRadius(DSRadius.m)
+                .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
+            } else {
+                Button(action: onLoadMore) {
+                    DSText(
+                        "Tap to load more transactions",
+                        style: .bodyMedium,
+                        color: DSColor.Primary.primary100
+                    )
+                    .frame(maxWidth: .infinity)
+                    .dsPadding(DSSpacing.m)
+                    .background(DSColor.Extra.white)
+                    .dsCornerRadius(DSRadius.m)
+                    .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
+                }
+            }
         }
     }
 }
@@ -351,6 +574,7 @@ private struct DSLoadingState: View {
             ProgressView()
                 .progressViewStyle(.circular)
                 .scaleEffect(1.5)
+                .tint(DSColor.Primary.primary100)
 
             Text(message)
                 .dsTextStyle(.bodyMedium)
@@ -456,3 +680,50 @@ private struct DSStatusCard: View {
         }
     }
 }
+
+// MARK: - Previews
+
+#if DEBUG
+#Preview("Inspector - Light Mode") {
+    let coordinator = InspectorCoordinator()
+    let viewModel = NetworkInspectorViewModel()
+
+    return NavigationStack {
+        InspectorScreen(coordinator: coordinator, viewModel: viewModel)
+    }
+}
+
+#Preview("Inspector - Dark Mode") {
+    let coordinator = InspectorCoordinator()
+    let viewModel = NetworkInspectorViewModel()
+
+    return NavigationStack {
+        InspectorScreen(coordinator: coordinator, viewModel: viewModel)
+    }
+    .preferredColorScheme(.dark)
+}
+
+#Preview("Inspector - Loading") {
+    let coordinator = InspectorCoordinator()
+    let viewModel = NetworkInspectorViewModel()
+    // Trigger loading state
+    Task {
+        await MainActor.run {
+            viewModel.isLoading = true
+        }
+    }
+
+    return NavigationStack {
+        InspectorScreen(coordinator: coordinator, viewModel: viewModel)
+    }
+}
+
+#Preview("Inspector - Empty") {
+    let coordinator = InspectorCoordinator()
+    let viewModel = NetworkInspectorViewModel()
+
+    return NavigationStack {
+        InspectorScreen(coordinator: coordinator, viewModel: viewModel)
+    }
+}
+#endif

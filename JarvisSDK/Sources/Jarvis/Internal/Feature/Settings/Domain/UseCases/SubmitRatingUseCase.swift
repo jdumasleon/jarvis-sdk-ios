@@ -9,9 +9,9 @@ import Foundation
 
 /// Use case for submitting SDK rating
 public class SubmitRatingUseCase {
-    private let ratingRepository: RatingRepository
+    private let ratingRepository: RatingRepositoryProtocol
 
-    public init(ratingRepository: RatingRepository) {
+    public init(ratingRepository: RatingRepositoryProtocol) {
         self.ratingRepository = ratingRepository
     }
 

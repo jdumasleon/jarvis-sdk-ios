@@ -79,7 +79,11 @@ public class NetworkInterceptor {
                 startTime: Date(timeIntervalSince1970: startTime)
             )
 
-            try? await repository.save(transaction)
+            do {
+                try await repository.save(transaction)
+            } catch {
+                // Silently fail - we don't want to crash the app if saving fails
+            }
         }
     }
 
@@ -109,8 +113,9 @@ public class NetworkInterceptor {
             self?.requestStartTimes.removeValue(forKey: requestId)
         }
 
+        let statusCode = (response as? HTTPURLResponse)?.statusCode ?? 0
+
         Task {
-            let statusCode = (response as? HTTPURLResponse)?.statusCode ?? 0
             let originalResponseHeaders = (response as? HTTPURLResponse)?.allHeaderFields as? [String: String]
 
             // Redact request headers
@@ -157,7 +162,11 @@ public class NetworkInterceptor {
                 endTime: Date(timeIntervalSince1970: endTime)
             )
 
-            try? await repository.save(transaction)
+            do {
+                try await repository.save(transaction)
+            } catch {
+                // Silently fail - we don't want to crash the app if saving fails
+            }
         }
     }
 

@@ -21,6 +21,11 @@ public struct NetworkInspectorUIState {
     public let groupByDate: Bool
     public let dateGroups: [DateGrouping.DateGroup]
 
+    // Infinite scroll state
+    public let hasMorePages: Bool
+    public let isLoadingMore: Bool
+    public let isRefreshing: Bool
+
     public init(
         transactions: [NetworkTransaction] = [],
         filteredTransactions: [NetworkTransaction] = [],
@@ -35,7 +40,10 @@ public struct NetworkInspectorUIState {
         itemsPerPage: Int = 20,
         totalPages: Int = 0,
         groupByDate: Bool = true,
-        dateGroups: [DateGrouping.DateGroup] = []
+        dateGroups: [DateGrouping.DateGroup] = [],
+        hasMorePages: Bool = false,
+        isLoadingMore: Bool = false,
+        isRefreshing: Bool = false
     ) {
         self.transactions = transactions
         self.filteredTransactions = filteredTransactions
@@ -51,6 +59,9 @@ public struct NetworkInspectorUIState {
         self.totalPages = totalPages
         self.groupByDate = groupByDate
         self.dateGroups = dateGroups
+        self.hasMorePages = hasMorePages
+        self.isLoadingMore = isLoadingMore
+        self.isRefreshing = isRefreshing
     }
 }
 

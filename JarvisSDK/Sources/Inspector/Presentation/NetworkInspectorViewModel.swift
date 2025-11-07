@@ -43,10 +43,11 @@ public class NetworkInspectorViewModel: BaseViewModel {
             do {
                 let transactions = try await monitorUseCase.execute(())
                 let totalPages = calculateTotalPages(count: transactions.count)
+                let hasMore = calculateHasMorePages(currentCount: uiState.itemsPerPage, totalCount: transactions.count)
 
                 uiState = NetworkInspectorUIState(
                     transactions: transactions,
-                    filteredTransactions: applyPagination(to: transactions),
+                    filteredTransactions: Array(transactions.prefix(uiState.itemsPerPage)),
                     selectedTransaction: uiState.selectedTransaction,
                     filter: uiState.filter,
                     isLoading: false,
@@ -54,9 +55,12 @@ public class NetworkInspectorViewModel: BaseViewModel {
                     searchQuery: uiState.searchQuery,
                     selectedMethod: uiState.selectedMethod,
                     selectedStatusCategory: uiState.selectedStatusCategory,
-                    currentPage: uiState.currentPage,
+                    currentPage: 0,
                     itemsPerPage: uiState.itemsPerPage,
-                    totalPages: totalPages
+                    totalPages: totalPages,
+                    hasMorePages: hasMore,
+                    isLoadingMore: false,
+                    isRefreshing: false
                 )
                 isLoading = false
             } catch {
@@ -73,10 +77,87 @@ public class NetworkInspectorViewModel: BaseViewModel {
                     selectedStatusCategory: uiState.selectedStatusCategory,
                     currentPage: uiState.currentPage,
                     itemsPerPage: uiState.itemsPerPage,
-                    totalPages: uiState.totalPages
+                    totalPages: uiState.totalPages,
+                    hasMorePages: uiState.hasMorePages,
+                    isLoadingMore: false,
+                    isRefreshing: false
                 )
             }
         }
+    }
+
+    public func loadMoreTransactions() {
+        guard uiState.hasMorePages && !uiState.isLoadingMore else { return }
+
+        Task {
+            uiState = NetworkInspectorUIState(
+                transactions: uiState.transactions,
+                filteredTransactions: uiState.filteredTransactions,
+                selectedTransaction: uiState.selectedTransaction,
+                filter: uiState.filter,
+                isLoading: uiState.isLoading,
+                error: uiState.error,
+                searchQuery: uiState.searchQuery,
+                selectedMethod: uiState.selectedMethod,
+                selectedStatusCategory: uiState.selectedStatusCategory,
+                currentPage: uiState.currentPage,
+                itemsPerPage: uiState.itemsPerPage,
+                totalPages: uiState.totalPages,
+                hasMorePages: uiState.hasMorePages,
+                isLoadingMore: true,
+                isRefreshing: uiState.isRefreshing
+            )
+
+            let nextPage = uiState.currentPage + 1
+            let startIndex = nextPage * uiState.itemsPerPage
+            let endIndex = min(startIndex + uiState.itemsPerPage, uiState.transactions.count)
+
+            if startIndex < uiState.transactions.count {
+                let newItems = Array(uiState.transactions[startIndex..<endIndex])
+                let allItems = uiState.filteredTransactions + newItems
+                let hasMore = endIndex < uiState.transactions.count
+
+                uiState = NetworkInspectorUIState(
+                    transactions: uiState.transactions,
+                    filteredTransactions: allItems,
+                    selectedTransaction: uiState.selectedTransaction,
+                    filter: uiState.filter,
+                    isLoading: false,
+                    error: nil,
+                    searchQuery: uiState.searchQuery,
+                    selectedMethod: uiState.selectedMethod,
+                    selectedStatusCategory: uiState.selectedStatusCategory,
+                    currentPage: nextPage,
+                    itemsPerPage: uiState.itemsPerPage,
+                    totalPages: uiState.totalPages,
+                    hasMorePages: hasMore,
+                    isLoadingMore: false,
+                    isRefreshing: false
+                )
+            }
+        }
+    }
+
+    public func refreshTransactions() async {
+        uiState = NetworkInspectorUIState(
+            transactions: uiState.transactions,
+            filteredTransactions: uiState.filteredTransactions,
+            selectedTransaction: uiState.selectedTransaction,
+            filter: uiState.filter,
+            isLoading: uiState.isLoading,
+            error: uiState.error,
+            searchQuery: uiState.searchQuery,
+            selectedMethod: uiState.selectedMethod,
+            selectedStatusCategory: uiState.selectedStatusCategory,
+            currentPage: uiState.currentPage,
+            itemsPerPage: uiState.itemsPerPage,
+            totalPages: uiState.totalPages,
+            hasMorePages: uiState.hasMorePages,
+            isLoadingMore: false,
+            isRefreshing: true
+        )
+
+        loadTransactions()
     }
 
     public func search(_ query: String) {
@@ -269,6 +350,10 @@ public class NetworkInspectorViewModel: BaseViewModel {
     private func calculateTotalPages(count: Int, itemsPerPage: Int? = nil) -> Int {
         let items = itemsPerPage ?? uiState.itemsPerPage
         return max(1, Int(ceil(Double(count) / Double(items))))
+    }
+
+    private func calculateHasMorePages(currentCount: Int, totalCount: Int) -> Bool {
+        return currentCount < totalCount
     }
 
     public func applyFilter(_ filter: TransactionFilter) {

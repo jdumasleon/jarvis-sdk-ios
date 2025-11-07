@@ -8,7 +8,7 @@
 import Foundation
 
 /// Implementation of RatingRepository
-class RatingRepositoryImpl: RatingRepository {
+class RatingRepository: RatingRepositoryProtocol {
     private let ratingApiService: RatingApiService
 
     init(ratingApiService: RatingApiService) {
@@ -17,9 +17,8 @@ class RatingRepositoryImpl: RatingRepository {
 
     func submitRating(_ rating: Rating) async throws -> RatingSubmissionResult {
         do {
-            let ratingDto = rating.toDto()
-            let responseDto = try await ratingApiService.submitRating(ratingDto)
-            return responseDto.toDomain()
+            // GraphQL API service now handles conversion internally
+            return try await ratingApiService.submitRating(rating)
         } catch {
             // Log error for debugging
             print("Error submitting rating: \(error.localizedDescription)")
