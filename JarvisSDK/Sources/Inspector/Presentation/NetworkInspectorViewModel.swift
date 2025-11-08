@@ -15,6 +15,9 @@ public class NetworkInspectorViewModel: BaseViewModel {
     @Injected private var filterUseCase: FilterNetworkTransactionsUseCase
     @Injected private var repository: NetworkTransactionRepositoryProtocol
 
+    // Store all filtered transactions for pagination
+    private var allFilteredTransactions: [NetworkTransaction] = []
+
     public override init() {
         super.init()
     }
@@ -42,6 +45,10 @@ public class NetworkInspectorViewModel: BaseViewModel {
 
             do {
                 let transactions = try await monitorUseCase.execute(())
+
+                // Store all transactions for pagination
+                allFilteredTransactions = transactions
+
                 let totalPages = calculateTotalPages(count: transactions.count)
                 let hasMore = calculateHasMorePages(currentCount: uiState.itemsPerPage, totalCount: transactions.count)
 
@@ -110,12 +117,12 @@ public class NetworkInspectorViewModel: BaseViewModel {
 
             let nextPage = uiState.currentPage + 1
             let startIndex = nextPage * uiState.itemsPerPage
-            let endIndex = min(startIndex + uiState.itemsPerPage, uiState.transactions.count)
+            let endIndex = min(startIndex + uiState.itemsPerPage, allFilteredTransactions.count)
 
-            if startIndex < uiState.transactions.count {
-                let newItems = Array(uiState.transactions[startIndex..<endIndex])
+            if startIndex < allFilteredTransactions.count {
+                let newItems = Array(allFilteredTransactions[startIndex..<endIndex])
                 let allItems = uiState.filteredTransactions + newItems
-                let hasMore = endIndex < uiState.transactions.count
+                let hasMore = endIndex < allFilteredTransactions.count
 
                 uiState = NetworkInspectorUIState(
                     transactions: uiState.transactions,
@@ -314,8 +321,12 @@ public class NetworkInspectorViewModel: BaseViewModel {
                     }
                 }
 
+                // Store all filtered transactions for pagination
+                allFilteredTransactions = filteredTransactions
+
                 let totalPages = calculateTotalPages(count: filteredTransactions.count)
                 let paginatedTransactions = applyPagination(to: filteredTransactions, page: 0)
+                let hasMore = calculateHasMorePages(currentCount: paginatedTransactions.count, totalCount: filteredTransactions.count)
 
                 uiState = NetworkInspectorUIState(
                     transactions: uiState.transactions,
@@ -329,7 +340,10 @@ public class NetworkInspectorViewModel: BaseViewModel {
                     selectedStatusCategory: statusCategory,
                     currentPage: 0,
                     itemsPerPage: uiState.itemsPerPage,
-                    totalPages: totalPages
+                    totalPages: totalPages,
+                    hasMorePages: hasMore,
+                    isLoadingMore: false,
+                    isRefreshing: false
                 )
             } catch {
                 handleError(error)

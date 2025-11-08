@@ -289,6 +289,8 @@ public struct DSTextField: View {
 public struct DSSearchField: View {
     @Binding private var text: String
     @FocusState private var isFocused: Bool
+    @State private var localText: String
+    @State private var debounceTask: Task<Void, Never>?
 
     private let placeholder: String
     private let backgroundColor: Color?
@@ -307,6 +309,7 @@ public struct DSSearchField: View {
         self.onSearchSubmit = onSearchSubmit
         self.onClear = onClear
         self.backgroundColor = backgroundColor
+        self._localText = State(initialValue: text.wrappedValue)
     }
 
     public var body: some View {
@@ -315,18 +318,31 @@ public struct DSSearchField: View {
                 .font(.system(size: DSIconSize.m))
                 .foregroundColor(DSColor.Neutral.neutral60)
 
-            TextField(placeholder, text: $text)
+            TextField(placeholder, text: $localText)
                 .font(DSTextStyle.bodyMedium.font)
                 .focused($isFocused)
+                .submitLabel(.search)
                 .onSubmit {
-                    onSearchSubmit?(text)
+                    text = localText
+                    onSearchSubmit?(localText)
+                }
+                .onChange(of: localText) { newValue in
+                    // Debounce cancelable en el MainActor
+                    debounceTask?.cancel()
+                    debounceTask = Task { @MainActor in
+                        try? await Task.sleep(nanoseconds: 300_000_000) // 300 ms
+                        guard !Task.isCancelled else { return }
+                        text = newValue
+                    }
                 }
 
-            if !text.isEmpty {
-                Button(action: {
+            if !localText.isEmpty {
+                Button {
+                    debounceTask?.cancel()
+                    localText = ""
                     text = ""
                     onClear?()
-                }) {
+                } label: {
                     DSIcons.Navigation.close
                         .font(.system(size: DSIconSize.s))
                         .foregroundColor(DSColor.Neutral.neutral60)
@@ -336,6 +352,10 @@ public struct DSSearchField: View {
         .dsPadding(DSSpacing.s)
         .background(backgroundColor ?? DSColor.Neutral.neutral0)
         .dsCornerRadius(DSRadius.round)
+        // Mantén esta sincronización por si el binding cambia desde fuera
+        .onChange(of: text) { newValue in
+            if localText != newValue { localText = newValue }
+        }
     }
 }
 
@@ -390,6 +410,178 @@ public struct DSToggle: View {
 
     private var labelColor: Color {
         isDisabled ? DSColor.Neutral.neutral40 : DSColor.Neutral.neutral100
+    }
+}
+
+// MARK: - Text Editor
+
+public struct DSTextEditor: View {
+    @Binding private var text: String
+    @FocusState private var isFocused: Bool
+    @State private var localText: String = ""
+
+    private let placeholder: String
+    private let label: String?
+    private let helperText: String?
+    private let errorText: String?
+    private let minHeight: CGFloat
+    private let maxHeight: CGFloat?
+    private let maxLength: Int?
+    private let isDisabled: Bool
+
+    public init(
+        text: Binding<String>,
+        placeholder: String,
+        label: String? = nil,
+        helperText: String? = nil,
+        errorText: String? = nil,
+        minHeight: CGFloat = 100,
+        maxHeight: CGFloat? = nil,
+        maxLength: Int? = nil,
+        isDisabled: Bool = false
+    ) {
+        self._text = text
+        self.placeholder = placeholder
+        self.label = label
+        self.helperText = helperText
+        self.errorText = errorText
+        self.minHeight = minHeight
+        self.maxHeight = maxHeight
+        self.maxLength = maxLength
+        self.isDisabled = isDisabled
+    }
+
+    public var body: some View {
+        VStack(alignment: .leading, spacing: DSSpacing.xs) {
+            // Label
+            if let label = label {
+                Text(label)
+                    .dsTextStyle(.labelMedium)
+                    .foregroundColor(labelColor)
+            }
+
+            // Text Editor Container
+            ZStack(alignment: .topLeading) {
+                // Placeholder
+                if localText.isEmpty {
+                    Text(placeholder)
+                        .dsTextStyle(.bodyMedium)
+                        .foregroundColor(DSColor.Neutral.neutral60)
+                        .padding(.horizontal, 4)
+                        .padding(.vertical, 8)
+                        .allowsHitTesting(false)
+                }
+
+                // Text Editor
+                TextEditor(text: $localText)
+                    .font(DSTextStyle.bodyMedium.font)
+                    .focused($isFocused)
+                    .disabled(isDisabled)
+                    .scrollContentBackground(.hidden) // Hide default background
+                    .onChange(of: localText) { newValue in
+                        // Handle max length validation locally
+                        if let maxLength = maxLength, newValue.count > maxLength {
+                            localText = String(newValue.prefix(maxLength))
+                        }
+                        // Debounce: Update binding after user stops typing
+                        Task {
+                            try? await Task.sleep(nanoseconds: 500_000_000) // 500ms
+                            if localText == newValue || (maxLength != nil && newValue.count > maxLength!) {
+                                text = localText
+                            }
+                        }
+                    }
+                    .onChange(of: isFocused) { focused in
+                        // Sync on focus loss
+                        if !focused {
+                            text = localText
+                        }
+                    }
+            }
+            .frame(minHeight: minHeight, maxHeight: maxHeight)
+            .dsPadding(DSSpacing.xs)
+            .background(currentState.backgroundColor)
+            .overlay(
+                RoundedRectangle(cornerRadius: DSRadius.s)
+                    .stroke(currentState.borderColor, lineWidth: borderWidth)
+            )
+            .dsCornerRadius(DSRadius.s)
+
+            // Character Counter & Helper/Error Text
+            HStack {
+                // Helper/Error Text
+                if let message = currentMessage {
+                    HStack(spacing: DSSpacing.xs) {
+                        if errorText != nil {
+                            DSIcons.Status.error
+                                .font(.system(size: DSIconSize.xs))
+                                .foregroundColor(DSColor.Error.error100)
+                        }
+
+                        Text(message)
+                            .dsTextStyle(.labelSmall)
+                            .foregroundColor(messageColor)
+                    }
+                }
+
+                Spacer()
+
+                // Character Counter
+                if let maxLength = maxLength {
+                    Text("\(localText.count)/\(maxLength)")
+                        .dsTextStyle(.labelSmall)
+                        .foregroundColor(localText.count > maxLength ? DSColor.Error.error60 : DSColor.Neutral.neutral60)
+                }
+            }
+        }
+        .onAppear {
+            localText = text
+        }
+        .onChange(of: text) { newValue in
+            if localText != newValue {
+                localText = newValue
+            }
+        }
+    }
+
+    private var currentState: DSTextField.InputState {
+        if isDisabled {
+            return .disabled
+        } else if errorText != nil {
+            return .error
+        } else if isFocused {
+            return .focused
+        } else {
+            return .normal
+        }
+    }
+
+    private var borderWidth: CGFloat {
+        isFocused ? DSBorderWidth.thick : DSBorderWidth.regular
+    }
+
+    private var labelColor: Color {
+        if isDisabled {
+            return DSColor.Neutral.neutral40
+        } else if errorText != nil {
+            return DSColor.Error.error60
+        } else if isFocused {
+            return DSColor.Primary.primary60
+        } else {
+            return DSColor.Neutral.neutral60
+        }
+    }
+
+    private var currentMessage: String? {
+        errorText ?? helperText
+    }
+
+    private var messageColor: Color {
+        if errorText != nil {
+            return DSColor.Error.error80
+        } else {
+            return DSColor.Neutral.neutral80
+        }
     }
 }
 

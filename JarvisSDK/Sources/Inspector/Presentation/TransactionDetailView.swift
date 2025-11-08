@@ -47,6 +47,7 @@ struct TransactionDetailView: View {
                 EmptyTransactionView()
             }
         }
+        .background(DSColor.Extra.background0)
         .navigationTitle("Transaction Detail")
         #if os(iOS)
         .navigationBarTitleDisplayMode(.inline)
@@ -138,6 +139,7 @@ private struct TabButton: View {
                                 endPoint: .trailing
                             )
                     )
+                    .dsPadding(.vertical, DSSpacing.xs)
                     .fontWeight(isSelected ? .bold : .medium)
 
                 Rectangle()
@@ -157,7 +159,7 @@ private struct TabButton: View {
                     .frame(height: 3)
             }
             .frame(maxWidth: .infinity)
-            .dsPadding(.vertical, DSSpacing.s)
+            
         }
     }
 }

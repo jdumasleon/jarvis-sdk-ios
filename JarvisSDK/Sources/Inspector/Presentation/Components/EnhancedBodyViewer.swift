@@ -12,6 +12,10 @@
 import SwiftUI
 import DesignSystem
 
+#if canImport(UIKit)
+import UIKit
+#endif
+
 /// Enhanced body viewer with different renderers based on content type
 struct EnhancedBodyViewer: View {
     let title: String
@@ -147,16 +151,16 @@ private struct JsonViewer: View {
     }
 
     var body: some View {
-        ScrollView(.horizontal, showsIndicators: true) {
-            VStack(alignment: .leading, spacing: DSSpacing.none) {
-                HStack {
-                    Spacer()
-                    Text(getContentTypeLabel(contentType))
-                        .dsTextStyle(.bodySmall)
-                        .foregroundColor(DSColor.Primary.primary60)
-                        .dsPadding(.all, DSSpacing.s)
-                }
+        ZStack(alignment: .topTrailing) {
+            HStack {
+                Spacer()
+                Text(getContentTypeLabel(contentType))
+                    .dsTextStyle(.bodySmall)
+                    .foregroundColor(DSColor.Primary.primary60)
+                    .dsPadding(.all, DSSpacing.s)
+            }
 
+            ScrollView(.horizontal, showsIndicators: true) {
                 Text(formattedJson)
                     .font(.system(size: 12, design: .monospaced))
                     .foregroundColor(DSColor.Neutral.neutral100)
@@ -285,16 +289,16 @@ private struct TextViewer: View {
     let contentType: String?
 
     var body: some View {
-        ScrollView(.horizontal, showsIndicators: true) {
-            VStack(alignment: .leading, spacing: DSSpacing.none) {
-                HStack {
-                    Spacer()
-                    Text(getContentTypeLabel(contentType))
-                        .dsTextStyle(.bodySmall)
-                        .foregroundColor(DSColor.Primary.primary60)
-                        .dsPadding(.all, DSSpacing.s)
-                }
+        ZStack(alignment: .topTrailing) {
+            HStack {
+                Spacer()
+                Text(getContentTypeLabel(contentType))
+                    .dsTextStyle(.bodySmall)
+                    .foregroundColor(DSColor.Primary.primary60)
+                    .dsPadding(.all, DSSpacing.s)
+            }
 
+            ScrollView(.horizontal, showsIndicators: true) {
                 Text(text)
                     .font(.system(size: 12, design: .monospaced))
                     .foregroundColor(DSColor.Neutral.neutral100)
@@ -302,6 +306,7 @@ private struct TextViewer: View {
                     .lineLimit(50)
                     .dsPadding(.all, DSSpacing.m)
             }
+            
         }
         .background(DSColor.Extra.background0)
         .dsCornerRadius(DSRadius.s)
@@ -316,53 +321,51 @@ private struct JsonSearchDialog: View {
     @State private var searchText: String = ""
     @Environment(\.dismiss) private var dismiss
 
-    private var filteredContent: String {
-        if searchText.isEmpty {
-            return formatJson(jsonContent)
-        }
-
-        // Simple highlighting by filtering lines
-        let formatted = formatJson(jsonContent)
-        let lines = formatted.components(separatedBy: "\n")
-        let filtered = lines.filter { $0.localizedCaseInsensitiveContains(searchText) }
-        return filtered.joined(separator: "\n")
+    private var formattedContent: String {
+        formatJson(jsonContent)
     }
 
     var body: some View {
         NavigationStack {
             VStack(spacing: DSSpacing.none) {
                 // Search field
-                HStack {
-                    Image(systemName: "magnifyingglass")
-                        .foregroundColor(DSColor.Neutral.neutral60)
+                DSSearchField(
+                    text: $searchText,
+                    placeholder: "Search JSON...",
+                    backgroundColor: DSColor.Extra.white
+                )
+                .dsPadding(.horizontal, DSSpacing.s)
 
-                    TextField("Search JSON...", text: $searchText)
-                        .textFieldStyle(.plain)
-
-                    if !searchText.isEmpty {
-                        Button(action: { searchText = "" }) {
-                            Image(systemName: "xmark.circle.fill")
-                                .foregroundColor(DSColor.Neutral.neutral60)
+                // Content with highlighting
+                VStack {
+                    ScrollView {
+                        if searchText.isEmpty {
+                            Text(formattedContent)
+                                .font(.system(size: 12, design: .monospaced))
+                                .foregroundColor(DSColor.Neutral.neutral100)
+                                .textSelection(.enabled)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .dsPadding(.all, DSSpacing.m)
+                        } else {
+                            HighlightedText(
+                                text: formattedContent,
+                                searchText: searchText
+                            )
+                            .font(.system(size: 12, design: .monospaced))
+                            .textSelection(.enabled)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .dsPadding(.all, DSSpacing.m)
                         }
                     }
+                    .background(DSColor.Extra.background0)
+                    .dsCornerRadius(DSRadius.s)
+                    .dsPadding(.all, DSSpacing.s)
                 }
-                .dsPadding(.all, DSSpacing.m)
-                .background(DSColor.Neutral.neutral20)
+                .background(DSColor.Extra.white)
                 .dsCornerRadius(DSRadius.s)
-                .dsPadding(.all, DSSpacing.m)
-
-                Divider()
-
-                // Content
-                ScrollView {
-                    Text(filteredContent)
-                        .font(.system(size: 12, design: .monospaced))
-                        .foregroundColor(DSColor.Neutral.neutral100)
-                        .textSelection(.enabled)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .dsPadding(.all, DSSpacing.m)
-                }
+                .dsPadding(.all, DSSpacing.s)
             }
+            .background(DSColor.Extra.background0)
             .navigationTitle("Search JSON")
             #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
@@ -376,6 +379,61 @@ private struct JsonSearchDialog: View {
             }
         }
     }
+}
+
+// MARK: - Highlighted Text View
+
+private struct HighlightedText: View {
+    let text: String
+    let searchText: String
+
+    var body: some View {
+        let attributed = highlightMatches(in: text, matching: searchText)
+        return Text(AttributedString(attributed))
+    }
+
+    private func highlightMatches(in text: String, matching search: String) -> NSAttributedString {
+        let attributedString = NSMutableAttributedString(string: text)
+
+        // Default attributes
+        let defaultAttributes: [NSAttributedString.Key: Any] = [
+            .foregroundColor: DSColor.Neutral.neutral100.toUIColor()
+        ]
+        attributedString.addAttributes(defaultAttributes, range: NSRange(location: 0, length: text.count))
+
+        // Highlight attributes
+        let highlightAttributes: [NSAttributedString.Key: Any] = [
+            .backgroundColor: DSColor.Warning.warning20.toUIColor(),
+            .foregroundColor: DSColor.Warning.warning100.toUIColor()
+        ]
+
+        // Find and highlight all occurrences (case-insensitive)
+        let searchLower = search.lowercased()
+        let textLower = text.lowercased()
+
+        var searchStartIndex = textLower.startIndex
+        while let range = textLower.range(of: searchLower, range: searchStartIndex..<textLower.endIndex) {
+            let nsRange = NSRange(range, in: text)
+            attributedString.addAttributes(highlightAttributes, range: nsRange)
+            searchStartIndex = range.upperBound
+        }
+
+        return attributedString
+    }
+}
+
+// MARK: - Color Extension
+
+private extension Color {
+    #if canImport(UIKit)
+    func toUIColor() -> UIColor {
+        return UIColor(self)
+    }
+    #else
+    func toUIColor() -> NSColor {
+        return NSColor(self)
+    }
+    #endif
 }
 
 // MARK: - Helper Functions
@@ -420,3 +478,92 @@ private extension String? {
         return self == nil || self?.isEmpty == true
     }
 }
+
+// MARK: - Previews
+
+#if DEBUG
+struct EnhancedBodyViewer_Previews: PreviewProvider {
+
+    private static let sampleJson = """
+    {
+      "id": 123,
+      "name": "Jarvis SDK",
+      "enabled": true,
+      "tags": ["debug", "network", "tools"],
+      "config": {
+        "retries": 3,
+        "timeout": 15000,
+        "features": {
+          "httpInspector": true,
+          "mockResponses": false
+        }
+      }
+    }
+    """
+
+    private static let sampleText = """
+    This is a plain text response body.
+
+    It can contain multiple lines, headers, logs or any other non-JSON/text content.
+    Use this to check monospace rendering and horizontal scrolling.
+    """
+
+    private static let sampleImageUrl = "https://picsum.photos/400/300"
+
+    // Si quieres probar base64, puedes colocar aquí uno real
+    private static let sampleBase64Image = """
+    iVBORw0KGgoAAAANSUhEUgAAAAUA
+    AAAFCAYAAACNbyblAAAAHElEQVQI12P4
+    // ...
+    """
+
+    static var previews: some View {
+        Group {
+            // JSON – expanded
+            previewWrapper(title: "Response Body (JSON)",
+                           bodyContent: sampleJson,
+                           contentType: "application/json")
+
+            // Text – expanded
+            previewWrapper(title: "Response Body (Plain Text)",
+                           bodyContent: sampleText,
+                           contentType: "text/plain")
+
+            // Image URL – expanded
+            previewWrapper(title: "Response Body (Image URL)",
+                           bodyContent: sampleImageUrl,
+                           contentType: "image/jpeg")
+
+            // Image base64 – placeholder / preview behaviour
+            previewWrapper(title: "Response Body (Base64 Image)",
+                           bodyContent: sampleBase64Image,
+                           contentType: "image/png")
+
+            // Empty body
+            previewWrapper(title: "Response Body (Empty)",
+                           bodyContent: nil,
+                           contentType: nil)
+        }
+        .previewLayout(.sizeThatFits)
+    }
+
+    // Wrapper para aplicar fondo, padding, etc.
+    private static func previewWrapper(
+        title: String,
+        bodyContent: String?,
+        contentType: String?
+    ) -> some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: DSSpacing.l) {
+                EnhancedBodyViewer(
+                    title: title,
+                    bodyContent: bodyContent,
+                    contentType: contentType
+                )
+            }
+            .dsPadding(.all, DSSpacing.l)
+            .background(DSColor.Extra.background0)
+        }
+    }
+}
+#endif

@@ -74,35 +74,16 @@ public struct RatingSheet: View {
                     )
                     
                     // Description Input
-                    VStack(alignment: .leading, spacing: DSSpacing.xs) {
-                        DSText(
-                            "Description (Optional)",
-                            style: .labelMedium,
-                            color: DSColor.Neutral.neutral100
-                        )
-
-                        TextEditor(text: Binding(
+                    DSTextEditor(
+                        text: Binding(
                             get: { ratingData.description },
                             set: { onDescriptionChange($0) }
-                        ))
-                        .frame(minHeight: 100)
-                        .padding(DSSpacing.xs)
-                        .background(DSColor.Extra.white)
-                        .cornerRadius(DSRadius.s)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: DSRadius.s)
-                                .stroke(DSColor.Neutral.neutral20, lineWidth: 1)
-                        )
-                        .overlay(alignment: .topLeading) {
-                            if ratingData.description.isEmpty {
-                                Text("Tell us what you think...")
-                                    .foregroundColor(DSColor.Neutral.neutral60)
-                                    .padding(.horizontal, DSSpacing.xs + 4)
-                                    .padding(.vertical, DSSpacing.xs + 8)
-                                    .allowsHitTesting(false)
-                            }
-                        }
-                    }
+                        ),
+                        placeholder: "Tell us what you think...",
+                        label: "Description (Optional)",
+                        minHeight: 100,
+                        maxLength: 500
+                    )
 
                     // Buttons
                     VStack(spacing: DSSpacing.s) {

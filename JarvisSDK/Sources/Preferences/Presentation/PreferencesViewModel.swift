@@ -15,28 +15,47 @@ public class PreferencesViewModel: BaseViewModel {
     @Injected private var updatePreferenceUseCase: UpdatePreferenceUseCase
     @Injected private var deletePreferenceUseCase: DeletePreferenceUseCase
 
+    private let itemsPerPage = 20
+    private var currentPage = 0
+    private var allFilteredPreferences: [Preference] = []
+
     public override init() {
         super.init()
     }
 
     public func loadPreferences() {
         Task {
+            // Set loading state
             isLoading = true
             clearError()
 
             do {
                 let preferences = try await getPreferencesUseCase.execute(uiState.filter == .all ? nil : uiState.filter)
+                let filtered = filterAndSearch(preferences, searchQuery: uiState.searchQuery, selectedType: uiState.selectedType)
 
+                // Reset pagination
+                currentPage = 0
+                allFilteredPreferences = filtered
+                let initialItems = Array(filtered.prefix(itemsPerPage))
+                let hasMore = filtered.count > itemsPerPage
+
+                // Update UI state and clear loading
+                isLoading = false
                 uiState = PreferencesUIState(
                     preferences: preferences,
-                    filteredPreferences: filterAndSearch(preferences),
+                    filteredPreferences: initialItems,
                     selectedPreference: uiState.selectedPreference,
                     filter: uiState.filter,
                     searchQuery: uiState.searchQuery,
+                    selectedType: uiState.selectedType,
                     isLoading: false,
-                    error: nil
+                    error: nil,
+                    hasMorePages: hasMore,
+                    isLoadingMore: false
                 )
             } catch {
+                // Clear loading and set error
+                isLoading = false
                 handleError(error)
                 uiState = PreferencesUIState(
                     preferences: uiState.preferences,
@@ -44,35 +63,93 @@ public class PreferencesViewModel: BaseViewModel {
                     selectedPreference: uiState.selectedPreference,
                     filter: uiState.filter,
                     searchQuery: uiState.searchQuery,
+                    selectedType: uiState.selectedType,
                     isLoading: false,
-                    error: error
+                    error: error,
+                    hasMorePages: false,
+                    isLoadingMore: false
+                )
+            }
+        }
+    }
+
+    public func loadMorePreferences() {
+        guard uiState.hasMorePages && !uiState.isLoadingMore else { return }
+
+        Task {
+            uiState = PreferencesUIState(
+                preferences: uiState.preferences,
+                filteredPreferences: uiState.filteredPreferences,
+                selectedPreference: uiState.selectedPreference,
+                filter: uiState.filter,
+                searchQuery: uiState.searchQuery,
+                selectedType: uiState.selectedType,
+                isLoading: uiState.isLoading,
+                error: uiState.error,
+                hasMorePages: uiState.hasMorePages,
+                isLoadingMore: true
+            )
+
+            currentPage += 1
+            let startIndex = currentPage * itemsPerPage
+            let endIndex = min(startIndex + itemsPerPage, allFilteredPreferences.count)
+
+            if startIndex < allFilteredPreferences.count {
+                let newItems = Array(allFilteredPreferences[startIndex..<endIndex])
+                let allItems = uiState.filteredPreferences + newItems
+                let hasMore = endIndex < allFilteredPreferences.count
+
+                uiState = PreferencesUIState(
+                    preferences: uiState.preferences,
+                    filteredPreferences: allItems,
+                    selectedPreference: uiState.selectedPreference,
+                    filter: uiState.filter,
+                    searchQuery: uiState.searchQuery,
+                    selectedType: uiState.selectedType,
+                    isLoading: false,
+                    error: nil,
+                    hasMorePages: hasMore,
+                    isLoadingMore: false
                 )
             }
         }
     }
 
     public func applyFilter(_ filter: PreferenceFilter) {
+        // Update filter first, then reload preferences from the source
         uiState = PreferencesUIState(
             preferences: uiState.preferences,
-            filteredPreferences: filterAndSearch(uiState.preferences),
+            filteredPreferences: uiState.filteredPreferences,
             selectedPreference: uiState.selectedPreference,
             filter: filter,
             searchQuery: uiState.searchQuery,
+            selectedType: uiState.selectedType,
             isLoading: false,
-            error: nil
+            error: nil,
+            hasMorePages: false,
+            isLoadingMore: false
         )
         loadPreferences()
     }
 
     public func search(_ query: String) {
+        let filtered = filterAndSearch(uiState.preferences, searchQuery: query, selectedType: uiState.selectedType)
+        allFilteredPreferences = filtered
+        currentPage = 0
+        let initialItems = Array(filtered.prefix(itemsPerPage))
+        let hasMore = filtered.count > itemsPerPage
+
         uiState = PreferencesUIState(
             preferences: uiState.preferences,
-            filteredPreferences: filterAndSearch(uiState.preferences),
+            filteredPreferences: initialItems,
             selectedPreference: uiState.selectedPreference,
             filter: uiState.filter,
             searchQuery: query,
+            selectedType: uiState.selectedType,
             isLoading: false,
-            error: nil
+            error: nil,
+            hasMorePages: hasMore,
+            isLoadingMore: false
         )
     }
 
@@ -83,8 +160,11 @@ public class PreferencesViewModel: BaseViewModel {
             selectedPreference: preference,
             filter: uiState.filter,
             searchQuery: uiState.searchQuery,
+            selectedType: uiState.selectedType,
             isLoading: uiState.isLoading,
-            error: uiState.error
+            error: uiState.error,
+            hasMorePages: uiState.hasMorePages,
+            isLoadingMore: uiState.isLoadingMore
         )
     }
 
@@ -115,24 +195,86 @@ public class PreferencesViewModel: BaseViewModel {
                     source: source,
                     suiteName: suiteName
                 )
-                let success = try await deletePreferenceUseCase.execute(input)
-                if success {
-                    loadPreferences()
-                }
+                _ = try await deletePreferenceUseCase.execute(input)
+                // Always reload to reflect the current state
+                loadPreferences()
             } catch {
                 handleError(error)
             }
         }
     }
 
-    private func filterAndSearch(_ preferences: [Preference]) -> [Preference] {
+
+    public func clearAllPreferences(source: PreferenceFilter) {
+        Task {
+            do {
+                let preferencesToDelete = uiState.preferences.filter { preference in
+                    switch source {
+                    case .all:
+                        return true
+                    case .userDefaults:
+                        return preference.source == .userDefaults
+                    case .keychain:
+                        return preference.source == .keychain
+                    case .propertyList:
+                        return preference.source == .propertyList
+                    }
+                }
+
+                // Delete each preference
+                for preference in preferencesToDelete {
+                    let input = DeletePreferenceUseCase.Input(
+                        key: preference.key,
+                        source: preference.source,
+                        suiteName: preference.suiteName
+                    )
+                    _ = try await deletePreferenceUseCase.execute(input)
+                }
+
+                // Reload preferences
+                loadPreferences()
+            } catch {
+                handleError(error)
+            }
+        }
+    }
+
+    public func filterByType(_ type: String?) {
+        let filtered = filterAndSearch(uiState.preferences, searchQuery: uiState.searchQuery, selectedType: type)
+        allFilteredPreferences = filtered
+        currentPage = 0
+        let initialItems = Array(filtered.prefix(itemsPerPage))
+        let hasMore = filtered.count > itemsPerPage
+
+        uiState = PreferencesUIState(
+            preferences: uiState.preferences,
+            filteredPreferences: initialItems,
+            selectedPreference: uiState.selectedPreference,
+            filter: uiState.filter,
+            searchQuery: uiState.searchQuery,
+            selectedType: type,
+            isLoading: false,
+            error: nil,
+            hasMorePages: hasMore,
+            isLoadingMore: false
+        )
+    }
+
+    private func filterAndSearch(_ preferences: [Preference], searchQuery: String, selectedType: String?) -> [Preference] {
         var filtered = preferences
 
-        // Apply search query
-        if !uiState.searchQuery.isEmpty {
+        // Apply type filter
+        if let type = selectedType {
             filtered = filtered.filter { preference in
-                preference.key.localizedCaseInsensitiveContains(uiState.searchQuery) ||
-                String(describing: preference.value).localizedCaseInsensitiveContains(uiState.searchQuery)
+                preference.type.lowercased().contains(type.lowercased())
+            }
+        }
+
+        // Apply search query
+        if !searchQuery.isEmpty {
+            filtered = filtered.filter { preference in
+                preference.key.localizedCaseInsensitiveContains(searchQuery) ||
+                String(describing: preference.value).localizedCaseInsensitiveContains(searchQuery)
             }
         }
 

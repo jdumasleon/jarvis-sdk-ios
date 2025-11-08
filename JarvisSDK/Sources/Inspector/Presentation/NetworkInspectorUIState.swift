@@ -68,10 +68,10 @@ public struct NetworkInspectorUIState {
 /// Status code categories for filtering
 public enum StatusCategory: String, CaseIterable {
     case all = "All"
-    case successful = "2xx Success"
-    case redirect = "3xx Redirect"
-    case clientError = "4xx Client Error"
-    case serverError = "5xx Server Error"
+    case successful = "Success"
+    case redirect = "Redirect"
+    case clientError = "Client Error"
+    case serverError = "Server Error"
 
     public var range: ClosedRange<Int>? {
         switch self {

@@ -6,10 +6,10 @@ import CoreMotion
 #endif
 
 /// Detects device shake gestures using Core Motion
-internal final class ShakeDetector: ObservableObject {
-    static let shared = ShakeDetector()
+public final class ShakeDetector: ObservableObject {
+    public static let shared = ShakeDetector()
 
-    @Published var isShaking = false
+    @Published public var isShaking = false
 
     #if os(iOS)
     private let motionManager = CMMotionManager()
@@ -39,11 +39,11 @@ internal final class ShakeDetector: ObservableObject {
         #endif
     }
 
-    func setShakeHandler(_ handler: @escaping () -> Void) {
+    public func setShakeHandler(_ handler: @escaping () -> Void) {
         self.shakeHandler = handler
     }
 
-    func startDetection() {
+    public func startDetection() {
         #if os(iOS)
         guard motionManager.isAccelerometerAvailable else {
             JarvisLogger.shared.warning("Cannot start shake detection: accelerometer not available")
@@ -81,7 +81,7 @@ internal final class ShakeDetector: ObservableObject {
         #endif
     }
 
-    func stopDetection() {
+    public func stopDetection() {
         #if os(iOS)
         guard motionManager.isAccelerometerActive else {
             return
