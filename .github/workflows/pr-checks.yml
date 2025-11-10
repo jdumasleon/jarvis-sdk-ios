@@ -173,7 +173,7 @@ jobs:
       - name: 🍎 Set up Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: '15.4'
+          xcode-version: '16.2.0'
 
       - name: 🔧 Init CodeQL
         uses: github/codeql-action/init@v3
