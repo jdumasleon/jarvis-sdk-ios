@@ -1,164 +1,157 @@
 import Foundation
-import SwiftData
+import CoreData
+import Domain
 
-/// SwiftData storage manager for network transactions
-@available(iOS 17.0, *)
+/// Core Data-based storage for network transactions
+/// Replaces previous JSON/in-memory storage for better performance and persistence
 @MainActor
 public class NetworkTransactionStorage {
     public static let shared = NetworkTransactionStorage()
 
-    private var modelContainer: ModelContainer?
-    private var modelContext: ModelContext?
+    private let coreDataStack = NetworkInspectorCoreDataStack.shared
 
-    private init() {
-        setupStorage()
-    }
-
-    private func setupStorage() {
-        do {
-            let schema = Schema([NetworkTransactionEntity.self])
-            let modelConfiguration = ModelConfiguration(
-                schema: schema,
-                isStoredInMemoryOnly: false,
-                groupContainer: .none,
-                cloudKitDatabase: .none
-            )
-            modelContainer = try ModelContainer(
-                for: schema,
-                configurations: [modelConfiguration]
-            )
-            modelContext = ModelContext(modelContainer!)
-        } catch {
-            print("❌ Failed to initialize SwiftData storage: \(error)")
-            // Fallback to in-memory if persistent fails
-            setupInMemoryStorage()
-        }
-    }
-
-    private func setupInMemoryStorage() {
-        do {
-            let schema = Schema([NetworkTransactionEntity.self])
-            let modelConfiguration = ModelConfiguration(
-                schema: schema,
-                isStoredInMemoryOnly: true
-            )
-            modelContainer = try ModelContainer(
-                for: schema,
-                configurations: [modelConfiguration]
-            )
-            modelContext = ModelContext(modelContainer!)
-        } catch {
-            print("❌ Failed to initialize in-memory storage: \(error)")
-        }
-    }
+    private init() {}
 
     // MARK: - CRUD Operations
 
     public func save(_ entity: NetworkTransactionEntity) throws {
-        guard let context = modelContext else {
-            throw StorageError.contextNotAvailable
+        let context = coreDataStack.context
+
+        // Check if exists
+        let fetchRequest = NetworkTransactionManagedObject.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %@", entity.id)
+
+        let managedObject: NetworkTransactionManagedObject
+        if let existing = try context.fetch(fetchRequest).first {
+            managedObject = existing
+        } else {
+            managedObject = NetworkTransactionManagedObject(context: context)
+            managedObject.id = entity.id
         }
 
-        context.insert(entity)
-        try context.save()
+        // Update properties
+        managedObject.requestId = entity.requestId
+        managedObject.responseId = entity.responseId
+        managedObject.method = entity.method
+        managedObject.url = entity.url
+        managedObject.requestHeadersJSON = entity.requestHeadersJSON
+        managedObject.requestBody = entity.requestBody.flatMap { String(data: $0, encoding: .utf8) }
+        managedObject.responseHeadersJSON = entity.responseHeadersJSON
+        managedObject.responseBody = entity.responseBody.flatMap { String(data: $0, encoding: .utf8) }
+        managedObject.statusCode = Int64(entity.statusCode ?? 0)
+        managedObject.startTime = entity.startTime
+        managedObject.endTime = entity.endTime
+        managedObject.status = entity.status
+
+        // New fields
+        managedObject.httpProtocol = entity.httpProtocol
+        managedObject.path = entity.path
+        managedObject.host = entity.host
+        managedObject.requestTimestamp = entity.requestTimestamp
+        managedObject.requestBodySize = entity.requestBodySize
+        managedObject.responseTimestamp = entity.responseTimestamp
+        managedObject.responseBodySize = entity.responseBodySize
+        managedObject.statusMessage = entity.statusMessage
+        managedObject.error = entity.error
+
+        try coreDataStack.save()
     }
 
     public func fetch(id: String) throws -> NetworkTransactionEntity? {
-        guard let context = modelContext else {
-            throw StorageError.contextNotAvailable
+        let context = coreDataStack.context
+        let fetchRequest = NetworkTransactionManagedObject.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %@", id)
+        fetchRequest.fetchLimit = 1
+
+        guard let managedObject = try context.fetch(fetchRequest).first else {
+            return nil
         }
 
-        let predicate = #Predicate<NetworkTransactionEntity> { transaction in
-            transaction.id == id
-        }
-
-        let descriptor = FetchDescriptor<NetworkTransactionEntity>(predicate: predicate)
-        let results = try context.fetch(descriptor)
-        return results.first
+        return convertToEntity(managedObject)
     }
 
     public func fetchAll() throws -> [NetworkTransactionEntity] {
-        guard let context = modelContext else {
-            throw StorageError.contextNotAvailable
-        }
-
-        let descriptor = FetchDescriptor<NetworkTransactionEntity>(
-            sortBy: [SortDescriptor(\.startTime, order: .reverse)]
-        )
-        return try context.fetch(descriptor)
+        let context = coreDataStack.context
+        let managedObjects = try context.fetch(NetworkTransactionManagedObject.fetchAll())
+        return managedObjects.map(convertToEntity)
     }
 
     public func fetchRecent(limit: Int) throws -> [NetworkTransactionEntity] {
-        guard let context = modelContext else {
-            throw StorageError.contextNotAvailable
-        }
-
-        var descriptor = FetchDescriptor<NetworkTransactionEntity>(
-            sortBy: [SortDescriptor(\.startTime, order: .reverse)]
-        )
-        descriptor.fetchLimit = limit
-        return try context.fetch(descriptor)
+        let context = coreDataStack.context
+        let managedObjects = try context.fetch(NetworkTransactionManagedObject.fetchRecent(limit: limit))
+        return managedObjects.map(convertToEntity)
     }
 
     public func fetchByMethod(_ method: String) throws -> [NetworkTransactionEntity] {
-        guard let context = modelContext else {
-            throw StorageError.contextNotAvailable
-        }
-
-        let predicate = #Predicate<NetworkTransactionEntity> { transaction in
-            transaction.method == method
-        }
-
-        let descriptor = FetchDescriptor<NetworkTransactionEntity>(
-            predicate: predicate,
-            sortBy: [SortDescriptor(\.startTime, order: .reverse)]
-        )
-        return try context.fetch(descriptor)
+        let context = coreDataStack.context
+        let managedObjects = try context.fetch(NetworkTransactionManagedObject.fetchByMethod(method))
+        return managedObjects.map(convertToEntity)
     }
 
     public func fetchByStatusCode(_ statusCode: Int) throws -> [NetworkTransactionEntity] {
-        guard let context = modelContext else {
-            throw StorageError.contextNotAvailable
-        }
+        let context = coreDataStack.context
+        let managedObjects = try context.fetch(NetworkTransactionManagedObject.fetchByStatusCode(statusCode))
+        return managedObjects.map(convertToEntity)
+    }
 
-        let predicate = #Predicate<NetworkTransactionEntity> { transaction in
-            transaction.statusCode == statusCode
-        }
-
-        let descriptor = FetchDescriptor<NetworkTransactionEntity>(
-            predicate: predicate,
-            sortBy: [SortDescriptor(\.startTime, order: .reverse)]
-        )
-        return try context.fetch(descriptor)
+    public func search(_ query: String) throws -> [NetworkTransactionEntity] {
+        let context = coreDataStack.context
+        let managedObjects = try context.fetch(NetworkTransactionManagedObject.search(query))
+        return managedObjects.map(convertToEntity)
     }
 
     public func delete(id: String) throws {
-        guard let context = modelContext else {
-            throw StorageError.contextNotAvailable
-        }
+        let context = coreDataStack.context
+        let fetchRequest = NetworkTransactionManagedObject.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %@", id)
 
-        if let entity = try fetch(id: id) {
-            context.delete(entity)
-            try context.save()
-        }
+        let objects = try context.fetch(fetchRequest)
+        objects.forEach { context.delete($0) }
+
+        try coreDataStack.save()
     }
 
     public func deleteAll() throws {
-        guard let context = modelContext else {
-            throw StorageError.contextNotAvailable
-        }
+        let context = coreDataStack.context
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "NetworkTransactionEntity")
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
 
-        let all = try fetchAll()
-        for entity in all {
-            context.delete(entity)
-        }
-        try context.save()
+        try context.execute(deleteRequest)
+        try coreDataStack.save()
+    }
+
+    // MARK: - Conversion
+
+    private func convertToEntity(_ managedObject: NetworkTransactionManagedObject) -> NetworkTransactionEntity {
+        return NetworkTransactionEntity(
+            id: managedObject.id,
+            requestId: managedObject.requestId,
+            responseId: managedObject.responseId,
+            method: managedObject.method,
+            url: managedObject.url,
+            requestHeadersJSON: managedObject.requestHeadersJSON ?? "",
+            responseHeadersJSON: managedObject.responseHeadersJSON,
+            requestBody: managedObject.requestBody?.data(using: .utf8),
+            responseBody: managedObject.responseBody?.data(using: .utf8),
+            statusCode: managedObject.statusCode > 0 ? Int(managedObject.statusCode) : nil,
+            startTime: managedObject.startTime,
+            endTime: managedObject.endTime,
+            status: managedObject.status,
+            httpProtocol: managedObject.httpProtocol,
+            path: managedObject.path,
+            host: managedObject.host,
+            requestTimestamp: managedObject.requestTimestamp,
+            requestBodySize: managedObject.requestBodySize,
+            responseTimestamp: managedObject.responseTimestamp,
+            responseBodySize: managedObject.responseBodySize,
+            statusMessage: managedObject.statusMessage,
+            error: managedObject.error
+        )
     }
 
     // MARK: - Errors
 
     public enum StorageError: Error {
-        case contextNotAvailable
         case fetchFailed
         case saveFailed
         case deleteFailed

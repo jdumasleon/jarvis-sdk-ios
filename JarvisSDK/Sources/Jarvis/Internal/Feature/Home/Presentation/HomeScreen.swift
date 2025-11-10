@@ -1,213 +1,313 @@
 //
 //  HomeScreen.swift
-//  Jarvis
+//  JarvisSDK
 //
-//  Created by Jose Luis Dumas Leon   on 30/9/25.
+//  Home dashboard screen with analytics
 //
-import SwiftUI
-import DesignSystem
 
-// MARK: - Home View
+import SwiftUI
+import Presentation
+import DesignSystem
+import Common
+
+/// Home navigation view with coordinator-based routing
+@MainActor
+struct HomeNavigationView: View {
+    @ObservedObject private var coordinator: HomeCoordinator
+    @ObservedObject private var viewModel: HomeViewModel
+
+    init(coordinator: HomeCoordinator, viewModel: HomeViewModel) {
+        self.coordinator = coordinator
+        self.viewModel = viewModel
+    }
+
+    var body: some View {
+        NavigationStack(path: $coordinator.routes) {
+            HomeScreen(coordinator: coordinator, viewModel: viewModel)
+                .navigationDestination(for: HomeCoordinator.Route.self) { route in
+                    EmptyView()
+                }
+        }
+    }
+}
+
+// MARK: - Home Screen
 
 public struct HomeScreen: View {
-    @StateObject private var viewModel = HomeViewModel()
+    @Environment(\.dismiss) var dismiss
+    let coordinator: HomeCoordinator
+    @ObservedObject var viewModel: HomeViewModel
 
-    public init() {}
+    init(
+        coordinator: HomeCoordinator,
+        viewModel: HomeViewModel
+    ) {
+        self.coordinator = coordinator
+        self.viewModel = viewModel
+    }
 
     public var body: some View {
-        NavigationView {
-            ScrollView {
-                LazyVStack(spacing: DSSpacing.l) {
-                    // Welcome section
-                    DSHeaderCard(
-                        title: "Jarvis Inspector",
-                        subtitle: "Monitor your app's network activity and preferences"
-                    ) {
-                        Text("Debug and inspect your app's behavior with powerful monitoring tools.")
-                            .dsTextStyle(.bodySmall)
-                            .foregroundColor(DSColor.Neutral.neutral80)
-                    }
+        ZStack {
+            DSColor.Extra.background0.ignoresSafeArea()
 
-                    // Inspector stats
-                    DSCard(style: .elevated) {
-                        VStack(alignment: .leading, spacing: DSSpacing.m) {
-                            HStack {
-                                DSIcons.Jarvis.inspector
-                                    .font(.system(size: DSIconSize.m))
-                                    .foregroundColor(DSColor.Primary.primary100)
+            contentView
+        }
+        .navigationTitle("Dashboard")
+        #if os(iOS)
+        .navigationBarTitleDisplayMode(.large)
+        #endif
+        .toolbar {
+            #if os(iOS)
+            ToolbarItem(placement: .navigationBarLeading) {
+                JarvisTopBarLogo()
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                DSIconButton(
+                    icon: DSIcons.Navigation.close,
+                    style: .ghost,
+                    size: .small,
+                    tint: DSColor.Neutral.neutral100
+                ) {
+                    coordinator.onDismissSDK?()
+                }
+            }
+            #endif
+        }
+    }
 
-                                Text("Network Inspector")
-                                    .dsTextStyle(.titleMedium)
-                                    .foregroundColor(DSColor.Neutral.neutral100)
+    // MARK: - Content View
 
-                                Spacer()
+    @ViewBuilder
+    private var contentView: some View {
+        if viewModel.uiState.isLoading && viewModel.uiState.enhancedMetrics == nil {
+            loadingView
+        } else if let error = viewModel.uiState.error, viewModel.uiState.enhancedMetrics == nil {
+            errorView(message: error.localizedDescription)
+        } else {
+            successView()
+        }
+    }
 
-                                DSButton.ghost("View All", size: .small) {
-                                    // Navigate to inspector
-                                }
-                            }
+    // MARK: - Loading View
 
-                            StatsGridView(stats: viewModel.inspectorStats)
+    private var loadingView: some View {
+        VStack(spacing: DSSpacing.m) {
+            ProgressView()
+                .scaleEffect(1.2)
+
+            Text("Loading dashboard...")
+                .dsTextStyle(.bodyMedium)
+                .foregroundColor(DSColor.Neutral.neutral60)
+        }
+    }
+
+    // MARK: - Success View
+
+    private func successView() -> some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: DSSpacing.l) {
+                // Header Content (Info Banner + Session Filter)
+                if viewModel.uiState.isHeaderContentVisible {
+                    // Info Banner
+                    DSAlert(
+                        style: .info,
+                        title: "Analytics Dashboard",
+                        message: "Monitor your app's performance, network activity, and preferences in real-time.") {
+                            viewModel.onEvent(.dismissHeaderContent)
                         }
-                    }
-
-                    // Preferences stats
-                    DSCard(style: .elevated) {
-                        VStack(alignment: .leading, spacing: DSSpacing.m) {
-                            HStack {
-                                DSIcons.Jarvis.preferences
-                                    .font(.system(size: DSIconSize.m))
-                                    .foregroundColor(DSColor.Secondary.secondary100)
-
-                                Text("Preferences Monitor")
-                                    .dsTextStyle(.titleMedium)
-                                    .foregroundColor(DSColor.Neutral.neutral100)
-
-                                Spacer()
-
-                                DSButton.ghost("View All", size: .small) {
-                                    // Navigate to preferences
+                }
+                
+                VStack(alignment: .leading, spacing: DSSpacing.s) {
+                    DSText(
+                        "Filter".uppercased(),
+                        style: .bodyMedium,
+                        color: DSColor.Neutral.neutral100
+                    )
+                    .dsPadding(.horizontal, DSSpacing.m)
+                    
+                    // Session Filter
+                    HStack(spacing: DSSpacing.s) {
+                        ForEach(SessionFilter.allCases, id: \.self) { filter in
+                            DSFilterChip(
+                                title: filter.rawValue,
+                                isSelected: viewModel.uiState.selectedSessionFilter == filter,
+                                action: {
+                                    viewModel.onEvent(.changeSessionFilter(filter))
                                 }
-                            }
-
-                            PreferencesStatsView(stats: viewModel.preferencesStats)
+                            )
                         }
-                    }
-
-                    // Quick actions
-                    DSCard(style: .outlined) {
-                        VStack(alignment: .leading, spacing: DSSpacing.m) {
-                            Text("Quick Actions")
-                                .dsTextStyle(.titleMedium)
-                                .foregroundColor(DSColor.Neutral.neutral100)
-
-                            VStack(spacing: DSSpacing.s) {
-                                DSButton.outline("Clear Inspector Data") {
-                                    // Clear inspector data
-                                }
-
-                                DSButton.outline("Clear Preferences Data") {
-                                    // Clear preferences data
-                                }
-
-                                DSButton.outline("Export Data") {
-                                    // Export data
-                                }
-                            }
-                        }
+                    
                     }
                 }
-                .dsPadding(DSSpacing.m)
+                
+                // Dashboard Cards
+                if let metrics = viewModel.uiState.enhancedMetrics {
+                    dashboardGrid(metrics: metrics, cardOrder: viewModel.uiState.cardOrder)
+                } else {
+                    emptyDashboard
+                }
             }
-            .navigationTitle("Home")
-            .task {
-                await viewModel.loadStats()
-            }
-            .refreshable {
-                await viewModel.loadStats()
+            .dsPadding(.all, DSSpacing.m)
+        }
+        .refreshable {
+            viewModel.onEvent(.refreshDashboard)
+        }
+    }
+
+    // MARK: - Dashboard Grid
+
+    private func dashboardGrid(metrics: EnhancedDashboardMetrics, cardOrder: [DashboardCardType]) -> some View {
+        LazyVGrid(
+            columns: [
+                GridItem(.adaptive(minimum: 300, maximum: .infinity), spacing: DSSpacing.m)
+            ],
+            spacing: DSSpacing.m
+        ) {
+            ForEach(cardOrder, id: \.self) { cardType in
+                dashboardCard(for: cardType, metrics: metrics)
+                    .id(cardType)
             }
         }
     }
-}
 
-// MARK: - Stats Grid View
+    // MARK: - Dashboard Card
 
-private struct StatsGridView: View {
-    let stats: InspectorStats
-
-    var body: some View {
-        LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 2), spacing: DSSpacing.s) {
-            StatCardView(
-                title: "Total Requests",
-                value: "\(stats.totalRequests)",
-                icon: DSIcons.Status.info
-            )
-
-            StatCardView(
-                title: "Success Rate",
-                value: String(format: "%.1f%%", stats.successRate * 100),
-                icon: DSIcons.Status.success
-            )
-
-            StatCardView(
-                title: "Avg Response",
-                value: String(format: "%.0fms", stats.averageResponseTime * 1000),
-                icon: DSIcons.Status.loading
-            )
-
-            StatCardView(
-                title: "Errors",
-                value: "\(stats.errorRequests)",
-                icon: DSIcons.Status.error
-            )
-        }
-    }
-}
-
-// MARK: - Preferences Stats View
-
-private struct PreferencesStatsView: View {
-    let stats: PreferencesStats
-
-    var body: some View {
-        HStack(spacing: DSSpacing.m) {
-            StatCardView(
-                title: "Total Changes",
-                value: "\(stats.totalChanges)",
-                icon: DSIcons.Status.info
-            )
-
-            StatCardView(
-                title: "Recent",
-                value: "\(stats.recentChanges)",
-                icon: DSIcons.Status.success
-            )
-
-            StatCardView(
-                title: "Monitored Keys",
-                value: "\(stats.monitoredKeys)",
-                icon: DSIcons.Jarvis.monitoring
-            )
-        }
-    }
-}
-
-// MARK: - Stat Card View
-
-private struct StatCardView: View {
-    let title: String
-    let value: String
-    let icon: Image
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: DSSpacing.xs) {
-            HStack {
-                icon
-                    .font(.system(size: DSIconSize.s))
-                    .foregroundColor(DSColor.Neutral.neutral80)
-
-                Spacer()
+    @ViewBuilder
+    private func dashboardCard(for cardType: DashboardCardType, metrics: EnhancedDashboardMetrics) -> some View {
+        switch cardType {
+        case .healthSummary:
+            if let healthScore = metrics.healthScore {
+                HealthScoreGauge(healthScore: healthScore)
             }
 
-            Text(value)
-                .dsTextStyle(.titleLarge)
+        case .systemPerformance:
+            PerformanceOverviewChart(performanceSnapshot: metrics.performanceSnapshot)
+
+        case .networkOverview:
+            NetworkAreaChart(
+                dataPoints: metrics.enhancedNetworkMetrics.requestsOverTime,
+                totalRequests: metrics.enhancedNetworkMetrics.totalCalls
+            )
+
+        case .preferencesOverview:
+            PreferencesOverviewChart(metrics: metrics.enhancedPreferencesMetrics)
+
+        case .httpMethods:
+            HttpMethodsDonutChart(methodData: metrics.enhancedNetworkMetrics.httpMethodDistribution)
+
+        case .topEndpoints:
+            TopEndpointsBarChart(endpoints: metrics.enhancedNetworkMetrics.topEndpoints)
+
+        case .slowEndpoints:
+            SlowestEndpointsList(endpoints: metrics.enhancedNetworkMetrics.slowestEndpoints)
+        }
+    }
+
+    // MARK: - Empty Dashboard
+
+    private var emptyDashboard: some View {
+        VStack(spacing: DSSpacing.m) {
+            Image(systemName: "chart.line.uptrend.xyaxis")
+                .font(.system(size: 60))
+                .foregroundColor(DSColor.Neutral.neutral40)
+
+            Text("No Data Available")
+                .dsTextStyle(.headlineMedium)
                 .foregroundColor(DSColor.Neutral.neutral100)
 
-            Text(title)
-                .dsTextStyle(.labelMedium)
-                .foregroundColor(DSColor.Neutral.neutral80)
+            Text("Start using your app to see analytics")
+                .dsTextStyle(.bodyMedium)
+                .foregroundColor(DSColor.Neutral.neutral60)
+                .multilineTextAlignment(.center)
         }
-        .dsPadding(DSSpacing.s)
-        .background(DSColor.Neutral.neutral0)
-        .dsCornerRadius(DSRadius.s)
+        .dsPadding(.all, DSSpacing.xl)
+    }
+
+    // MARK: - Error View
+
+    private func errorView(message: String) -> some View {
+        VStack(spacing: DSSpacing.m) {
+            Image(systemName: "exclamationmark.triangle")
+                .font(.system(size: 60))
+                .foregroundColor(DSColor.Error.error60)
+
+            Text("Error Loading Dashboard")
+                .dsTextStyle(.headlineMedium)
+                .foregroundColor(DSColor.Neutral.neutral100)
+
+            Text(message)
+                .dsTextStyle(.bodyMedium)
+                .foregroundColor(DSColor.Neutral.neutral60)
+                .multilineTextAlignment(.center)
+
+            Button(action: {
+                viewModel.onEvent(.refreshDashboard)
+            }) {
+                Text("Try Again")
+                    .dsTextStyle(.labelMedium)
+                    .foregroundColor(DSColor.Extra.white)
+                    .dsPadding(.horizontal, DSSpacing.l)
+                    .dsPadding(.vertical, DSSpacing.m)
+                    .background(DSColor.Primary.primary60)
+                    .dsCornerRadius(DSRadius.m)
+            }
+        }
+        .dsPadding(.all, DSSpacing.xl)
     }
 }
 
 // MARK: - Preview
 
 #if DEBUG
-@available(iOS 17.0, *)
-#Preview("Home View") {
-    HomeScreen()
+#Preview("Home Screen - Loading") {
+    let mockRepo = MockDashboardRepository()
+    return HomeScreen(
+        coordinator: HomeCoordinator(),
+        viewModel: HomeViewModel(
+            getEnhancedMetricsUseCase: GetEnhancedDashboardMetricsUseCase(repository: mockRepo),
+            refreshMetricsUseCase: RefreshDashboardMetricsUseCase(repository: mockRepo)
+        )
+    )
+}
+
+#Preview("Home Screen - Success") {
+    let mockRepo = MockDashboardRepository()
+    return HomeScreen(
+        coordinator: HomeCoordinator(),
+        viewModel: HomeViewModel(
+            getEnhancedMetricsUseCase: GetEnhancedDashboardMetricsUseCase(repository: mockRepo),
+            refreshMetricsUseCase: RefreshDashboardMetricsUseCase(repository: mockRepo)
+        )
+    )
+}
+
+// MARK: - Mock Use Cases for Previews
+
+import Combine
+
+private class MockDashboardRepository: DashboardRepository {
+    func getDashboardMetrics() -> AnyPublisher<DashboardMetrics, Error> {
+        Just(DashboardMetrics(
+            networkMetrics: NetworkMetrics(totalCalls: 0, averageSpeed: 0, successfulCalls: 0, failedCalls: 0, successRate: 0),
+            preferencesMetrics: PreferencesMetrics(totalPreferences: 0, preferencesByType: [:], mostCommonType: nil),
+            performanceMetrics: PerformanceMetrics(rating: .excellent, averageResponseTime: 0, errorRate: 0, apdexScore: 1.0)
+        ))
+        .setFailureType(to: Error.self)
+        .eraseToAnyPublisher()
+    }
+
+    func getEnhancedDashboardMetrics(sessionFilter: SessionFilter) -> AnyPublisher<EnhancedDashboardMetrics, Error> {
+        Just(EnhancedDashboardMetrics.mock)
+            .setFailureType(to: Error.self)
+            .eraseToAnyPublisher()
+    }
+
+    func refreshMetrics() async throws -> DashboardMetrics {
+        return DashboardMetrics(
+            networkMetrics: NetworkMetrics(totalCalls: 0, averageSpeed: 0, successfulCalls: 0, failedCalls: 0, successRate: 0),
+            preferencesMetrics: PreferencesMetrics(totalPreferences: 0, preferencesByType: [:], mostCommonType: nil),
+            performanceMetrics: PerformanceMetrics(rating: .excellent, averageResponseTime: 0, errorRate: 0, apdexScore: 1.0)
+        )
+    }
 }
 #endif

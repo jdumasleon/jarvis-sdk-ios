@@ -1,10 +1,10 @@
 import Foundation
 import SwiftUI
 import Combine
-// Import all required modules
 import Platform
 import Domain
 import JarvisInspectorDomain
+import JarvisInspectorData
 import Common
 import DesignSystem
 
@@ -19,11 +19,15 @@ public final class JarvisSDK: ObservableObject {
     @Published public private(set) var isActive = false
     @Published public private(set) var isShowing = false
     @Published public private(set) var isInitialized = false
+    @Published private var targetTab: Int = 0  // 0=home, 1=inspector, 2=preferences, 3=settings
 
     // MARK: - Private Properties
     private var configuration = JarvisConfig()
     private let shakeDetector = ShakeDetector.shared
     private var cancellables = Set<AnyCancellable>()
+
+    // Performance monitoring
+    internal let performanceMonitor = PerformanceMonitorManager()
 
     // MARK: - Internal State
     private var previousActiveState = false
@@ -32,6 +36,8 @@ public final class JarvisSDK: ObservableObject {
     // MARK: - Initialization
     private init() {
         setupShakeDetection()
+        // Start network monitoring immediately so interception is ready before explicit initialization.
+        NetworkInterceptor.shared.startMonitoring()
     }
 
     // MARK: - Public API
@@ -51,6 +57,9 @@ public final class JarvisSDK: ObservableObject {
             isInitialized = true
 
             JarvisLogger.shared.info("Jarvis SDK initialized successfully")
+
+            // Note: Shake detection is automatically started by ShakeDetectorModifier (.onShake)
+            // No need to start it here to avoid conflicts
         } else {
             // Store previous states for restoration
             previousActiveState = isActive
@@ -81,29 +90,57 @@ public final class JarvisSDK: ObservableObject {
     /// Activate the SDK (show FAB and enable features)
     public func activate() {
         guard isInitialized else {
-            JarvisLogger.shared.warning("Cannot activate: SDK not initialized")
+            JarvisLogger.shared.warning("Cannot activate: SDK not initialized yet - waiting for initialization")
+            // Try to activate after a short delay to allow initialization to complete
+            Task { @MainActor in
+                try? await Task.sleep(nanoseconds: 500_000_000) // 0.5 seconds
+                if self.isInitialized {
+                    self.activate()
+                } else {
+                    JarvisLogger.shared.error("Failed to activate: SDK initialization timed out")
+                }
+            }
             return
         }
 
-        isActive = true
-
-        if configuration.enableShakeDetection {
-            shakeDetector.startDetection()
+        // Prevent multiple activations
+        guard !isActive else {
+            JarvisLogger.shared.debug("Jarvis SDK already activated")
+            return
         }
 
-        JarvisLogger.shared.info("Jarvis SDK activated")
+        // Defer state change to avoid "Publishing changes during view updates"
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+
+            self.isActive = true
+
+            // Note: Shake detection is managed by ShakeDetectorModifier, not here
+
+            // Start performance monitoring
+            self.performanceMonitor.startMonitoring()
+
+            JarvisLogger.shared.info("Jarvis SDK activated")
+        }
     }
 
     /// Deactivate the SDK (hide all UI and disable features)
     public func deactivate() {
-        isActive = false
-        hideOverlay()
+        // Defer state change to avoid "Publishing changes during view updates"
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
 
-        if configuration.enableShakeDetection {
-            shakeDetector.stopDetection()
+            self.isActive = false
+            self.hideOverlay()
+
+            // Note: Don't stop shake detection here - it's managed by ShakeDetectorModifier
+            // This allows shake to reactivate Jarvis after deactivation
+
+            // Stop performance monitoring
+            self.performanceMonitor.stopMonitoring()
+
+            JarvisLogger.shared.info("Jarvis SDK deactivated")
         }
-
-        JarvisLogger.shared.info("Jarvis SDK deactivated")
     }
 
     /// Toggle SDK activation state
@@ -119,19 +156,33 @@ public final class JarvisSDK: ObservableObject {
     }
 
     /// Show the main Jarvis overlay
-    public func showOverlay() {
+    public func showOverlay(tab: Int = 0) {
         guard isActive else {
             JarvisLogger.shared.warning("Cannot show overlay: SDK not active")
             return
         }
 
-        isShowing = true
-        JarvisLogger.shared.debug("Jarvis overlay shown")
+        // Defer state change to avoid "Publishing changes during view updates"
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+
+            self.targetTab = tab
+            self.isShowing = true
+
+            // Pause performance monitoring to avoid measuring SDK overhead
+            self.performanceMonitor.pauseMonitoring()
+
+            JarvisLogger.shared.debug("Jarvis overlay shown on tab \(tab)")
+        }
     }
 
     /// Hide the main Jarvis overlay
     public func hideOverlay() {
         isShowing = false
+
+        // Resume performance monitoring when overlay closes
+        performanceMonitor.resumeMonitoring()
+
         JarvisLogger.shared.debug("Jarvis overlay hidden")
     }
 
@@ -153,25 +204,61 @@ public final class JarvisSDK: ObservableObject {
         return configuration
     }
 
+    // MARK: - Manual URLSession Configuration
+
+    /// Configure a URLSessionConfiguration to use Jarvis network interception
+    /// Use this if you need explicit control over when interception is enabled
+    /// - Parameter configuration: The URLSessionConfiguration to configure
+    /// - Returns: The configured URLSessionConfiguration (for chaining)
+    @discardableResult
+    public nonisolated static func configureURLSession(_ configuration: inout URLSessionConfiguration) -> URLSessionConfiguration {
+        if let interceptorClass = NSClassFromString("Platform.URLSessionInterceptor") as? URLProtocol.Type {
+            var protocolClasses = configuration.protocolClasses ?? []
+            // Only add if not already present
+            if !protocolClasses.contains(where: { $0 == interceptorClass }) {
+                protocolClasses.insert(interceptorClass, at: 0)
+                configuration.protocolClasses = protocolClasses
+            }
+        }
+        return configuration
+    }
+
     // MARK: - SwiftUI Integration
 
-    /// Main Jarvis overlay view
+    /// Main Jarvis SDK application view with scaffold structure
     public func mainView() -> some View {
-        JarvisMainView()
-            .environmentObject(self)
+        let tab: AppCoordinator.Tab = {
+            switch targetTab {
+            case 0: return .home
+            case 1: return .inspector
+            case 2: return .preferences
+            case 3: return .settings
+            default: return .home
+            }
+        }()
+
+        return JarvisSDKApplication(
+            onDismiss: {
+                Task { @MainActor in
+                    self.hideOverlay()
+                }
+            },
+            initialTab: tab
+        )
+        .environmentObject(self)
     }
 
     // MARK: - Private Methods
 
     private func setupShakeDetection() {
-        shakeDetector.setShakeHandler { [weak self] in
-            Task { @MainActor in
-                self?.handleShakeDetected()
-            }
-        }
+        // Note: Shake detection is now handled by the .onShake modifier in JarvisSDKModifier
+        // This prevents double-triggering when a shake occurs
+        // Keeping this method for potential future use
+        JarvisLogger.shared.debug("Shake detection setup - handled by .onShake modifier")
     }
 
     private func handleShakeDetected() {
+        // Deprecated: Now handled by .onShake modifier to prevent race conditions
         guard configuration.enableShakeDetection else { return }
 
         JarvisLogger.shared.debug("Shake detected - toggling Jarvis SDK")
@@ -179,12 +266,18 @@ public final class JarvisSDK: ObservableObject {
     }
 
     private func performInitialization() async {
+        // Initialize dependency injection container
+        await initializeDependencyInjection()
+
         // Initialize core systems
         await initializeCore()
 
         // Initialize network inspection
         if configuration.networkInspection.enableNetworkLogging {
             await initializeNetworkInspection()
+        } else {
+            NetworkInterceptor.shared.stopMonitoring()
+            JarvisLogger.shared.info("Network inspection disabled via configuration")
         }
 
         // Initialize preferences monitoring
@@ -201,14 +294,19 @@ public final class JarvisSDK: ObservableObject {
         }
     }
 
+    private func initializeDependencyInjection() async {
+        DependencyConfiguration.registerAll()
+        JarvisLogger.shared.debug("Dependency injection configured")
+    }
+
     private func initializeCore() async {
         // TODO: Initialize core platform services
         JarvisLogger.shared.debug("Core systems initialized")
     }
 
     private func initializeNetworkInspection() async {
-        // TODO: Initialize inspection monitoring
-        JarvisLogger.shared.debug("Network inspection initialized")
+        NetworkInterceptor.shared.startMonitoring()
+        JarvisLogger.shared.info("Network inspection initialized")
     }
 
     private func initializePreferencesMonitoring() async {
@@ -218,6 +316,7 @@ public final class JarvisSDK: ObservableObject {
 
     private func performCleanup() async {
         // Stop network interception
+        NetworkInterceptor.shared.stopMonitoring()
 
         // Stop shake detection
         shakeDetector.stopDetection()
@@ -225,7 +324,7 @@ public final class JarvisSDK: ObservableObject {
         // Clear subscriptions
         cancellables.removeAll()
 
-        JarvisLogger.shared.debug("SDK cleanup completed")
+        JarvisLogger.shared.info("SDK cleanup completed")
     }
 }
 
@@ -250,30 +349,53 @@ public struct JarvisSDKModifier: ViewModifier {
             if jarvis.isActive {
                 JarvisFabButton(
                     onInspectorTap: {
-                        jarvis.showOverlay()
+                        jarvis.showOverlay(tab: 1)  // Inspector tab
                     },
                     onPreferencesTap: {
-                        jarvis.showOverlay()
+                        jarvis.showOverlay(tab: 2)  // Preferences tab
                     },
                     onHomeTap: {
-                        jarvis.showOverlay()
+                        jarvis.showOverlay(tab: 0)  // Home tab
                     },
                     onCloseTap: {
                         jarvis.deactivate()
                     }
                 )
                 .transition(.scale.combined(with: .opacity))
+                .zIndex(999) // Ensure FAB is above all content
+                .onAppear {
+                    JarvisLogger.shared.debug("FAB appeared - Jarvis is active")
+                }
+                .onDisappear {
+                    JarvisLogger.shared.debug("FAB disappeared")
+                }
             }
         }
-        .sheet(isPresented: $showingInspector) {
+        .sheet(isPresented: $showingInspector, onDismiss: {
+            // Sync Jarvis state when sheet is dismissed by user swipe
+            if jarvis.isShowing {
+                jarvis.hideOverlay()
+            }
+        }) {
             jarvis.mainView()
         }
         .onChange(of: jarvis.isShowing) { isShowing in
             showingInspector = isShowing
         }
         .onShake {
-            if jarvis.isActive && config.enableShakeDetection {
-                jarvis.showOverlay()
+            JarvisLogger.shared.debug("Shake detected in modifier - isActive: \(jarvis.isActive), initialized: \(jarvis.isInitialized)")
+            if config.enableShakeDetection {
+                Task { @MainActor in
+                    if jarvis.isActive {
+                        JarvisLogger.shared.debug("Showing overlay (already active)")
+                        jarvis.showOverlay()
+                    } else {
+                        JarvisLogger.shared.debug("Activating Jarvis")
+                        jarvis.activate()
+                    }
+                }
+            } else {
+                JarvisLogger.shared.warning("Shake detection is disabled in config")
             }
         }
         .task {
@@ -289,282 +411,5 @@ public extension View {
     /// - Returns: View with Jarvis SDK integration
     func jarvisSDK(config: JarvisConfig = JarvisConfig()) -> some View {
         modifier(JarvisSDKModifier(config: config))
-    }
-}
-
-// MARK: - Temporary Main View
-// TODO: Replace with proper implementation from feature modules
-
-internal struct JarvisMainView: View {
-    @EnvironmentObject private var jarvis: JarvisSDK
-    @State private var transactions: [NetworkTransaction] = []
-    @State private var selectedTab = 0
-
-    var body: some View {
-        NavigationView {
-            TabView(selection: $selectedTab) {
-                // Dashboard Tab
-                DashboardView(jarvis: jarvis)
-                    .tabItem {
-                        Image(systemName: "chart.bar")
-                        Text("Dashboard")
-                    }
-                    .tag(0)
-
-                // Network Inspector Tab
-                NetworkInspectorView(transactions: transactions)
-                    .tabItem {
-                        Image(systemName: "network")
-                        Text("Network")
-                    }
-                    .tag(1)
-
-                // Preferences Tab
-                PreferencesView()
-                    .tabItem {
-                        Image(systemName: "gearshape")
-                        Text("Preferences")
-                    }
-                    .tag(2)
-            }
-            .navigationTitle(tabTitle)
-            #if os(iOS)
-            .navigationBarTitleDisplayMode(.inline)
-            #endif
-            .toolbar {
-                ToolbarItem(placement: .primaryAction) {
-                    Button("Done") {
-                        jarvis.hideOverlay()
-                    }
-                }
-            }
-        }
-        .onAppear {
-            refreshTransactions()
-        }
-        .refreshable {
-            refreshTransactions()
-        }
-    }
-
-    private var tabTitle: String {
-        switch selectedTab {
-        case 0: return "Dashboard"
-        case 1: return "Network Inspector"
-        case 2: return "Preferences"
-        default: return "Jarvis SDK"
-        }
-    }
-
-    private func refreshTransactions() {
-        // Use the NetworkInterceptor and repository to get transactions
-        // For now, use mock data until proper integration
-        transactions = NetworkTransaction.mockTransactions
-    }
-
-    public func clearNetworkData() {
-        transactions.removeAll()
-    }
-}
-
-private struct DashboardView: View {
-    let jarvis: JarvisSDK
-
-    var body: some View {
-        ScrollView {
-            VStack(spacing: 20) {
-                Text("Jarvis SDK Dashboard")
-                    .dsTextStyle(.titleLarge)
-
-                Text("iOS Network & Preferences Inspector")
-                    .font(.headline)
-                    .foregroundColor(.secondary)
-
-                VStack(spacing: 12) {
-                    InfoRow(title: "Status", value: jarvis.isActive ? "Active" : "Inactive")
-                    InfoRow(title: "Network Logging", value: jarvis.getConfiguration().networkInspection.enableNetworkLogging ? "Enabled" : "Disabled")
-                    InfoRow(title: "Preferences Monitoring", value: jarvis.getConfiguration().preferences.configuration.autoDiscoverUserDefaults ? "Enabled" : "Disabled")
-                    InfoRow(title: "Shake Detection", value: jarvis.getConfiguration().enableShakeDetection ? "Enabled" : "Disabled")
-                }
-                .padding()
-                .background(DSColor.Extra.background0)
-                .cornerRadius(12)
-
-                // Quick Actions
-                VStack(spacing: 12) {
-                    Button("Clear Network Data") {
-                        // Clear transactions - implement later
-                        print("Clear network data tapped")
-                    }
-                    .buttonStyle(.bordered)
-
-                    Button("Test Network Request") {
-                        performTestRequest()
-                    }
-                    .buttonStyle(.bordered)
-                }
-            }
-            .padding()
-        }
-    }
-
-    private func performTestRequest() {
-        Task {
-            do {
-                let url = URL(string: "https://jsonplaceholder.typicode.com/posts/1")!
-                let (_, _) = try await URLSession.shared.data(from: url)
-            } catch {
-                print("Test request failed: \(error)")
-            }
-        }
-    }
-}
-
-private struct NetworkInspectorView: View {
-    let transactions: [NetworkTransaction]
-
-    var body: some View {
-        List {
-            if transactions.isEmpty {
-                VStack(spacing: 16) {
-                    Image(systemName: "network.slash")
-                        .font(.system(size: 60))
-                        .foregroundColor(.gray)
-                    Text("No Network Requests")
-                        .font(.headline)
-                        .foregroundColor(.gray)
-                    Text("Network requests will appear here when your app makes them")
-                        .font(.body)
-                        .foregroundColor(.secondary)
-                        .multilineTextAlignment(.center)
-                }
-                .frame(maxWidth: .infinity)
-                .padding()
-                .listRowSeparator(.hidden)
-            } else {
-                ForEach(transactions) { transaction in
-                    NetworkTransactionRow(networkTransaction: transaction)
-                }
-            }
-        }
-        .listStyle(PlainListStyle())
-    }
-}
-
-private struct NetworkTransactionRow: View {
-    let networkTransaction: NetworkTransaction
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                // HTTP Method Badge
-                Text(networkTransaction.request.method.rawValue)
-                    .dsTextStyle(.labelSmall)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
-                    .background(methodColor.opacity(0.2))
-                    .foregroundColor(methodColor)
-                    .cornerRadius(4)
-
-                // Status Badge
-                if let response = networkTransaction.response {
-                    Text("\(response.statusCode)")
-                        .dsTextStyle(.labelSmall)
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 4)
-                        .background(statusColor.opacity(0.2))
-                        .foregroundColor(statusColor)
-                        .cornerRadius(4)
-                }
-
-                Spacer()
-
-                // Duration
-                if let duration = networkTransaction.duration {
-                    Text("\(Int(duration * 1000))ms")
-                        .dsTextStyle(.labelSmall)
-                        .foregroundColor(.secondary)
-                }
-            }
-
-            // URL
-            Text(networkTransaction.request.url)
-                .dsTextStyle(.bodyMedium)
-                .lineLimit(2)
-
-            // Timestamp
-            Text(networkTransaction.startTime.timeAgoString)
-                .font(.caption)
-                .foregroundColor(.secondary)
-        }
-        .padding(.vertical, 4)
-    }
-
-    private var methodColor: Color {
-        switch networkTransaction.request.method {
-        case .GET: return .blue
-        case .POST: return .green
-        case .PUT: return .orange
-        case .DELETE: return .red
-        case .PATCH: return .purple
-        default: return .gray
-        }
-    }
-
-    private var statusColor: Color {
-        guard let response = networkTransaction.response else { return .gray }
-
-        switch response.statusCode {
-        case 200..<300: return .green
-        case 300..<400: return .yellow
-        case 400..<500: return .orange
-        case 500..<600: return .red
-        default: return .gray
-        }
-    }
-}
-
-private struct PreferencesView: View {
-    var body: some View {
-        ScrollView {
-            VStack(spacing: 20) {
-                Text("Preferences Inspector")
-                    .dsTextStyle(.titleLarge)
-
-                Text("Monitor UserDefaults and other preferences")
-                    .font(.headline)
-                    .foregroundColor(.secondary)
-
-                VStack(spacing: 12) {
-                    Text("Coming Soon")
-                        .dsTextStyle(.titleMedium)
-                        .foregroundColor(.secondary)
-
-                    Text("Preferences monitoring functionality will be implemented in the next phase")
-                        .font(.body)
-                        .foregroundColor(.secondary)
-                        .multilineTextAlignment(.center)
-                }
-                .padding()
-                .background(DSColor.Extra.background0)
-                .cornerRadius(12)
-            }
-            .padding()
-        }
-    }
-}
-
-private struct InfoRow: View {
-    let title: String
-    let value: String
-
-    var body: some View {
-        HStack {
-            Text(title)
-                .dsTextStyle(.bodyMedium)
-            Spacer()
-            Text(value)
-                .foregroundColor(.secondary)
-        }
     }
 }

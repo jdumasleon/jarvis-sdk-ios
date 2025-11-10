@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Jarvis
 
 // MARK: - HTTP Client Protocol
 
@@ -22,10 +23,17 @@ class HTTPClient: HTTPClientProtocol {
     private let decoder: JSONDecoder
 
     init(
-        session: URLSession = .shared,
+        session: URLSession? = nil,
         decoder: JSONDecoder = JSONDecoder()
     ) {
-        self.session = session
+        if let session = session {
+            self.session = session
+        } else {
+            // Use default configuration and ensure Jarvis interceptor is registered up front.
+            var configuration = URLSessionConfiguration.default
+            JarvisSDK.configureURLSession(&configuration)
+            self.session = URLSession(configuration: configuration)
+        }
         self.decoder = decoder
     }
 

@@ -71,6 +71,7 @@ public struct DSColor {
         // Brand colors
         public static let jarvisPink = Color("JarvisPink", bundle: .module)
         public static let jarvisBlue = Color("JarvisBlue", bundle: .module)
+        public static let jarvisPurple = Color("JarvisPurple", bundle: .module)
 
         // Background colors
         public static let background0 = Color("Background0", bundle: .module)
@@ -82,7 +83,7 @@ public struct DSColor {
 
         // Surface colors
         public static let surface = white
-        public static let onSurface = Neutral.neutral100
+        public static let onSurface = black
     }
 
     // MARK: - Chart Colors

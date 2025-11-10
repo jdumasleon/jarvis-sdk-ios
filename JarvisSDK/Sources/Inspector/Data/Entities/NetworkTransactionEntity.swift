@@ -1,27 +1,35 @@
 import Foundation
-import SwiftData
 
-/// SwiftData entity for persistent network transaction storage
-@available(iOS 17.0, *)
-@Model
-public final class NetworkTransactionEntity {
-    @Attribute(.unique) public var id: String
+/// Entity for network transaction storage (iOS 16+ compatible)
+public final class NetworkTransactionEntity: Codable {
+    public var id: String
     public var requestId: String
     public var responseId: String?
     public var method: String
     public var url: String
 
-    // Store headers as JSON string for SwiftData compatibility
+    // Store headers as JSON string
     public var requestHeadersJSON: String
     public var responseHeadersJSON: String?
 
-    @Attribute(.externalStorage) public var requestBody: Data?
-    @Attribute(.externalStorage) public var responseBody: Data?
+    public var requestBody: Data?
+    public var responseBody: Data?
 
     public var statusCode: Int?
     public var startTime: Date
     public var endTime: Date?
     public var status: String
+
+    // New fields for enhanced detail view
+    public var httpProtocol: String?
+    public var path: String?
+    public var host: String?
+    public var requestTimestamp: Int64
+    public var requestBodySize: Int64
+    public var responseTimestamp: Int64
+    public var responseBodySize: Int64
+    public var statusMessage: String?
+    public var error: String?
 
     public init(
         id: String,
@@ -36,7 +44,16 @@ public final class NetworkTransactionEntity {
         statusCode: Int? = nil,
         startTime: Date,
         endTime: Date? = nil,
-        status: String
+        status: String,
+        httpProtocol: String? = nil,
+        path: String? = nil,
+        host: String? = nil,
+        requestTimestamp: Int64 = 0,
+        requestBodySize: Int64 = 0,
+        responseTimestamp: Int64 = 0,
+        responseBodySize: Int64 = 0,
+        statusMessage: String? = nil,
+        error: String? = nil
     ) {
         self.id = id
         self.requestId = requestId
@@ -51,6 +68,15 @@ public final class NetworkTransactionEntity {
         self.startTime = startTime
         self.endTime = endTime
         self.status = status
+        self.httpProtocol = httpProtocol
+        self.path = path
+        self.host = host
+        self.requestTimestamp = requestTimestamp
+        self.requestBodySize = requestBodySize
+        self.responseTimestamp = responseTimestamp
+        self.responseBodySize = responseBodySize
+        self.statusMessage = statusMessage
+        self.error = error
     }
 
     // Helper to convert headers dictionary to JSON

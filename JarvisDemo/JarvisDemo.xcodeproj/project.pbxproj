@@ -23,6 +23,141 @@
 		2A6523E62EAE57850080EB38 /* Jarvis in Frameworks */ = {isa = PBXBuildFile; productRef = 2A6523E52EAE57850080EB38 /* Jarvis */; };
 		2A6523E82EAE57850080EB38 /* JarvisInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 2A6523E72EAE57850080EB38 /* JarvisInspector */; };
 		2A6523EA2EAE57850080EB38 /* JarvisPreferences in Frameworks */ = {isa = PBXBuildFile; productRef = 2A6523E92EAE57850080EB38 /* JarvisPreferences */; };
+		2A6524572EAEAA7C0080EB38 /* Jarvis in Frameworks */ = {isa = PBXBuildFile; productRef = 2A6524562EAEAA7C0080EB38 /* Jarvis */; };
+		2A6524592EAEAA7C0080EB38 /* JarvisInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 2A6524582EAEAA7C0080EB38 /* JarvisInspector */; };
+		2A65245B2EAEAA7C0080EB38 /* JarvisPreferences in Frameworks */ = {isa = PBXBuildFile; productRef = 2A65245A2EAEAA7C0080EB38 /* JarvisPreferences */; };
+		2A65245E2EAEBAD50080EB38 /* Jarvis in Frameworks */ = {isa = PBXBuildFile; productRef = 2A65245D2EAEBAD50080EB38 /* Jarvis */; };
+		2A6524602EAEBAD50080EB38 /* JarvisInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 2A65245F2EAEBAD50080EB38 /* JarvisInspector */; };
+		2A6524622EAEBAD50080EB38 /* JarvisPreferences in Frameworks */ = {isa = PBXBuildFile; productRef = 2A6524612EAEBAD50080EB38 /* JarvisPreferences */; };
+		2A6524652EAFFD320080EB38 /* Jarvis in Frameworks */ = {isa = PBXBuildFile; productRef = 2A6524642EAFFD320080EB38 /* Jarvis */; };
+		2A6524672EAFFD320080EB38 /* JarvisInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 2A6524662EAFFD320080EB38 /* JarvisInspector */; };
+		2A6524692EAFFD320080EB38 /* JarvisPreferences in Frameworks */ = {isa = PBXBuildFile; productRef = 2A6524682EAFFD320080EB38 /* JarvisPreferences */; };
+		2AC7626F2EC29EB80007AC9A /* DesignSystem in Frameworks */ = {isa = PBXBuildFile; productRef = 2AC7626E2EC29EB80007AC9A /* DesignSystem */; };
+		2AC762722EC29ECA0007AC9A /* Jarvis in Frameworks */ = {isa = PBXBuildFile; productRef = 2AC762712EC29ECA0007AC9A /* Jarvis */; };
+		2AC762742EC29ECA0007AC9A /* JarvisInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 2AC762732EC29ECA0007AC9A /* JarvisInspector */; };
+		2AC762762EC29ECA0007AC9A /* JarvisPreferences in Frameworks */ = {isa = PBXBuildFile; productRef = 2AC762752EC29ECA0007AC9A /* JarvisPreferences */; };
+		2AD613E52EB66B5700C697C4 /* Jarvis in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD613E42EB66B5700C697C4 /* Jarvis */; };
+		2AD613E72EB66B5700C697C4 /* JarvisInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD613E62EB66B5700C697C4 /* JarvisInspector */; };
+		2AD613E92EB66B5700C697C4 /* JarvisPreferences in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD613E82EB66B5700C697C4 /* JarvisPreferences */; };
+		2AD613EC2EB6B29400C697C4 /* Jarvis in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD613EB2EB6B29400C697C4 /* Jarvis */; };
+		2AD613EE2EB6B29400C697C4 /* JarvisInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD613ED2EB6B29400C697C4 /* JarvisInspector */; };
+		2AD613F02EB6B29400C697C4 /* JarvisPreferences in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD613EF2EB6B29400C697C4 /* JarvisPreferences */; };
+		2AD613F32EB6B4A200C697C4 /* Jarvis in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD613F22EB6B4A200C697C4 /* Jarvis */; };
+		2AD613F52EB6B4A200C697C4 /* JarvisInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD613F42EB6B4A200C697C4 /* JarvisInspector */; };
+		2AD613F72EB6B4A200C697C4 /* JarvisPreferences in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD613F62EB6B4A200C697C4 /* JarvisPreferences */; };
+		2AD613FA2EB6B53200C697C4 /* Jarvis in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD613F92EB6B53200C697C4 /* Jarvis */; };
+		2AD613FC2EB6B53200C697C4 /* JarvisInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD613FB2EB6B53200C697C4 /* JarvisInspector */; };
+		2AD613FE2EB6B53200C697C4 /* JarvisPreferences in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD613FD2EB6B53200C697C4 /* JarvisPreferences */; };
+		2AD614012EB6B8A300C697C4 /* Jarvis in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD614002EB6B8A300C697C4 /* Jarvis */; };
+		2AD614032EB6B8A300C697C4 /* JarvisInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD614022EB6B8A300C697C4 /* JarvisInspector */; };
+		2AD614052EB6B8A300C697C4 /* JarvisPreferences in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD614042EB6B8A300C697C4 /* JarvisPreferences */; };
+		2AD614082EB6C7B300C697C4 /* Jarvis in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD614072EB6C7B300C697C4 /* Jarvis */; };
+		2AD6140A2EB6C7B300C697C4 /* JarvisInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD614092EB6C7B300C697C4 /* JarvisInspector */; };
+		2AD6140C2EB6C7B300C697C4 /* JarvisPreferences in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD6140B2EB6C7B300C697C4 /* JarvisPreferences */; };
+		2AD6140F2EB7789300C697C4 /* Jarvis in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD6140E2EB7789300C697C4 /* Jarvis */; };
+		2AD614112EB7789300C697C4 /* JarvisInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD614102EB7789300C697C4 /* JarvisInspector */; };
+		2AD614132EB7789300C697C4 /* JarvisPreferences in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD614122EB7789300C697C4 /* JarvisPreferences */; };
+		2AD614162EB7ED9400C697C4 /* Jarvis in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD614152EB7ED9400C697C4 /* Jarvis */; };
+		2AD614182EB7ED9400C697C4 /* JarvisInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD614172EB7ED9400C697C4 /* JarvisInspector */; };
+		2AD6141A2EB7ED9400C697C4 /* JarvisPreferences in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD614192EB7ED9400C697C4 /* JarvisPreferences */; };
+		2AD6141D2EB7F08D00C697C4 /* Jarvis in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD6141C2EB7F08D00C697C4 /* Jarvis */; };
+		2AD6141F2EB7F08D00C697C4 /* JarvisInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD6141E2EB7F08D00C697C4 /* JarvisInspector */; };
+		2AD614212EB7F08D00C697C4 /* JarvisPreferences in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD614202EB7F08D00C697C4 /* JarvisPreferences */; };
+		2AD614242EB7F1D600C697C4 /* Jarvis in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD614232EB7F1D600C697C4 /* Jarvis */; };
+		2AD614262EB7F1D600C697C4 /* JarvisInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD614252EB7F1D600C697C4 /* JarvisInspector */; };
+		2AD614282EB7F1D600C697C4 /* JarvisPreferences in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD614272EB7F1D600C697C4 /* JarvisPreferences */; };
+		2AD6142B2EB8006700C697C4 /* Jarvis in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD6142A2EB8006700C697C4 /* Jarvis */; };
+		2AD6142D2EB8006700C697C4 /* JarvisInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD6142C2EB8006700C697C4 /* JarvisInspector */; };
+		2AD6142F2EB8006700C697C4 /* JarvisPreferences in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD6142E2EB8006700C697C4 /* JarvisPreferences */; };
+		2AD614322EB8056300C697C4 /* Jarvis in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD614312EB8056300C697C4 /* Jarvis */; };
+		2AD614342EB8056300C697C4 /* JarvisInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD614332EB8056300C697C4 /* JarvisInspector */; };
+		2AD614362EB8056300C697C4 /* JarvisPreferences in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD614352EB8056300C697C4 /* JarvisPreferences */; };
+		2AD614392EB8BA4000C697C4 /* Jarvis in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD614382EB8BA4000C697C4 /* Jarvis */; };
+		2AD6143B2EB8BA4000C697C4 /* JarvisInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD6143A2EB8BA4000C697C4 /* JarvisInspector */; };
+		2AD6143D2EB8BA4000C697C4 /* JarvisPreferences in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD6143C2EB8BA4000C697C4 /* JarvisPreferences */; };
+		2AD614402EB8C18800C697C4 /* DesignSystem in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD6143F2EB8C18800C697C4 /* DesignSystem */; };
+		2AD614432EB8C19400C697C4 /* Jarvis in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD614422EB8C19400C697C4 /* Jarvis */; };
+		2AD614452EB8C19400C697C4 /* JarvisInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD614442EB8C19400C697C4 /* JarvisInspector */; };
+		2AD614472EB8C19400C697C4 /* JarvisPreferences in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD614462EB8C19400C697C4 /* JarvisPreferences */; };
+		2AD6144A2EB8E32900C697C4 /* DesignSystem in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD614492EB8E32900C697C4 /* DesignSystem */; };
+		2AD6144D2EB96BB500C697C4 /* Jarvis in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD6144C2EB96BB500C697C4 /* Jarvis */; };
+		2AD6144F2EB96BB500C697C4 /* JarvisInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD6144E2EB96BB500C697C4 /* JarvisInspector */; };
+		2AD614512EB96BB500C697C4 /* JarvisPreferences in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD614502EB96BB500C697C4 /* JarvisPreferences */; };
+		2AD614542EBA262900C697C4 /* Jarvis in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD614532EBA262900C697C4 /* Jarvis */; };
+		2AD614562EBA262900C697C4 /* JarvisInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD614552EBA262900C697C4 /* JarvisInspector */; };
+		2AD614582EBA262900C697C4 /* JarvisPreferences in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD614572EBA262900C697C4 /* JarvisPreferences */; };
+		2AD6145B2EBA57A300C697C4 /* Jarvis in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD6145A2EBA57A300C697C4 /* Jarvis */; };
+		2AD6145D2EBA57A300C697C4 /* JarvisInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD6145C2EBA57A300C697C4 /* JarvisInspector */; };
+		2AD6145F2EBA57A300C697C4 /* JarvisPreferences in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD6145E2EBA57A300C697C4 /* JarvisPreferences */; };
+		2AD614622EBA69D500C697C4 /* Jarvis in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD614612EBA69D500C697C4 /* Jarvis */; };
+		2AD614642EBA69D500C697C4 /* JarvisInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD614632EBA69D500C697C4 /* JarvisInspector */; };
+		2AD614662EBA69D500C697C4 /* JarvisPreferences in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD614652EBA69D500C697C4 /* JarvisPreferences */; };
+		2AD614692EBA6A7800C697C4 /* Jarvis in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD614682EBA6A7800C697C4 /* Jarvis */; };
+		2AD6146B2EBA6A7800C697C4 /* JarvisInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD6146A2EBA6A7800C697C4 /* JarvisInspector */; };
+		2AD6146D2EBA6A7800C697C4 /* JarvisPreferences in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD6146C2EBA6A7800C697C4 /* JarvisPreferences */; };
+		2AD614702EBAA77200C697C4 /* Jarvis in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD6146F2EBAA77200C697C4 /* Jarvis */; };
+		2AD614722EBAA77200C697C4 /* JarvisInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD614712EBAA77200C697C4 /* JarvisInspector */; };
+		2AD614742EBAA77200C697C4 /* JarvisPreferences in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD614732EBAA77200C697C4 /* JarvisPreferences */; };
+		2AD614772EBAAC8300C697C4 /* Jarvis in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD614762EBAAC8300C697C4 /* Jarvis */; };
+		2AD614792EBAAC8300C697C4 /* JarvisInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD614782EBAAC8300C697C4 /* JarvisInspector */; };
+		2AD6147B2EBAAC8300C697C4 /* JarvisPreferences in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD6147A2EBAAC8300C697C4 /* JarvisPreferences */; };
+		2AD6147E2EBAC50300C697C4 /* Jarvis in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD6147D2EBAC50300C697C4 /* Jarvis */; };
+		2AD614802EBAC50300C697C4 /* JarvisInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD6147F2EBAC50300C697C4 /* JarvisInspector */; };
+		2AD614822EBAC50300C697C4 /* JarvisPreferences in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD614812EBAC50300C697C4 /* JarvisPreferences */; };
+		2AD614872EBB5FBB00C697C4 /* Jarvis in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD614862EBB5FBB00C697C4 /* Jarvis */; };
+		2AD614892EBB5FBB00C697C4 /* JarvisInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD614882EBB5FBB00C697C4 /* JarvisInspector */; };
+		2AD6148B2EBB5FBB00C697C4 /* JarvisPreferences in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD6148A2EBB5FBB00C697C4 /* JarvisPreferences */; };
+		2AD6148E2EBB610400C697C4 /* Jarvis in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD6148D2EBB610400C697C4 /* Jarvis */; };
+		2AD614902EBB610400C697C4 /* JarvisInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD6148F2EBB610400C697C4 /* JarvisInspector */; };
+		2AD614922EBB610400C697C4 /* JarvisPreferences in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD614912EBB610400C697C4 /* JarvisPreferences */; };
+		2AD614972EBBB89100C697C4 /* Jarvis in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD614962EBBB89100C697C4 /* Jarvis */; };
+		2AD614992EBBB89100C697C4 /* JarvisInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD614982EBBB89100C697C4 /* JarvisInspector */; };
+		2AD6149B2EBBB89100C697C4 /* JarvisPreferences in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD6149A2EBBB89100C697C4 /* JarvisPreferences */; };
+		2AD6149E2EBC10F700C697C4 /* Jarvis in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD6149D2EBC10F700C697C4 /* Jarvis */; };
+		2AD614A02EBC10F700C697C4 /* JarvisInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD6149F2EBC10F700C697C4 /* JarvisInspector */; };
+		2AD614A22EBC10F700C697C4 /* JarvisPreferences in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD614A12EBC10F700C697C4 /* JarvisPreferences */; };
+		2AD614A52EBC20B000C697C4 /* Jarvis in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD614A42EBC20B000C697C4 /* Jarvis */; };
+		2AD614A72EBC20B000C697C4 /* JarvisInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD614A62EBC20B000C697C4 /* JarvisInspector */; };
+		2AD614A92EBC20B000C697C4 /* JarvisPreferences in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD614A82EBC20B000C697C4 /* JarvisPreferences */; };
+		2AD615802EBD28DC00C697C4 /* Jarvis in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD6157F2EBD28DC00C697C4 /* Jarvis */; };
+		2AD615822EBD28DC00C697C4 /* JarvisInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD615812EBD28DC00C697C4 /* JarvisInspector */; };
+		2AD615842EBD28DC00C697C4 /* JarvisPreferences in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD615832EBD28DC00C697C4 /* JarvisPreferences */; };
+		2AD615872EBD29A600C697C4 /* Jarvis in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD615862EBD29A600C697C4 /* Jarvis */; };
+		2AD615892EBD29A600C697C4 /* JarvisInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD615882EBD29A600C697C4 /* JarvisInspector */; };
+		2AD6158B2EBD29A600C697C4 /* JarvisPreferences in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD6158A2EBD29A600C697C4 /* JarvisPreferences */; };
+		2AD6158E2EBD371700C697C4 /* Jarvis in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD6158D2EBD371700C697C4 /* Jarvis */; };
+		2AD615902EBD371700C697C4 /* JarvisInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD6158F2EBD371700C697C4 /* JarvisInspector */; };
+		2AD615922EBD371700C697C4 /* JarvisPreferences in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD615912EBD371700C697C4 /* JarvisPreferences */; };
+		2AD615952EBDF10700C697C4 /* Jarvis in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD615942EBDF10700C697C4 /* Jarvis */; };
+		2AD615972EBDF10700C697C4 /* JarvisInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD615962EBDF10700C697C4 /* JarvisInspector */; };
+		2AD615992EBDF10700C697C4 /* JarvisPreferences in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD615982EBDF10700C697C4 /* JarvisPreferences */; };
+		2AD6159C2EBE161100C697C4 /* Jarvis in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD6159B2EBE161100C697C4 /* Jarvis */; };
+		2AD6159E2EBE161100C697C4 /* JarvisInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD6159D2EBE161100C697C4 /* JarvisInspector */; };
+		2AD615A02EBE161100C697C4 /* JarvisPreferences in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD6159F2EBE161100C697C4 /* JarvisPreferences */; };
+		2AD615A32EBE2D5000C697C4 /* Jarvis in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD615A22EBE2D5000C697C4 /* Jarvis */; };
+		2AD615A52EBE2D5000C697C4 /* JarvisInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD615A42EBE2D5000C697C4 /* JarvisInspector */; };
+		2AD615A72EBE2D5000C697C4 /* JarvisPreferences in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD615A62EBE2D5000C697C4 /* JarvisPreferences */; };
+		2AD615AA2EBE33D400C697C4 /* Jarvis in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD615A92EBE33D400C697C4 /* Jarvis */; };
+		2AD615AC2EBE33D400C697C4 /* JarvisInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD615AB2EBE33D400C697C4 /* JarvisInspector */; };
+		2AD615AE2EBE33D400C697C4 /* JarvisPreferences in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD615AD2EBE33D400C697C4 /* JarvisPreferences */; };
+		2AD615B12EBE909000C697C4 /* Jarvis in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD615B02EBE909000C697C4 /* Jarvis */; };
+		2AD615B32EBE909000C697C4 /* JarvisInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD615B22EBE909000C697C4 /* JarvisInspector */; };
+		2AD615B52EBE909000C697C4 /* JarvisPreferences in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD615B42EBE909000C697C4 /* JarvisPreferences */; };
+		2AD615B82EBE960700C697C4 /* Jarvis in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD615B72EBE960700C697C4 /* Jarvis */; };
+		2AD615BA2EBE960700C697C4 /* JarvisInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD615B92EBE960700C697C4 /* JarvisInspector */; };
+		2AD615BC2EBE960700C697C4 /* JarvisPreferences in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD615BB2EBE960700C697C4 /* JarvisPreferences */; };
+		2AD616292EC0ACF300C697C4 /* Jarvis in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD616282EC0ACF300C697C4 /* Jarvis */; };
+		2AD6162B2EC0ACF300C697C4 /* JarvisInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD6162A2EC0ACF300C697C4 /* JarvisInspector */; };
+		2AD6162D2EC0ACF300C697C4 /* JarvisPreferences in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD6162C2EC0ACF300C697C4 /* JarvisPreferences */; };
+		2AD616302EC0B1C200C697C4 /* Jarvis in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD6162F2EC0B1C200C697C4 /* Jarvis */; };
+		2AD616322EC0B1C200C697C4 /* JarvisInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD616312EC0B1C200C697C4 /* JarvisInspector */; };
+		2AD616342EC0B1C200C697C4 /* JarvisPreferences in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD616332EC0B1C200C697C4 /* JarvisPreferences */; };
+		2AD616372EC0F8AC00C697C4 /* Jarvis in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD616362EC0F8AC00C697C4 /* Jarvis */; };
+		2AD616392EC0F8AC00C697C4 /* JarvisInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD616382EC0F8AC00C697C4 /* JarvisInspector */; };
+		2AD6163B2EC0F8AC00C697C4 /* JarvisPreferences in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD6163A2EC0F8AC00C697C4 /* JarvisPreferences */; };
+		2AD6163E2EC202C500C697C4 /* Jarvis in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD6163D2EC202C500C697C4 /* Jarvis */; };
+		2AD616402EC202C500C697C4 /* JarvisInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD6163F2EC202C500C697C4 /* JarvisInspector */; };
+		2AD616422EC202C500C697C4 /* JarvisPreferences in Frameworks */ = {isa = PBXBuildFile; productRef = 2AD616412EC202C500C697C4 /* JarvisPreferences */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,22 +206,157 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2AD614992EBBB89100C697C4 /* JarvisInspector in Frameworks */,
 				2A6523DF2EAD9F5B0080EB38 /* Jarvis in Frameworks */,
 				2A139F322E9F027900C499DA /* Jarvis in Frameworks */,
+				2AD6145D2EBA57A300C697C4 /* JarvisInspector in Frameworks */,
+				2AD614082EB6C7B300C697C4 /* Jarvis in Frameworks */,
+				2AD613E92EB66B5700C697C4 /* JarvisPreferences in Frameworks */,
+				2A6524572EAEAA7C0080EB38 /* Jarvis in Frameworks */,
+				2AD616402EC202C500C697C4 /* JarvisInspector in Frameworks */,
+				2AD615842EBD28DC00C697C4 /* JarvisPreferences in Frameworks */,
+				2A6524592EAEAA7C0080EB38 /* JarvisInspector in Frameworks */,
+				2AD616322EC0B1C200C697C4 /* JarvisInspector in Frameworks */,
+				2AC7626F2EC29EB80007AC9A /* DesignSystem in Frameworks */,
+				2AD615B82EBE960700C697C4 /* Jarvis in Frameworks */,
+				2AD615BC2EBE960700C697C4 /* JarvisPreferences in Frameworks */,
+				2AD614542EBA262900C697C4 /* Jarvis in Frameworks */,
+				2AD615992EBDF10700C697C4 /* JarvisPreferences in Frameworks */,
+				2AD614472EB8C19400C697C4 /* JarvisPreferences in Frameworks */,
+				2AD6162B2EC0ACF300C697C4 /* JarvisInspector in Frameworks */,
+				2AD614A92EBC20B000C697C4 /* JarvisPreferences in Frameworks */,
+				2AD6159E2EBE161100C697C4 /* JarvisInspector in Frameworks */,
+				2AD614892EBB5FBB00C697C4 /* JarvisInspector in Frameworks */,
+				2AD615AA2EBE33D400C697C4 /* Jarvis in Frameworks */,
 				2A6523EA2EAE57850080EB38 /* JarvisPreferences in Frameworks */,
+				2AD615802EBD28DC00C697C4 /* Jarvis in Frameworks */,
+				2AD6147B2EBAAC8300C697C4 /* JarvisPreferences in Frameworks */,
+				2AD616372EC0F8AC00C697C4 /* Jarvis in Frameworks */,
+				2AD614662EBA69D500C697C4 /* JarvisPreferences in Frameworks */,
+				2AD615A52EBE2D5000C697C4 /* JarvisInspector in Frameworks */,
+				2AD6145B2EBA57A300C697C4 /* Jarvis in Frameworks */,
+				2AD613F72EB6B4A200C697C4 /* JarvisPreferences in Frameworks */,
+				2AD614582EBA262900C697C4 /* JarvisPreferences in Frameworks */,
+				2AD6144A2EB8E32900C697C4 /* DesignSystem in Frameworks */,
+				2AD615AE2EBE33D400C697C4 /* JarvisPreferences in Frameworks */,
+				2AD614512EB96BB500C697C4 /* JarvisPreferences in Frameworks */,
+				2AD614802EBAC50300C697C4 /* JarvisInspector in Frameworks */,
+				2AD614922EBB610400C697C4 /* JarvisPreferences in Frameworks */,
+				2AD614322EB8056300C697C4 /* Jarvis in Frameworks */,
+				2AD6145F2EBA57A300C697C4 /* JarvisPreferences in Frameworks */,
+				2AD614342EB8056300C697C4 /* JarvisInspector in Frameworks */,
+				2AD613FE2EB6B53200C697C4 /* JarvisPreferences in Frameworks */,
+				2AD614432EB8C19400C697C4 /* Jarvis in Frameworks */,
+				2AD614392EB8BA4000C697C4 /* Jarvis in Frameworks */,
+				2AD6142D2EB8006700C697C4 /* JarvisInspector in Frameworks */,
+				2AD6140A2EB6C7B300C697C4 /* JarvisInspector in Frameworks */,
+				2A65245E2EAEBAD50080EB38 /* Jarvis in Frameworks */,
+				2AD614012EB6B8A300C697C4 /* Jarvis in Frameworks */,
+				2AD6141F2EB7F08D00C697C4 /* JarvisInspector in Frameworks */,
+				2AD6163E2EC202C500C697C4 /* Jarvis in Frameworks */,
+				2AD6148E2EBB610400C697C4 /* Jarvis in Frameworks */,
+				2AD614A72EBC20B000C697C4 /* JarvisInspector in Frameworks */,
+				2AD615872EBD29A600C697C4 /* Jarvis in Frameworks */,
+				2AD614052EB6B8A300C697C4 /* JarvisPreferences in Frameworks */,
 				2A13A0072E9F977900C499DA /* Jarvis in Frameworks */,
+				2AD616302EC0B1C200C697C4 /* Jarvis in Frameworks */,
+				2AD614722EBAA77200C697C4 /* JarvisInspector in Frameworks */,
 				2A6523E32EAD9F5B0080EB38 /* JarvisPreferences in Frameworks */,
+				2AD613EE2EB6B29400C697C4 /* JarvisInspector in Frameworks */,
+				2A6524622EAEBAD50080EB38 /* JarvisPreferences in Frameworks */,
+				2AD614A52EBC20B000C697C4 /* Jarvis in Frameworks */,
+				2AD6158E2EBD371700C697C4 /* Jarvis in Frameworks */,
+				2AD616292EC0ACF300C697C4 /* Jarvis in Frameworks */,
+				2AC762762EC29ECA0007AC9A /* JarvisPreferences in Frameworks */,
+				2AD614902EBB610400C697C4 /* JarvisInspector in Frameworks */,
+				2AD6149B2EBBB89100C697C4 /* JarvisPreferences in Frameworks */,
 				2A13A00E2EA41C1200C499DA /* DesignSystem in Frameworks */,
+				2AD615AC2EBE33D400C697C4 /* JarvisInspector in Frameworks */,
+				2AD613F02EB6B29400C697C4 /* JarvisPreferences in Frameworks */,
+				2A6524692EAFFD320080EB38 /* JarvisPreferences in Frameworks */,
+				2AD614402EB8C18800C697C4 /* DesignSystem in Frameworks */,
+				2A6524602EAEBAD50080EB38 /* JarvisInspector in Frameworks */,
+				2AC762742EC29ECA0007AC9A /* JarvisInspector in Frameworks */,
+				2AD614182EB7ED9400C697C4 /* JarvisInspector in Frameworks */,
+				2AD614872EBB5FBB00C697C4 /* Jarvis in Frameworks */,
+				2AD615922EBD371700C697C4 /* JarvisPreferences in Frameworks */,
+				2AD6142F2EB8006700C697C4 /* JarvisPreferences in Frameworks */,
+				2AD613E72EB66B5700C697C4 /* JarvisInspector in Frameworks */,
+				2AD614822EBAC50300C697C4 /* JarvisPreferences in Frameworks */,
+				2AD615B12EBE909000C697C4 /* Jarvis in Frameworks */,
+				2AC762722EC29ECA0007AC9A /* Jarvis in Frameworks */,
+				2AD615A02EBE161100C697C4 /* JarvisPreferences in Frameworks */,
+				2AD615892EBD29A600C697C4 /* JarvisInspector in Frameworks */,
 				2A13A0792EA5722400C499DA /* DesignSystem in Frameworks */,
+				2AD6143B2EB8BA4000C697C4 /* JarvisInspector in Frameworks */,
+				2AD616422EC202C500C697C4 /* JarvisPreferences in Frameworks */,
+				2AD614A02EBC10F700C697C4 /* JarvisInspector in Frameworks */,
+				2AD613E52EB66B5700C697C4 /* Jarvis in Frameworks */,
+				2AD616392EC0F8AC00C697C4 /* JarvisInspector in Frameworks */,
+				2AD614692EBA6A7800C697C4 /* Jarvis in Frameworks */,
+				2AD613EC2EB6B29400C697C4 /* Jarvis in Frameworks */,
+				2AD6163B2EC0F8AC00C697C4 /* JarvisPreferences in Frameworks */,
+				2AD6140C2EB6C7B300C697C4 /* JarvisPreferences in Frameworks */,
+				2AD615952EBDF10700C697C4 /* Jarvis in Frameworks */,
+				2AD614132EB7789300C697C4 /* JarvisPreferences in Frameworks */,
 				2A13A0742EA52F3F00C499DA /* DesignSystem in Frameworks */,
+				2AD615A32EBE2D5000C697C4 /* Jarvis in Frameworks */,
+				2AD614282EB7F1D600C697C4 /* JarvisPreferences in Frameworks */,
+				2AD614792EBAAC8300C697C4 /* JarvisInspector in Frameworks */,
+				2AD613FC2EB6B53200C697C4 /* JarvisInspector in Frameworks */,
+				2AD6141A2EB7ED9400C697C4 /* JarvisPreferences in Frameworks */,
 				2A6523082EAD6CFF0080EB38 /* DesignSystem in Frameworks */,
+				2AD613F32EB6B4A200C697C4 /* Jarvis in Frameworks */,
 				2A139F362E9F027900C499DA /* JarvisPreferences in Frameworks */,
+				2AD614032EB6B8A300C697C4 /* JarvisInspector in Frameworks */,
+				2AD6142B2EB8006700C697C4 /* Jarvis in Frameworks */,
+				2AD615902EBD371700C697C4 /* JarvisInspector in Frameworks */,
+				2AD6141D2EB7F08D00C697C4 /* Jarvis in Frameworks */,
+				2AD614562EBA262900C697C4 /* JarvisInspector in Frameworks */,
+				2AD6146D2EBA6A7800C697C4 /* JarvisPreferences in Frameworks */,
+				2AD615B32EBE909000C697C4 /* JarvisInspector in Frameworks */,
+				2AD614362EB8056300C697C4 /* JarvisPreferences in Frameworks */,
+				2AD616342EC0B1C200C697C4 /* JarvisPreferences in Frameworks */,
+				2AD6149E2EBC10F700C697C4 /* Jarvis in Frameworks */,
+				2A65245B2EAEAA7C0080EB38 /* JarvisPreferences in Frameworks */,
+				2AD615822EBD28DC00C697C4 /* JarvisInspector in Frameworks */,
+				2AD6140F2EB7789300C697C4 /* Jarvis in Frameworks */,
+				2AD6147E2EBAC50300C697C4 /* Jarvis in Frameworks */,
+				2AD614262EB7F1D600C697C4 /* JarvisInspector in Frameworks */,
+				2AD614242EB7F1D600C697C4 /* Jarvis in Frameworks */,
+				2AD614452EB8C19400C697C4 /* JarvisInspector in Frameworks */,
+				2AD6158B2EBD29A600C697C4 /* JarvisPreferences in Frameworks */,
+				2AD6143D2EB8BA4000C697C4 /* JarvisPreferences in Frameworks */,
+				2AD613F52EB6B4A200C697C4 /* JarvisInspector in Frameworks */,
+				2AD615A72EBE2D5000C697C4 /* JarvisPreferences in Frameworks */,
 				2A6523E82EAE57850080EB38 /* JarvisInspector in Frameworks */,
 				2A6523E62EAE57850080EB38 /* Jarvis in Frameworks */,
+				2AD614212EB7F08D00C697C4 /* JarvisPreferences in Frameworks */,
+				2AD614702EBAA77200C697C4 /* Jarvis in Frameworks */,
 				2A139F342E9F027900C499DA /* JarvisInspector in Frameworks */,
+				2AD614622EBA69D500C697C4 /* Jarvis in Frameworks */,
+				2AD614642EBA69D500C697C4 /* JarvisInspector in Frameworks */,
+				2AD614972EBBB89100C697C4 /* Jarvis in Frameworks */,
+				2AD6162D2EC0ACF300C697C4 /* JarvisPreferences in Frameworks */,
+				2AD6148B2EBB5FBB00C697C4 /* JarvisPreferences in Frameworks */,
 				2A6523E12EAD9F5B0080EB38 /* JarvisInspector in Frameworks */,
+				2AD614112EB7789300C697C4 /* JarvisInspector in Frameworks */,
+				2AD614772EBAAC8300C697C4 /* Jarvis in Frameworks */,
+				2AD615BA2EBE960700C697C4 /* JarvisInspector in Frameworks */,
+				2AD615B52EBE909000C697C4 /* JarvisPreferences in Frameworks */,
+				2AD614162EB7ED9400C697C4 /* Jarvis in Frameworks */,
+				2AD613FA2EB6B53200C697C4 /* Jarvis in Frameworks */,
+				2AD6159C2EBE161100C697C4 /* Jarvis in Frameworks */,
+				2AD6144D2EB96BB500C697C4 /* Jarvis in Frameworks */,
 				2A13A00B2E9F977900C499DA /* JarvisPreferences in Frameworks */,
+				2A6524672EAFFD320080EB38 /* JarvisInspector in Frameworks */,
+				2AD614742EBAA77200C697C4 /* JarvisPreferences in Frameworks */,
+				2AD614A22EBC10F700C697C4 /* JarvisPreferences in Frameworks */,
+				2AD615972EBDF10700C697C4 /* JarvisInspector in Frameworks */,
 				2A13A0092E9F977900C499DA /* JarvisInspector in Frameworks */,
+				2AD6144F2EB96BB500C697C4 /* JarvisInspector in Frameworks */,
+				2AD6146B2EBA6A7800C697C4 /* JarvisInspector in Frameworks */,
+				2A6524652EAFFD320080EB38 /* Jarvis in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -163,6 +433,141 @@
 				2A6523E52EAE57850080EB38 /* Jarvis */,
 				2A6523E72EAE57850080EB38 /* JarvisInspector */,
 				2A6523E92EAE57850080EB38 /* JarvisPreferences */,
+				2A6524562EAEAA7C0080EB38 /* Jarvis */,
+				2A6524582EAEAA7C0080EB38 /* JarvisInspector */,
+				2A65245A2EAEAA7C0080EB38 /* JarvisPreferences */,
+				2A65245D2EAEBAD50080EB38 /* Jarvis */,
+				2A65245F2EAEBAD50080EB38 /* JarvisInspector */,
+				2A6524612EAEBAD50080EB38 /* JarvisPreferences */,
+				2A6524642EAFFD320080EB38 /* Jarvis */,
+				2A6524662EAFFD320080EB38 /* JarvisInspector */,
+				2A6524682EAFFD320080EB38 /* JarvisPreferences */,
+				2AD613E42EB66B5700C697C4 /* Jarvis */,
+				2AD613E62EB66B5700C697C4 /* JarvisInspector */,
+				2AD613E82EB66B5700C697C4 /* JarvisPreferences */,
+				2AD613EB2EB6B29400C697C4 /* Jarvis */,
+				2AD613ED2EB6B29400C697C4 /* JarvisInspector */,
+				2AD613EF2EB6B29400C697C4 /* JarvisPreferences */,
+				2AD613F22EB6B4A200C697C4 /* Jarvis */,
+				2AD613F42EB6B4A200C697C4 /* JarvisInspector */,
+				2AD613F62EB6B4A200C697C4 /* JarvisPreferences */,
+				2AD613F92EB6B53200C697C4 /* Jarvis */,
+				2AD613FB2EB6B53200C697C4 /* JarvisInspector */,
+				2AD613FD2EB6B53200C697C4 /* JarvisPreferences */,
+				2AD614002EB6B8A300C697C4 /* Jarvis */,
+				2AD614022EB6B8A300C697C4 /* JarvisInspector */,
+				2AD614042EB6B8A300C697C4 /* JarvisPreferences */,
+				2AD614072EB6C7B300C697C4 /* Jarvis */,
+				2AD614092EB6C7B300C697C4 /* JarvisInspector */,
+				2AD6140B2EB6C7B300C697C4 /* JarvisPreferences */,
+				2AD6140E2EB7789300C697C4 /* Jarvis */,
+				2AD614102EB7789300C697C4 /* JarvisInspector */,
+				2AD614122EB7789300C697C4 /* JarvisPreferences */,
+				2AD614152EB7ED9400C697C4 /* Jarvis */,
+				2AD614172EB7ED9400C697C4 /* JarvisInspector */,
+				2AD614192EB7ED9400C697C4 /* JarvisPreferences */,
+				2AD6141C2EB7F08D00C697C4 /* Jarvis */,
+				2AD6141E2EB7F08D00C697C4 /* JarvisInspector */,
+				2AD614202EB7F08D00C697C4 /* JarvisPreferences */,
+				2AD614232EB7F1D600C697C4 /* Jarvis */,
+				2AD614252EB7F1D600C697C4 /* JarvisInspector */,
+				2AD614272EB7F1D600C697C4 /* JarvisPreferences */,
+				2AD6142A2EB8006700C697C4 /* Jarvis */,
+				2AD6142C2EB8006700C697C4 /* JarvisInspector */,
+				2AD6142E2EB8006700C697C4 /* JarvisPreferences */,
+				2AD614312EB8056300C697C4 /* Jarvis */,
+				2AD614332EB8056300C697C4 /* JarvisInspector */,
+				2AD614352EB8056300C697C4 /* JarvisPreferences */,
+				2AD614382EB8BA4000C697C4 /* Jarvis */,
+				2AD6143A2EB8BA4000C697C4 /* JarvisInspector */,
+				2AD6143C2EB8BA4000C697C4 /* JarvisPreferences */,
+				2AD6143F2EB8C18800C697C4 /* DesignSystem */,
+				2AD614422EB8C19400C697C4 /* Jarvis */,
+				2AD614442EB8C19400C697C4 /* JarvisInspector */,
+				2AD614462EB8C19400C697C4 /* JarvisPreferences */,
+				2AD614492EB8E32900C697C4 /* DesignSystem */,
+				2AD6144C2EB96BB500C697C4 /* Jarvis */,
+				2AD6144E2EB96BB500C697C4 /* JarvisInspector */,
+				2AD614502EB96BB500C697C4 /* JarvisPreferences */,
+				2AD614532EBA262900C697C4 /* Jarvis */,
+				2AD614552EBA262900C697C4 /* JarvisInspector */,
+				2AD614572EBA262900C697C4 /* JarvisPreferences */,
+				2AD6145A2EBA57A300C697C4 /* Jarvis */,
+				2AD6145C2EBA57A300C697C4 /* JarvisInspector */,
+				2AD6145E2EBA57A300C697C4 /* JarvisPreferences */,
+				2AD614612EBA69D500C697C4 /* Jarvis */,
+				2AD614632EBA69D500C697C4 /* JarvisInspector */,
+				2AD614652EBA69D500C697C4 /* JarvisPreferences */,
+				2AD614682EBA6A7800C697C4 /* Jarvis */,
+				2AD6146A2EBA6A7800C697C4 /* JarvisInspector */,
+				2AD6146C2EBA6A7800C697C4 /* JarvisPreferences */,
+				2AD6146F2EBAA77200C697C4 /* Jarvis */,
+				2AD614712EBAA77200C697C4 /* JarvisInspector */,
+				2AD614732EBAA77200C697C4 /* JarvisPreferences */,
+				2AD614762EBAAC8300C697C4 /* Jarvis */,
+				2AD614782EBAAC8300C697C4 /* JarvisInspector */,
+				2AD6147A2EBAAC8300C697C4 /* JarvisPreferences */,
+				2AD6147D2EBAC50300C697C4 /* Jarvis */,
+				2AD6147F2EBAC50300C697C4 /* JarvisInspector */,
+				2AD614812EBAC50300C697C4 /* JarvisPreferences */,
+				2AD614862EBB5FBB00C697C4 /* Jarvis */,
+				2AD614882EBB5FBB00C697C4 /* JarvisInspector */,
+				2AD6148A2EBB5FBB00C697C4 /* JarvisPreferences */,
+				2AD6148D2EBB610400C697C4 /* Jarvis */,
+				2AD6148F2EBB610400C697C4 /* JarvisInspector */,
+				2AD614912EBB610400C697C4 /* JarvisPreferences */,
+				2AD614962EBBB89100C697C4 /* Jarvis */,
+				2AD614982EBBB89100C697C4 /* JarvisInspector */,
+				2AD6149A2EBBB89100C697C4 /* JarvisPreferences */,
+				2AD6149D2EBC10F700C697C4 /* Jarvis */,
+				2AD6149F2EBC10F700C697C4 /* JarvisInspector */,
+				2AD614A12EBC10F700C697C4 /* JarvisPreferences */,
+				2AD614A42EBC20B000C697C4 /* Jarvis */,
+				2AD614A62EBC20B000C697C4 /* JarvisInspector */,
+				2AD614A82EBC20B000C697C4 /* JarvisPreferences */,
+				2AD6157F2EBD28DC00C697C4 /* Jarvis */,
+				2AD615812EBD28DC00C697C4 /* JarvisInspector */,
+				2AD615832EBD28DC00C697C4 /* JarvisPreferences */,
+				2AD615862EBD29A600C697C4 /* Jarvis */,
+				2AD615882EBD29A600C697C4 /* JarvisInspector */,
+				2AD6158A2EBD29A600C697C4 /* JarvisPreferences */,
+				2AD6158D2EBD371700C697C4 /* Jarvis */,
+				2AD6158F2EBD371700C697C4 /* JarvisInspector */,
+				2AD615912EBD371700C697C4 /* JarvisPreferences */,
+				2AD615942EBDF10700C697C4 /* Jarvis */,
+				2AD615962EBDF10700C697C4 /* JarvisInspector */,
+				2AD615982EBDF10700C697C4 /* JarvisPreferences */,
+				2AD6159B2EBE161100C697C4 /* Jarvis */,
+				2AD6159D2EBE161100C697C4 /* JarvisInspector */,
+				2AD6159F2EBE161100C697C4 /* JarvisPreferences */,
+				2AD615A22EBE2D5000C697C4 /* Jarvis */,
+				2AD615A42EBE2D5000C697C4 /* JarvisInspector */,
+				2AD615A62EBE2D5000C697C4 /* JarvisPreferences */,
+				2AD615A92EBE33D400C697C4 /* Jarvis */,
+				2AD615AB2EBE33D400C697C4 /* JarvisInspector */,
+				2AD615AD2EBE33D400C697C4 /* JarvisPreferences */,
+				2AD615B02EBE909000C697C4 /* Jarvis */,
+				2AD615B22EBE909000C697C4 /* JarvisInspector */,
+				2AD615B42EBE909000C697C4 /* JarvisPreferences */,
+				2AD615B72EBE960700C697C4 /* Jarvis */,
+				2AD615B92EBE960700C697C4 /* JarvisInspector */,
+				2AD615BB2EBE960700C697C4 /* JarvisPreferences */,
+				2AD616282EC0ACF300C697C4 /* Jarvis */,
+				2AD6162A2EC0ACF300C697C4 /* JarvisInspector */,
+				2AD6162C2EC0ACF300C697C4 /* JarvisPreferences */,
+				2AD6162F2EC0B1C200C697C4 /* Jarvis */,
+				2AD616312EC0B1C200C697C4 /* JarvisInspector */,
+				2AD616332EC0B1C200C697C4 /* JarvisPreferences */,
+				2AD616362EC0F8AC00C697C4 /* Jarvis */,
+				2AD616382EC0F8AC00C697C4 /* JarvisInspector */,
+				2AD6163A2EC0F8AC00C697C4 /* JarvisPreferences */,
+				2AD6163D2EC202C500C697C4 /* Jarvis */,
+				2AD6163F2EC202C500C697C4 /* JarvisInspector */,
+				2AD616412EC202C500C697C4 /* JarvisPreferences */,
+				2AC7626E2EC29EB80007AC9A /* DesignSystem */,
+				2AC762712EC29ECA0007AC9A /* Jarvis */,
+				2AC762732EC29ECA0007AC9A /* JarvisInspector */,
+				2AC762752EC29ECA0007AC9A /* JarvisPreferences */,
 			);
 			productName = JarvisDemo;
 			productReference = 2A82D16D2E25CDFC00C65589 /* JarvisDemo.app */;
@@ -247,8 +652,8 @@
 			mainGroup = 2A82D1642E25CDFC00C65589;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				2A6523062EAD6CFF0080EB38 /* XCLocalSwiftPackageReference "../JarvisDesignSystem" */,
-				2A6523E42EAE57850080EB38 /* XCLocalSwiftPackageReference "../JarvisSDK" */,
+				2AC7626D2EC29EB80007AC9A /* XCLocalSwiftPackageReference "../JarvisDesignSystem" */,
+				2AC762702EC29ECA0007AC9A /* XCLocalSwiftPackageReference "../JarvisSDK" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 2A82D16E2E25CDFC00C65589 /* Products */;
@@ -448,18 +853,20 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"JarvisDemo/Preview Content\"";
 				DEVELOPMENT_TEAM = D3574J47V9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -478,18 +885,20 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"JarvisDemo/Preview Content\"";
 				DEVELOPMENT_TEAM = D3574J47V9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -617,11 +1026,11 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		2A6523062EAD6CFF0080EB38 /* XCLocalSwiftPackageReference "../JarvisDesignSystem" */ = {
+		2AC7626D2EC29EB80007AC9A /* XCLocalSwiftPackageReference "../JarvisDesignSystem" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../JarvisDesignSystem;
 		};
-		2A6523E42EAE57850080EB38 /* XCLocalSwiftPackageReference "../JarvisSDK" */ = {
+		2AC762702EC29ECA0007AC9A /* XCLocalSwiftPackageReference "../JarvisSDK" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../JarvisSDK;
 		};
@@ -689,6 +1098,546 @@
 			productName = JarvisInspector;
 		};
 		2A6523E92EAE57850080EB38 /* JarvisPreferences */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisPreferences;
+		};
+		2A6524562EAEAA7C0080EB38 /* Jarvis */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Jarvis;
+		};
+		2A6524582EAEAA7C0080EB38 /* JarvisInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisInspector;
+		};
+		2A65245A2EAEAA7C0080EB38 /* JarvisPreferences */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisPreferences;
+		};
+		2A65245D2EAEBAD50080EB38 /* Jarvis */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Jarvis;
+		};
+		2A65245F2EAEBAD50080EB38 /* JarvisInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisInspector;
+		};
+		2A6524612EAEBAD50080EB38 /* JarvisPreferences */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisPreferences;
+		};
+		2A6524642EAFFD320080EB38 /* Jarvis */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Jarvis;
+		};
+		2A6524662EAFFD320080EB38 /* JarvisInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisInspector;
+		};
+		2A6524682EAFFD320080EB38 /* JarvisPreferences */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisPreferences;
+		};
+		2AC7626E2EC29EB80007AC9A /* DesignSystem */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DesignSystem;
+		};
+		2AC762712EC29ECA0007AC9A /* Jarvis */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Jarvis;
+		};
+		2AC762732EC29ECA0007AC9A /* JarvisInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisInspector;
+		};
+		2AC762752EC29ECA0007AC9A /* JarvisPreferences */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisPreferences;
+		};
+		2AD613E42EB66B5700C697C4 /* Jarvis */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Jarvis;
+		};
+		2AD613E62EB66B5700C697C4 /* JarvisInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisInspector;
+		};
+		2AD613E82EB66B5700C697C4 /* JarvisPreferences */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisPreferences;
+		};
+		2AD613EB2EB6B29400C697C4 /* Jarvis */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Jarvis;
+		};
+		2AD613ED2EB6B29400C697C4 /* JarvisInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisInspector;
+		};
+		2AD613EF2EB6B29400C697C4 /* JarvisPreferences */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisPreferences;
+		};
+		2AD613F22EB6B4A200C697C4 /* Jarvis */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Jarvis;
+		};
+		2AD613F42EB6B4A200C697C4 /* JarvisInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisInspector;
+		};
+		2AD613F62EB6B4A200C697C4 /* JarvisPreferences */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisPreferences;
+		};
+		2AD613F92EB6B53200C697C4 /* Jarvis */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Jarvis;
+		};
+		2AD613FB2EB6B53200C697C4 /* JarvisInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisInspector;
+		};
+		2AD613FD2EB6B53200C697C4 /* JarvisPreferences */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisPreferences;
+		};
+		2AD614002EB6B8A300C697C4 /* Jarvis */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Jarvis;
+		};
+		2AD614022EB6B8A300C697C4 /* JarvisInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisInspector;
+		};
+		2AD614042EB6B8A300C697C4 /* JarvisPreferences */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisPreferences;
+		};
+		2AD614072EB6C7B300C697C4 /* Jarvis */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Jarvis;
+		};
+		2AD614092EB6C7B300C697C4 /* JarvisInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisInspector;
+		};
+		2AD6140B2EB6C7B300C697C4 /* JarvisPreferences */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisPreferences;
+		};
+		2AD6140E2EB7789300C697C4 /* Jarvis */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Jarvis;
+		};
+		2AD614102EB7789300C697C4 /* JarvisInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisInspector;
+		};
+		2AD614122EB7789300C697C4 /* JarvisPreferences */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisPreferences;
+		};
+		2AD614152EB7ED9400C697C4 /* Jarvis */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Jarvis;
+		};
+		2AD614172EB7ED9400C697C4 /* JarvisInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisInspector;
+		};
+		2AD614192EB7ED9400C697C4 /* JarvisPreferences */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisPreferences;
+		};
+		2AD6141C2EB7F08D00C697C4 /* Jarvis */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Jarvis;
+		};
+		2AD6141E2EB7F08D00C697C4 /* JarvisInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisInspector;
+		};
+		2AD614202EB7F08D00C697C4 /* JarvisPreferences */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisPreferences;
+		};
+		2AD614232EB7F1D600C697C4 /* Jarvis */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Jarvis;
+		};
+		2AD614252EB7F1D600C697C4 /* JarvisInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisInspector;
+		};
+		2AD614272EB7F1D600C697C4 /* JarvisPreferences */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisPreferences;
+		};
+		2AD6142A2EB8006700C697C4 /* Jarvis */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Jarvis;
+		};
+		2AD6142C2EB8006700C697C4 /* JarvisInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisInspector;
+		};
+		2AD6142E2EB8006700C697C4 /* JarvisPreferences */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisPreferences;
+		};
+		2AD614312EB8056300C697C4 /* Jarvis */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Jarvis;
+		};
+		2AD614332EB8056300C697C4 /* JarvisInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisInspector;
+		};
+		2AD614352EB8056300C697C4 /* JarvisPreferences */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisPreferences;
+		};
+		2AD614382EB8BA4000C697C4 /* Jarvis */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Jarvis;
+		};
+		2AD6143A2EB8BA4000C697C4 /* JarvisInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisInspector;
+		};
+		2AD6143C2EB8BA4000C697C4 /* JarvisPreferences */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisPreferences;
+		};
+		2AD6143F2EB8C18800C697C4 /* DesignSystem */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DesignSystem;
+		};
+		2AD614422EB8C19400C697C4 /* Jarvis */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Jarvis;
+		};
+		2AD614442EB8C19400C697C4 /* JarvisInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisInspector;
+		};
+		2AD614462EB8C19400C697C4 /* JarvisPreferences */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisPreferences;
+		};
+		2AD614492EB8E32900C697C4 /* DesignSystem */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DesignSystem;
+		};
+		2AD6144C2EB96BB500C697C4 /* Jarvis */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Jarvis;
+		};
+		2AD6144E2EB96BB500C697C4 /* JarvisInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisInspector;
+		};
+		2AD614502EB96BB500C697C4 /* JarvisPreferences */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisPreferences;
+		};
+		2AD614532EBA262900C697C4 /* Jarvis */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Jarvis;
+		};
+		2AD614552EBA262900C697C4 /* JarvisInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisInspector;
+		};
+		2AD614572EBA262900C697C4 /* JarvisPreferences */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisPreferences;
+		};
+		2AD6145A2EBA57A300C697C4 /* Jarvis */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Jarvis;
+		};
+		2AD6145C2EBA57A300C697C4 /* JarvisInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisInspector;
+		};
+		2AD6145E2EBA57A300C697C4 /* JarvisPreferences */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisPreferences;
+		};
+		2AD614612EBA69D500C697C4 /* Jarvis */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Jarvis;
+		};
+		2AD614632EBA69D500C697C4 /* JarvisInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisInspector;
+		};
+		2AD614652EBA69D500C697C4 /* JarvisPreferences */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisPreferences;
+		};
+		2AD614682EBA6A7800C697C4 /* Jarvis */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Jarvis;
+		};
+		2AD6146A2EBA6A7800C697C4 /* JarvisInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisInspector;
+		};
+		2AD6146C2EBA6A7800C697C4 /* JarvisPreferences */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisPreferences;
+		};
+		2AD6146F2EBAA77200C697C4 /* Jarvis */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Jarvis;
+		};
+		2AD614712EBAA77200C697C4 /* JarvisInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisInspector;
+		};
+		2AD614732EBAA77200C697C4 /* JarvisPreferences */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisPreferences;
+		};
+		2AD614762EBAAC8300C697C4 /* Jarvis */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Jarvis;
+		};
+		2AD614782EBAAC8300C697C4 /* JarvisInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisInspector;
+		};
+		2AD6147A2EBAAC8300C697C4 /* JarvisPreferences */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisPreferences;
+		};
+		2AD6147D2EBAC50300C697C4 /* Jarvis */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Jarvis;
+		};
+		2AD6147F2EBAC50300C697C4 /* JarvisInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisInspector;
+		};
+		2AD614812EBAC50300C697C4 /* JarvisPreferences */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisPreferences;
+		};
+		2AD614862EBB5FBB00C697C4 /* Jarvis */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Jarvis;
+		};
+		2AD614882EBB5FBB00C697C4 /* JarvisInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisInspector;
+		};
+		2AD6148A2EBB5FBB00C697C4 /* JarvisPreferences */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisPreferences;
+		};
+		2AD6148D2EBB610400C697C4 /* Jarvis */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Jarvis;
+		};
+		2AD6148F2EBB610400C697C4 /* JarvisInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisInspector;
+		};
+		2AD614912EBB610400C697C4 /* JarvisPreferences */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisPreferences;
+		};
+		2AD614962EBBB89100C697C4 /* Jarvis */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Jarvis;
+		};
+		2AD614982EBBB89100C697C4 /* JarvisInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisInspector;
+		};
+		2AD6149A2EBBB89100C697C4 /* JarvisPreferences */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisPreferences;
+		};
+		2AD6149D2EBC10F700C697C4 /* Jarvis */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Jarvis;
+		};
+		2AD6149F2EBC10F700C697C4 /* JarvisInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisInspector;
+		};
+		2AD614A12EBC10F700C697C4 /* JarvisPreferences */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisPreferences;
+		};
+		2AD614A42EBC20B000C697C4 /* Jarvis */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Jarvis;
+		};
+		2AD614A62EBC20B000C697C4 /* JarvisInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisInspector;
+		};
+		2AD614A82EBC20B000C697C4 /* JarvisPreferences */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisPreferences;
+		};
+		2AD6157F2EBD28DC00C697C4 /* Jarvis */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Jarvis;
+		};
+		2AD615812EBD28DC00C697C4 /* JarvisInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisInspector;
+		};
+		2AD615832EBD28DC00C697C4 /* JarvisPreferences */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisPreferences;
+		};
+		2AD615862EBD29A600C697C4 /* Jarvis */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Jarvis;
+		};
+		2AD615882EBD29A600C697C4 /* JarvisInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisInspector;
+		};
+		2AD6158A2EBD29A600C697C4 /* JarvisPreferences */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisPreferences;
+		};
+		2AD6158D2EBD371700C697C4 /* Jarvis */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Jarvis;
+		};
+		2AD6158F2EBD371700C697C4 /* JarvisInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisInspector;
+		};
+		2AD615912EBD371700C697C4 /* JarvisPreferences */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisPreferences;
+		};
+		2AD615942EBDF10700C697C4 /* Jarvis */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Jarvis;
+		};
+		2AD615962EBDF10700C697C4 /* JarvisInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisInspector;
+		};
+		2AD615982EBDF10700C697C4 /* JarvisPreferences */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisPreferences;
+		};
+		2AD6159B2EBE161100C697C4 /* Jarvis */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Jarvis;
+		};
+		2AD6159D2EBE161100C697C4 /* JarvisInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisInspector;
+		};
+		2AD6159F2EBE161100C697C4 /* JarvisPreferences */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisPreferences;
+		};
+		2AD615A22EBE2D5000C697C4 /* Jarvis */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Jarvis;
+		};
+		2AD615A42EBE2D5000C697C4 /* JarvisInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisInspector;
+		};
+		2AD615A62EBE2D5000C697C4 /* JarvisPreferences */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisPreferences;
+		};
+		2AD615A92EBE33D400C697C4 /* Jarvis */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Jarvis;
+		};
+		2AD615AB2EBE33D400C697C4 /* JarvisInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisInspector;
+		};
+		2AD615AD2EBE33D400C697C4 /* JarvisPreferences */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisPreferences;
+		};
+		2AD615B02EBE909000C697C4 /* Jarvis */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Jarvis;
+		};
+		2AD615B22EBE909000C697C4 /* JarvisInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisInspector;
+		};
+		2AD615B42EBE909000C697C4 /* JarvisPreferences */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisPreferences;
+		};
+		2AD615B72EBE960700C697C4 /* Jarvis */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Jarvis;
+		};
+		2AD615B92EBE960700C697C4 /* JarvisInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisInspector;
+		};
+		2AD615BB2EBE960700C697C4 /* JarvisPreferences */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisPreferences;
+		};
+		2AD616282EC0ACF300C697C4 /* Jarvis */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Jarvis;
+		};
+		2AD6162A2EC0ACF300C697C4 /* JarvisInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisInspector;
+		};
+		2AD6162C2EC0ACF300C697C4 /* JarvisPreferences */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisPreferences;
+		};
+		2AD6162F2EC0B1C200C697C4 /* Jarvis */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Jarvis;
+		};
+		2AD616312EC0B1C200C697C4 /* JarvisInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisInspector;
+		};
+		2AD616332EC0B1C200C697C4 /* JarvisPreferences */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisPreferences;
+		};
+		2AD616362EC0F8AC00C697C4 /* Jarvis */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Jarvis;
+		};
+		2AD616382EC0F8AC00C697C4 /* JarvisInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisInspector;
+		};
+		2AD6163A2EC0F8AC00C697C4 /* JarvisPreferences */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisPreferences;
+		};
+		2AD6163D2EC202C500C697C4 /* Jarvis */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Jarvis;
+		};
+		2AD6163F2EC202C500C697C4 /* JarvisInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisInspector;
+		};
+		2AD616412EC202C500C697C4 /* JarvisPreferences */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = JarvisPreferences;
 		};

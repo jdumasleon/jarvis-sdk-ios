@@ -1,5 +1,9 @@
 import SwiftUI
 
+#if canImport(UIKit)
+import UIKit
+#endif
+
 /// Design System Elevation/Shadow - consistent shadow styles
 public struct DSElevation {
     public static let none = 0.0
@@ -81,7 +85,11 @@ public extension View {
         shadowExample(title: "Extra Large", style: DSElevation.Shadow.extraLarge)
     }
     .padding(40)
+    #if canImport(UIKit)
     .background(Color(UIColor.systemGroupedBackground))
+    #else
+    .background(Color.gray.opacity(0.1))
+    #endif
 }
 
 @ViewBuilder

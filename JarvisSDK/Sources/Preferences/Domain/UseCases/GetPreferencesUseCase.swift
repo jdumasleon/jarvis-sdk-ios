@@ -21,22 +21,25 @@ public struct GetPreferencesUseCase: UseCase {
     }
 
     public func execute(_ input: PreferenceFilter?) async throws -> [Preference] {
-        let allPreferences = repository.scanAllPreferences()
+        // Run the synchronous scanning on a background thread to avoid blocking main thread
+        return await Task.detached(priority: .userInitiated) {
+            let allPreferences = repository.scanAllPreferences()
 
-        guard let filter = input else {
-            return allPreferences
-        }
+            guard let filter = input else {
+                return allPreferences
+            }
 
-        switch filter {
-        case .all:
-            return allPreferences
-        case .userDefaults:
-            return allPreferences.filter { $0.source == .userDefaults }
-        case .keychain:
-            return allPreferences.filter { $0.source == .keychain }
-        case .propertyList:
-            return allPreferences.filter { $0.source == .propertyList }
-        }
+            switch filter {
+            case .all:
+                return allPreferences
+            case .userDefaults:
+                return allPreferences.filter { $0.source == .userDefaults }
+            case .keychain:
+                return allPreferences.filter { $0.source == .keychain }
+            case .propertyList:
+                return allPreferences.filter { $0.source == .propertyList }
+            }
+        }.value
     }
 }
 

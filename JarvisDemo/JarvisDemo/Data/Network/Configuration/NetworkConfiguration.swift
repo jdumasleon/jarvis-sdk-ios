@@ -37,21 +37,17 @@ struct NetworkConfiguration {
 
 class HTTPClientFactory {
     static func createDefault() -> HTTPClientProtocol {
-        let configuration = URLSessionConfiguration.default
-        configuration.timeoutIntervalForRequest = NetworkConfiguration.default.timeout
-        configuration.timeoutIntervalForResource = NetworkConfiguration.default.timeout * 2
-
-        let session = URLSession(configuration: configuration)
-        return HTTPClient(session: session)
+        // IMPORTANT: Don't pass a session here!
+        // Let HTTPClient create its own session so it can pick up
+        // registered URLProtocols (like Jarvis's URLSessionInterceptor)
+        return HTTPClient()
     }
 
     static func createForTesting() -> HTTPClientProtocol {
-        let configuration = URLSessionConfiguration.default
-        configuration.timeoutIntervalForRequest = NetworkConfiguration.testing.timeout
-        configuration.timeoutIntervalForResource = NetworkConfiguration.testing.timeout * 2
-
-        let session = URLSession(configuration: configuration)
-        return HTTPClient(session: session)
+        // IMPORTANT: Don't pass a session here!
+        // Let HTTPClient create its own session so it can pick up
+        // registered URLProtocols (like Jarvis's URLSessionInterceptor)
+        return HTTPClient()
     }
 
     static func createMock() -> MockHTTPClient {

@@ -38,7 +38,15 @@ public class UserDefaultsScanner {
             for suiteName in discoveredSuites {
                 // Apply include/exclude filters
                 if shouldScanSuite(suiteName, config: config) {
-                    if let userDefaults = UserDefaults(suiteName: suiteName) {
+                    // Handle standard UserDefaults separately
+                    if suiteName == "standard" {
+                        preferences.append(contentsOf: extractPreferences(
+                            from: UserDefaults.standard,
+                            suiteName: "standard",
+                            config: config
+                        ))
+                        scannedSuites.insert(suiteName)
+                    } else if let userDefaults = UserDefaults(suiteName: suiteName) {
                         preferences.append(contentsOf: extractPreferences(
                             from: userDefaults,
                             suiteName: suiteName,
@@ -53,7 +61,14 @@ public class UserDefaultsScanner {
         // Step 2: Explicitly included suites (if not already scanned)
         for suiteName in config.includeUserDefaultsSuites {
             if !scannedSuites.contains(suiteName) {
-                if let userDefaults = UserDefaults(suiteName: suiteName) {
+                // Handle standard UserDefaults separately
+                if suiteName == "standard" {
+                    preferences.append(contentsOf: extractPreferences(
+                        from: UserDefaults.standard,
+                        suiteName: "standard",
+                        config: config
+                    ))
+                } else if let userDefaults = UserDefaults(suiteName: suiteName) {
                     preferences.append(contentsOf: extractPreferences(
                         from: userDefaults,
                         suiteName: suiteName,

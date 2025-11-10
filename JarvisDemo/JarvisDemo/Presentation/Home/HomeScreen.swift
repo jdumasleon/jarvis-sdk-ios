@@ -104,9 +104,9 @@ struct HomeScreen: View {
                     )
                     
                     DSButton(
-                        uiData.isJarvisActive ? "Deactivate Jarvis" : "Activate Jarvis",
-                        style: uiData.isJarvisActive ? .destructive : .primary,
-                        leftIcon: uiData.isJarvisActive ? DSIcons.Media.stopCircle : DSIcons.Media.playCircle
+                        JarvisSDK.shared.isActive  ? "Deactivate Jarvis" : "Activate Jarvis",
+                        style: JarvisSDK.shared.isActive  ? .destructive : .primary,
+                        leftIcon: JarvisSDK.shared.isActive ? DSIcons.Media.stopCircle : DSIcons.Media.playCircle
                     ) {
                         viewModel.onEvent(.ToggleJarvisMode)
                     }
@@ -123,7 +123,7 @@ struct HomeScreen: View {
                 .frame(maxWidth: .infinity, alignment: .center)
                 .padding()
 
-                if uiData.isJarvisActive {
+                if JarvisSDK.shared.isActive {
                     DSText(
                         "Active",
                         style: .bodyLarge,

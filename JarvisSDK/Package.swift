@@ -4,8 +4,8 @@ import PackageDescription
 let package = Package(
     name: "JarvisSDK",
     platforms: [
-        .iOS(.v16),
-        .macOS(.v13)
+        .iOS(.v17),
+        .macOS(.v14)
     ],
     products: [
         // Main SDK - what external apps will import
@@ -53,13 +53,9 @@ let package = Package(
                 "Presentation",
                 "JarvisResources",
 
-                // Feature dependencies
-                "JarvisInspectorDomain",
-                "JarvisInspectorData",
                 "JarvisInspectorPresentation",
-                "JarvisPreferencesDomain",
-                "JarvisPreferencesData",
                 "JarvisPreferencesPresentation"
+                
             ],
             path: "Sources/Jarvis"
         ),
@@ -180,9 +176,16 @@ let package = Package(
             resources: [
                 .process("Assets.xcassets")
             ]
-        )
+        ),
 
         // MARK: - Tests
-        // Tests will be added later when test structure is established
+        .testTarget(
+            name: "JarvisSDKTests",
+            dependencies: [
+                "Jarvis",
+                "JarvisInspectorData"
+            ],
+            path: "Tests/JarvisSDKTests"
+        )
     ]
 )
