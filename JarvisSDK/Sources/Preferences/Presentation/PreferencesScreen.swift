@@ -428,7 +428,7 @@ private struct PreferenceRowView: View {
                     .dsPadding(.vertical, DSSpacing.xxs)
                     .background(sourceColor.opacity(0.2))
                     .foregroundColor(sourceColor)
-                    .dsCornerRadius(DSRadius.xs)
+                    .dsCornerRadius(DSRadius.s)
 
                 // Type Badge
                 Text(preference.type)
@@ -437,7 +437,7 @@ private struct PreferenceRowView: View {
                     .dsPadding(.vertical, DSSpacing.xxs)
                     .background(DSColor.Info.info100.opacity(0.2))
                     .foregroundColor(DSColor.Info.info100)
-                    .dsCornerRadius(DSRadius.xs)
+                    .dsCornerRadius(DSRadius.s)
 
                 Spacer()
 

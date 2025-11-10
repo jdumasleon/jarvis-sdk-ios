@@ -71,6 +71,7 @@ public final class ShakeDetector: ObservableObject {
             )
 
             if magnitude > self.shakeThreshold {
+                JarvisLogger.shared.debug("Shake magnitude detected: \(magnitude) (threshold: \(self.shakeThreshold))")
                 self.handleShakeDetected()
             }
         }
@@ -93,11 +94,19 @@ public final class ShakeDetector: ObservableObject {
     }
 
     private func handleShakeDetected() {
+        JarvisLogger.shared.debug("handleShakeDetected called - will notify handler")
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
 
+            JarvisLogger.shared.debug("Setting isShaking = true")
             self.isShaking = true
-            self.shakeHandler?()
+
+            if let handler = self.shakeHandler {
+                JarvisLogger.shared.debug("Calling shake handler")
+                handler()
+            } else {
+                JarvisLogger.shared.warning("No shake handler registered!")
+            }
 
             // Reset the shake state after a short delay
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
@@ -115,14 +124,18 @@ public struct ShakeDetectorModifier: ViewModifier {
     public func body(content: Content) -> some View {
         content
             .onReceive(shakeDetector.$isShaking) { isShaking in
+                JarvisLogger.shared.debug("ShakeDetectorModifier received isShaking: \(isShaking)")
                 if isShaking {
+                    JarvisLogger.shared.debug("Calling onShakeDetected callback")
                     onShakeDetected()
                 }
             }
             .onAppear {
+                JarvisLogger.shared.debug("ShakeDetectorModifier appeared - starting detection")
                 shakeDetector.startDetection()
             }
             .onDisappear {
+                JarvisLogger.shared.debug("ShakeDetectorModifier disappeared - stopping detection")
                 shakeDetector.stopDetection()
             }
     }

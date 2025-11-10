@@ -72,7 +72,7 @@ class HomeViewModel: ObservableObject {
         switch uiState {
         case .success(let data):
             return HomeUiData(
-                isJarvisActive: manageJarvisModeUseCase.isJarvisActive(),
+                isJarvisActive: JarvisSDK.shared.isActive,
                 jarvisConfiguration: manageJarvisModeUseCase.getJarvisConfiguration(),
                 recentApiCalls: data.recentApiCalls,
                 isRefreshing: data.isRefreshing,
@@ -81,7 +81,7 @@ class HomeViewModel: ObservableObject {
             )
         default:
             return HomeUiData(
-                isJarvisActive: manageJarvisModeUseCase.isJarvisActive(),
+                isJarvisActive: JarvisSDK.shared.isActive,
                 jarvisConfiguration: manageJarvisModeUseCase.getJarvisConfiguration(),
                 recentApiCalls: [],
                 isRefreshing: false,
@@ -98,7 +98,6 @@ class HomeViewModel: ObservableObject {
     }
 
     private func observeJarvisState() {
-        // Observe JarvisSDK.shared.isActive changes
         JarvisSDK.shared.$isActive
             .sink { [weak self] _ in
                 self?.updateUiState()
@@ -124,7 +123,11 @@ class HomeViewModel: ObservableObject {
     }
 
     private func toggleJarvisMode() {
-        _ = manageJarvisModeUseCase.toggleJarvis()
+        if JarvisSDK.shared.isActive {
+            manageJarvisModeUseCase.deactivateJarvis()
+        } else {
+            manageJarvisModeUseCase.activateJarvis()
+        }
         updateUiState()
     }
 

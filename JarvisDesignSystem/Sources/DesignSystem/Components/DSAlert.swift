@@ -89,6 +89,7 @@ public struct DSAlert: View {
                         size: .small,
                         action: onDismiss
                     )
+                    .dsPadding(.top, -DSSpacing.xs)
                 }
             }
 

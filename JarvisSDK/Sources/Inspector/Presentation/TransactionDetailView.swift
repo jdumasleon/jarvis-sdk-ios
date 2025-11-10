@@ -533,7 +533,7 @@ import Common
                 "Content-Type": "application/json",
                 "User-Agent": "JarvisDemo/1.0"
             ],
-            body: nil
+            body: "{\"id\": 123, \"name\": \"John Doe\"}".data(using: .utf8)
         ),
         response: NetworkResponse(
             statusCode: 200,

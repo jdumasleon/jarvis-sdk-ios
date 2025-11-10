@@ -54,8 +54,8 @@ public struct DSFilterChip: View {
             .dsCornerRadius(DSRadius.round)
         }
         .dsBorder(
-            DSColor.Neutral.neutral100,
-            width: DSBorderWidth.regular,
+            DSColor.Neutral.neutral80,
+            width: DSBorderWidth.thin,
             radius: DSRadius.round
         )
         

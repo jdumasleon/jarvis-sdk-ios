@@ -4,8 +4,8 @@ import PackageDescription
 let package = Package(
     name: "JarvisSDK",
     platforms: [
-        .iOS(.v16),
-        .macOS(.v13)
+        .iOS(.v17),
+        .macOS(.v14)
     ],
     products: [
         // Main SDK - what external apps will import

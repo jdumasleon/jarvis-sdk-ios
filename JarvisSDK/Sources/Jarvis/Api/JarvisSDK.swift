@@ -26,6 +26,9 @@ public final class JarvisSDK: ObservableObject {
     private let shakeDetector = ShakeDetector.shared
     private var cancellables = Set<AnyCancellable>()
 
+    // Performance monitoring
+    internal let performanceMonitor = PerformanceMonitorManager()
+
     // MARK: - Internal State
     private var previousActiveState = false
     private var previousShowingState = false
@@ -54,6 +57,9 @@ public final class JarvisSDK: ObservableObject {
             isInitialized = true
 
             JarvisLogger.shared.info("Jarvis SDK initialized successfully")
+
+            // Note: Shake detection is automatically started by ShakeDetectorModifier (.onShake)
+            // No need to start it here to avoid conflicts
         } else {
             // Store previous states for restoration
             previousActiveState = isActive
@@ -84,29 +90,57 @@ public final class JarvisSDK: ObservableObject {
     /// Activate the SDK (show FAB and enable features)
     public func activate() {
         guard isInitialized else {
-            JarvisLogger.shared.warning("Cannot activate: SDK not initialized")
+            JarvisLogger.shared.warning("Cannot activate: SDK not initialized yet - waiting for initialization")
+            // Try to activate after a short delay to allow initialization to complete
+            Task { @MainActor in
+                try? await Task.sleep(nanoseconds: 500_000_000) // 0.5 seconds
+                if self.isInitialized {
+                    self.activate()
+                } else {
+                    JarvisLogger.shared.error("Failed to activate: SDK initialization timed out")
+                }
+            }
             return
         }
 
-        isActive = true
-
-        if configuration.enableShakeDetection {
-            shakeDetector.startDetection()
+        // Prevent multiple activations
+        guard !isActive else {
+            JarvisLogger.shared.debug("Jarvis SDK already activated")
+            return
         }
 
-        JarvisLogger.shared.info("Jarvis SDK activated")
+        // Defer state change to avoid "Publishing changes during view updates"
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+
+            self.isActive = true
+
+            // Note: Shake detection is managed by ShakeDetectorModifier, not here
+
+            // Start performance monitoring
+            self.performanceMonitor.startMonitoring()
+
+            JarvisLogger.shared.info("Jarvis SDK activated")
+        }
     }
 
     /// Deactivate the SDK (hide all UI and disable features)
     public func deactivate() {
-        isActive = false
-        hideOverlay()
+        // Defer state change to avoid "Publishing changes during view updates"
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
 
-        if configuration.enableShakeDetection {
-            shakeDetector.stopDetection()
+            self.isActive = false
+            self.hideOverlay()
+
+            // Note: Don't stop shake detection here - it's managed by ShakeDetectorModifier
+            // This allows shake to reactivate Jarvis after deactivation
+
+            // Stop performance monitoring
+            self.performanceMonitor.stopMonitoring()
+
+            JarvisLogger.shared.info("Jarvis SDK deactivated")
         }
-
-        JarvisLogger.shared.info("Jarvis SDK deactivated")
     }
 
     /// Toggle SDK activation state
@@ -128,14 +162,27 @@ public final class JarvisSDK: ObservableObject {
             return
         }
 
-        targetTab = tab
-        isShowing = true
-        JarvisLogger.shared.debug("Jarvis overlay shown on tab \(tab)")
+        // Defer state change to avoid "Publishing changes during view updates"
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+
+            self.targetTab = tab
+            self.isShowing = true
+
+            // Pause performance monitoring to avoid measuring SDK overhead
+            self.performanceMonitor.pauseMonitoring()
+
+            JarvisLogger.shared.debug("Jarvis overlay shown on tab \(tab)")
+        }
     }
 
     /// Hide the main Jarvis overlay
     public func hideOverlay() {
         isShowing = false
+
+        // Resume performance monitoring when overlay closes
+        performanceMonitor.resumeMonitoring()
+
         JarvisLogger.shared.debug("Jarvis overlay hidden")
     }
 
@@ -204,14 +251,14 @@ public final class JarvisSDK: ObservableObject {
     // MARK: - Private Methods
 
     private func setupShakeDetection() {
-        shakeDetector.setShakeHandler { [weak self] in
-            Task { @MainActor in
-                self?.handleShakeDetected()
-            }
-        }
+        // Note: Shake detection is now handled by the .onShake modifier in JarvisSDKModifier
+        // This prevents double-triggering when a shake occurs
+        // Keeping this method for potential future use
+        JarvisLogger.shared.debug("Shake detection setup - handled by .onShake modifier")
     }
 
     private func handleShakeDetected() {
+        // Deprecated: Now handled by .onShake modifier to prevent race conditions
         guard configuration.enableShakeDetection else { return }
 
         JarvisLogger.shared.debug("Shake detected - toggling Jarvis SDK")
@@ -315,6 +362,13 @@ public struct JarvisSDKModifier: ViewModifier {
                     }
                 )
                 .transition(.scale.combined(with: .opacity))
+                .zIndex(999) // Ensure FAB is above all content
+                .onAppear {
+                    JarvisLogger.shared.debug("FAB appeared - Jarvis is active")
+                }
+                .onDisappear {
+                    JarvisLogger.shared.debug("FAB disappeared")
+                }
             }
         }
         .sheet(isPresented: $showingInspector, onDismiss: {
@@ -329,8 +383,19 @@ public struct JarvisSDKModifier: ViewModifier {
             showingInspector = isShowing
         }
         .onShake {
-            if jarvis.isActive && config.enableShakeDetection {
-                jarvis.showOverlay()
+            JarvisLogger.shared.debug("Shake detected in modifier - isActive: \(jarvis.isActive), initialized: \(jarvis.isInitialized)")
+            if config.enableShakeDetection {
+                Task { @MainActor in
+                    if jarvis.isActive {
+                        JarvisLogger.shared.debug("Showing overlay (already active)")
+                        jarvis.showOverlay()
+                    } else {
+                        JarvisLogger.shared.debug("Activating Jarvis")
+                        jarvis.activate()
+                    }
+                }
+            } else {
+                JarvisLogger.shared.warning("Shake detection is disabled in config")
             }
         }
         .task {

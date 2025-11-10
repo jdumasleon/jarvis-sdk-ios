@@ -219,6 +219,13 @@ private struct TransactionHeader: View {
             Spacer()
 
             Menu {
+                Button {
+                    // navigate to rules
+                } label: {
+                    Label("Rules (coming soon)", systemImage: "line.horizontal.3")
+                }
+                .disabled(true)
+
                 Button(role: .destructive) {
                     onClearAllTapped()
                 } label: {
@@ -359,7 +366,7 @@ private struct NetworkTransactionRow: View {
                     .dsPadding(.vertical, DSSpacing.xxs)
                     .background(methodColor.opacity(0.2))
                     .foregroundColor(methodColor)
-                    .dsCornerRadius(DSRadius.xs)
+                    .dsCornerRadius(DSRadius.s)
 
                 // Status Code Badge
                 if let statusCode = transaction.response?.statusCode {
@@ -369,7 +376,7 @@ private struct NetworkTransactionRow: View {
                         .dsPadding(.vertical, DSSpacing.xxs)
                         .background(statusColor.opacity(0.2))
                         .foregroundColor(statusColor)
-                        .dsCornerRadius(DSRadius.xs)
+                        .dsCornerRadius(DSRadius.s)
                 }
 
                 Spacer()
