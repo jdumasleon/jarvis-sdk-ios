@@ -1,0 +1,350 @@
+name: 🚀 Release and Publish
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+jobs:
+  release:
+    name: 🎯 Create Release and Publish
+    if: github.event.pull_request.merged == true
+    runs-on: macos-latest
+
+    permissions:
+      contents: write
+      packages: write
+      pull-requests: read
+
+    outputs:
+      new-version: ${{ steps.version.outputs.new-version }}
+      version-type: ${{ steps.version.outputs.version-type }}
+
+    steps:
+      - name: 🏗️ Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🍎 Set up Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '15.4'
+
+      - name: 🔍 Determine Version Bump Type
+        id: version
+        run: |
+          PR_TITLE="${{ github.event.pull_request.title }}"
+          echo "PR Title: $PR_TITLE"
+
+          # Extract version bump type from PR title
+          if [[ "$PR_TITLE" =~ ^MAJOR ]]; then
+            VERSION_TYPE="major"
+          elif [[ "$PR_TITLE" =~ ^MINOR ]]; then
+            VERSION_TYPE="minor"
+          elif [[ "$PR_TITLE" =~ ^PATCH ]]; then
+            VERSION_TYPE="patch"
+          else
+            # Default to patch if no prefix is found
+            VERSION_TYPE="patch"
+          fi
+
+          echo "version-type=$VERSION_TYPE" >> $GITHUB_OUTPUT
+
+          # Get current version from podspec
+          CURRENT_VERSION=$(grep -m 1 "spec.version" JarvisSDK.podspec | sed 's/.*"\(.*\)".*/\1/')
+          echo "Current version: $CURRENT_VERSION"
+
+          # Calculate new version
+          IFS='.' read -r -a version_parts <<< "$CURRENT_VERSION"
+          major="${version_parts[0]}"
+          minor="${version_parts[1]}"
+          patch="${version_parts[2]}"
+
+          case $VERSION_TYPE in
+            "major")
+              major=$((major + 1))
+              minor=0
+              patch=0
+              ;;
+            "minor")
+              minor=$((minor + 1))
+              patch=0
+              ;;
+            "patch")
+              patch=$((patch + 1))
+              ;;
+          esac
+
+          NEW_VERSION="$major.$minor.$patch"
+          echo "New version: $NEW_VERSION"
+          echo "new-version=$NEW_VERSION" >> $GITHUB_OUTPUT
+
+      - name: 📝 Update Version in Files
+        run: |
+          NEW_VERSION="${{ steps.version.outputs.new-version }}"
+
+          # Update podspec
+          sed -i '' "s/spec.version *= *\".*\"/spec.version = \"$NEW_VERSION\"/" JarvisSDK.podspec
+
+          # Update README SPM examples
+          sed -i '' "s/from: \"[0-9.]*\"/from: \"$NEW_VERSION\"/" README.md
+
+          # Update README CocoaPods examples
+          sed -i '' "s/pod 'JarvisSDK', '~> [0-9.]*'/pod 'JarvisSDK', '~> $NEW_VERSION'/" README.md
+
+          echo "✅ Updated version to $NEW_VERSION in all files"
+
+      - name: 🧪 Run Tests
+        run: |
+          cd JarvisSDK
+          swift test
+
+      - name: 🏗️ Build SDK (Release)
+        run: |
+          cd JarvisSDK
+          swift build -c release
+
+      - name: 📦 Build XCFramework
+        run: |
+          cd JarvisSDK
+
+          # Clean previous builds
+          rm -rf build
+
+          # Build for iOS devices
+          xcodebuild archive \
+            -scheme Jarvis \
+            -configuration Release \
+            -destination 'generic/platform=iOS' \
+            -archivePath './build/ios.xcarchive' \
+            SKIP_INSTALL=NO \
+            BUILD_LIBRARY_FOR_DISTRIBUTION=YES
+
+          # Build for iOS Simulator
+          xcodebuild archive \
+            -scheme Jarvis \
+            -configuration Release \
+            -destination 'generic/platform=iOS Simulator' \
+            -archivePath './build/ios-simulator.xcarchive' \
+            SKIP_INSTALL=NO \
+            BUILD_LIBRARY_FOR_DISTRIBUTION=YES
+
+          # Create XCFramework
+          xcodebuild -create-xcframework \
+            -framework './build/ios.xcarchive/Products/Library/Frameworks/Jarvis.framework' \
+            -framework './build/ios-simulator.xcarchive/Products/Library/Frameworks/Jarvis.framework' \
+            -output './build/Jarvis.xcframework'
+
+          # Zip XCFramework for distribution
+          cd build
+          zip -r Jarvis.xcframework.zip Jarvis.xcframework
+          cd ..
+
+          # Calculate checksum
+          swift package compute-checksum ./build/Jarvis.xcframework.zip > ./build/checksum.txt
+
+          echo "✅ XCFramework created and zipped"
+
+      - name: 🔍 Validate Podspec
+        if: vars.COCOAPODS_TRUNK_TOKEN != ''
+        run: |
+          cd JarvisSDK
+          pod spec lint JarvisSDK.podspec --allow-warnings
+
+      - name: 🚀 Publish to CocoaPods
+        if: vars.COCOAPODS_TRUNK_TOKEN != ''
+        env:
+          COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
+        run: |
+          cd JarvisSDK
+          pod trunk push JarvisSDK.podspec --allow-warnings
+
+      - name: 🏷️ Create Git Tag
+        run: |
+          NEW_VERSION="${{ steps.version.outputs.new-version }}"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Commit version changes
+          git add JarvisSDK.podspec README.md
+          git commit -m "🔖 Release version $NEW_VERSION" || true
+
+          # Create and push tag
+          git tag -a "$NEW_VERSION" -m "Release version $NEW_VERSION"
+          git push origin main
+          git push origin "$NEW_VERSION"
+
+      - name: 📋 Generate Release Notes
+        id: release-notes
+        run: |
+          NEW_VERSION="${{ steps.version.outputs.new-version }}"
+          PREVIOUS_TAG=$(git describe --tags --abbrev=0 HEAD~1 2>/dev/null || echo "")
+
+          # Generate release notes from commits
+          if [ -n "$PREVIOUS_TAG" ]; then
+            COMMITS=$(git log ${PREVIOUS_TAG}..HEAD --oneline --no-merges --format="- %s (%an)")
+          else
+            COMMITS=$(git log --oneline --no-merges --format="- %s (%an)" -10)
+          fi
+
+          # Get checksum
+          CHECKSUM=$(cat JarvisSDK/build/checksum.txt)
+
+          # Create release notes
+          cat > release-notes.md << EOF
+          ## 🚀 What's Changed
+
+          $COMMITS
+
+          ## 📦 Installation
+
+          ### Swift Package Manager (SPM)
+
+          Add to your \`Package.swift\`:
+
+          \`\`\`swift
+          dependencies: [
+              .package(url: "https://github.com/${{ github.repository }}", from: "$NEW_VERSION")
+          ]
+          \`\`\`
+
+          Or in Xcode:
+          1. File > Add Package Dependencies
+          2. Enter: \`https://github.com/${{ github.repository }}\`
+          3. Select version: \`$NEW_VERSION\`
+
+          ### CocoaPods
+
+          Add to your \`Podfile\`:
+
+          \`\`\`ruby
+          pod 'JarvisSDK', '~> $NEW_VERSION'
+          \`\`\`
+
+          Then run:
+          \`\`\`bash
+          pod install
+          \`\`\`
+
+          ### Manual Installation (XCFramework)
+
+          1. Download \`Jarvis.xcframework.zip\` from assets below
+          2. Unzip and drag \`Jarvis.xcframework\` into your Xcode project
+          3. Select your target → General → Frameworks, Libraries, and Embedded Content
+          4. Set to "Embed & Sign"
+
+          **Checksum (for SPM binary)**: \`$CHECKSUM\`
+
+          ## 🎯 Quick Start
+
+          \`\`\`swift
+          import SwiftUI
+          import Jarvis
+
+          @main
+          struct MyApp: App {
+              var body: some Scene {
+                  WindowGroup {
+                      ContentView()
+                          .jarvisSDK(config: JarvisConfig(
+                              enableShakeDetection: true,
+                              enableDebugLogging: true
+                          ))
+                  }
+              }
+          }
+          \`\`\`
+
+          ## 🔗 Links
+
+          - [📖 Documentation](https://github.com/${{ github.repository }}#readme)
+          - [🐛 Report Issues](https://github.com/${{ github.repository }}/issues)
+          - [💬 Discussions](https://github.com/${{ github.repository }}/discussions)
+          - [📦 CocoaPods](https://cocoapods.org/pods/JarvisSDK)
+
+          ## 📱 Requirements
+
+          - iOS 15.0+
+          - Xcode 15.0+
+          - Swift 5.9+
+
+          ---
+
+          **Full Changelog**: https://github.com/${{ github.repository }}/compare/${PREVIOUS_TAG}...$NEW_VERSION
+          EOF
+
+      - name: 🎉 Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.new-version }}
+          name: "🚀 Jarvis iOS SDK v${{ steps.version.outputs.new-version }}"
+          body_path: release-notes.md
+          draft: false
+          prerelease: false
+          files: |
+            JarvisSDK/build/Jarvis.xcframework.zip
+            JarvisSDK/build/checksum.txt
+
+      - name: 🧹 Cleanup
+        if: always()
+        run: |
+          rm -f release-notes.md
+          rm -rf JarvisSDK/build
+
+  notify:
+    name: 📢 Post-Release Notifications
+    needs: release
+    if: always() && needs.release.result == 'success'
+    runs-on: macos-latest
+
+    steps:
+      - name: 📊 Update Analytics
+        if: vars.POSTHOG_PROJECT_API_KEY != ''
+        run: |
+          curl -X POST 'https://app.posthog.com/capture/' \
+            -H 'Content-Type: application/json' \
+            -d '{
+              "api_key": "${{ vars.POSTHOG_PROJECT_API_KEY }}",
+              "event": "sdk_release",
+              "properties": {
+                "platform": "ios",
+                "version": "${{ needs.release.outputs.new-version }}",
+                "version_type": "${{ needs.release.outputs.version-type }}",
+                "repository": "${{ github.repository }}"
+              }
+            }'
+
+      - name: 🚨 Update Sentry Release
+        if: vars.SENTRY_ORG != '' && vars.SENTRY_PROJECT != ''
+        run: |
+          curl -X POST \
+            https://sentry.io/api/0/organizations/${{ vars.SENTRY_ORG }}/releases/ \
+            -H 'Authorization: Bearer ${{ secrets.SENTRY_AUTH_TOKEN }}' \
+            -H 'Content-Type: application/json' \
+            -d '{
+              "version": "${{ needs.release.outputs.new-version }}",
+              "projects": ["${{ vars.SENTRY_PROJECT }}"],
+              "refs": [{
+                "repository": "${{ github.repository }}",
+                "commit": "${{ github.sha }}"
+              }]
+            }'
+
+      - name: 💬 Post to Discord/Slack
+        if: vars.DISCORD_WEBHOOK_URL != '' || vars.SLACK_WEBHOOK_URL != ''
+        run: |
+          MESSAGE="🚀 **Jarvis iOS SDK v${{ needs.release.outputs.new-version }}** has been released!\n\n📦 Install via SPM or CocoaPods\n🔗 https://github.com/${{ github.repository }}/releases/tag/${{ needs.release.outputs.new-version }}"
+
+          if [ -n "${{ vars.DISCORD_WEBHOOK_URL }}" ]; then
+            curl -X POST "${{ vars.DISCORD_WEBHOOK_URL }}" \
+              -H 'Content-Type: application/json' \
+              -d "{\"content\": \"$MESSAGE\"}"
+          fi
+
+          if [ -n "${{ vars.SLACK_WEBHOOK_URL }}" ]; then
+            curl -X POST "${{ vars.SLACK_WEBHOOK_URL }}" \
+              -H 'Content-Type: application/json' \
+              -d "{\"text\": \"$MESSAGE\"}"
+          fi
