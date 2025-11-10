@@ -1,5 +1,5 @@
 import Testing
-@testable import JarvisSDK
+@testable import Jarvis
 
 struct JarvisConfigBuilderTests {
     @Test func builderProducesCustomizedConfiguration() {

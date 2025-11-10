@@ -176,9 +176,16 @@ let package = Package(
             resources: [
                 .process("Assets.xcassets")
             ]
-        )
+        ),
 
         // MARK: - Tests
-        // Tests will be added later when test structure is established
+        .testTarget(
+            name: "JarvisSDKTests",
+            dependencies: [
+                "Jarvis",
+                "JarvisInspectorData"
+            ],
+            path: "Tests/JarvisSDKTests"
+        )
     ]
 )

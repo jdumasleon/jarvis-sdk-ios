@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import JarvisSDK
+@testable import JarvisInspectorData
 
 struct BodyTruncationTests {
     @Test func smallPayloadsAreNotModified() throws {
