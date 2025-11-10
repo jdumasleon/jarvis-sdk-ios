@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
   spec.name         = "JarvisSDK"
-  spec.version      = "1.0.0"
+  spec.version = "1.2.0"
   spec.summary      = "Jarvis Mobile SDK for iOS - Network Inspection & Debugging"
   spec.description  = <<-DESC
                       Jarvis SDK is a comprehensive mobile debugging and network inspection tool for iOS applications.
