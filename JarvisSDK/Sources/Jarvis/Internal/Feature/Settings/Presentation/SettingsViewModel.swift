@@ -7,7 +7,9 @@
 
 import SwiftUI
 import Combine
+#if canImport(Presentation)
 import Presentation
+#endif
 import Common
 
 /// ViewModel for Settings screen

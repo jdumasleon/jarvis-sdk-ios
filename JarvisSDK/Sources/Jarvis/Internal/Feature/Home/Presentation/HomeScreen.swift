@@ -6,7 +6,9 @@
 //
 
 import SwiftUI
+#if canImport(Presentation)
 import Presentation
+#endif
 import DesignSystem
 import Common
 

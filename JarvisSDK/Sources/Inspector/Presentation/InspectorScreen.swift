@@ -1,7 +1,9 @@
 import SwiftUI
 import DesignSystem
 import Domain
+#if canImport(Presentation)
 import Presentation
+#endif
 import JarvisInspectorDomain
 
 /// Inspector navigation view with coordinator-based routing
