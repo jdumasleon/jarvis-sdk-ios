@@ -1,7 +1,6 @@
 # Jarvis iOS SDK
 
 [![Swift Package Manager](https://img.shields.io/badge/Swift%20Package%20Manager-Compatible-brightgreen.svg)](https://swift.org/package-manager/)
-[![CocoaPods](https://img.shields.io/cocoapods/v/JarvisSDK.svg)](https://cocoapods.org/pods/JarvisSDK)
 [![Platform](https://img.shields.io/badge/Platform-iOS%2015.0%2B-blue.svg)](https://developer.apple.com/ios/)
 [![Swift](https://img.shields.io/badge/Swift-5.9%2B-orange.svg)](https://swift.org)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
@@ -25,7 +24,6 @@ A comprehensive debugging and development toolkit for iOS applications, providin
   - [🎨 Modern UI](#-modern-ui)
 - [Installation](#installation)
   - [Swift Package Manager (Recommended)](#swift-package-manager-recommended)
-  - [CocoaPods](#cocoapods)
 - [Integration Guide](#integration-guide)
   - [Prerequisites](#prerequisites)
   - [Step-by-Step Integration](#step-by-step-integration)
@@ -69,11 +67,6 @@ A comprehensive debugging and development toolkit for iOS applications, providin
 ```swift
 // In Xcode: File > Add Package Dependencies
 // URL: https://github.com/jdumasleon/mobile-jarvis-ios-sdk
-```
-
-**Or CocoaPods:**
-```ruby
-pod 'JarvisSDK', '~> 1.2.0'
 ```
 
 ### 2. Initialize in App
@@ -204,7 +197,6 @@ That's it! 🎉 Jarvis will now provide debugging capabilities and network inspe
 The Jarvis iOS SDK is available through multiple distribution channels:
 
 - **✅ Swift Package Manager** (Recommended) - Native Xcode integration
-- **✅ CocoaPods** - Traditional dependency management
 - **✅ Manual Integration** - For advanced use cases
 
 ### Swift Package Manager (Recommended)
@@ -238,27 +230,6 @@ Then add to your target:
     ]
 )
 ```
-
-### CocoaPods
-
-Add to your `Podfile`:
-
-```ruby
-platform :ios, '15.0'
-use_frameworks!
-
-target 'YourApp' do
-  pod 'JarvisSDK', '~> 1.2.0'
-end
-```
-
-Then run:
-
-```bash
-pod install
-```
-
-**Note:** Make sure to use the `.xcworkspace` file after installing.
 
 ### Available Packages
 
@@ -1125,14 +1096,13 @@ limitations under the License.
 
 ## Changelog
 
-### Version 1.1.7 (Latest)
+### Version 1.2.0 (Latest)
 - ⚡ **Performance Monitoring** - Comprehensive system performance tracking (CPU, Memory, FPS)
 - 📊 **Performance Charts** - Visual performance metrics with PerformanceOverviewChart
 - 🏠 **Enhanced Dashboard** - Integrated performance monitoring into main dashboard
 - 🔧 **Performance Manager** - Real-time performance data collection and monitoring
 - 📈 **Historical Metrics** - Track performance trends over time with configurable sampling
 - 🎯 **Battery & Thermal** - Battery level and thermal state monitoring
-- 🚀 **Release Automation** - Comprehensive release scripts for SPM and CocoaPods publishing
 - 📝 **Improved Documentation** - Complete guides for all features and integrations
 
 ### Version 1.1.0
@@ -1142,7 +1112,6 @@ limitations under the License.
 - 🔧 **Enhanced Metrics** - Expanded dashboard metrics with network and preferences analytics
 - 📱 **UIKit Support** - Complete UIKit integration guide and documentation
 - 🎭 **Design System Updates** - Improved components and visual consistency
-- ✅ **CocoaPods Distribution** - SDK now available via CocoaPods
 
 ### Version 1.0.0
 - 🚀 **Initial Release** - Core SDK functionality
