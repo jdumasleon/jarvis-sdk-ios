@@ -59,7 +59,7 @@ public struct GetSettingsItemsUseCase {
                         description: "View complete documentation",
                         icon: .link,
                         type: .externalLink,
-                        action: .openUrl("https://jdumasleon.com/work/jarvis")
+                        action: .openUrl("https://github.com/jdumasleon/jarvis-sdk-ios?tab=readme-ov-file#jarvis-ios-sdk")
                     ),
                     SettingsItem(
                         id: "release_notes",
@@ -67,7 +67,7 @@ public struct GetSettingsItemsUseCase {
                         description: "What's new in this version",
                         icon: .releaseNotes,
                         type: .externalLink,
-                        action: .openUrl("https://github.com/jdumasleon/jarvis-ios-sdk")
+                        action: .openUrl("https://github.com/jdumasleon/jarvis-sdk-ios?tab=readme-ov-file#changelog")
                     )
                 ]
             ),
@@ -122,7 +122,7 @@ public struct GetSettingsItemsUseCase {
                         description: "Tell others about this tool",
                         icon: .share,
                         type: .externalLink,
-                        action: .shareApp("https://jdumasleon.com/work/jarvis")
+                        action: .shareApp("https://jdumasleon.com/work/jarvis-ios-sdk")
                     ),
                     SettingsItem(
                         id: "contact",

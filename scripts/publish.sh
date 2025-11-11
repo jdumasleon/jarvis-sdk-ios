@@ -85,6 +85,11 @@ validate_version() {
 # Update version in podspec
 update_podspec_version() {
     local version=$1
+    if [ ! -f "$PODSPEC_FILE" ]; then
+        print_warning "JarvisSDK.podspec not found. Skipping podspec version update."
+        return
+    fi
+
     print_info "Updating JarvisSDK.podspec to version $version..."
     sed -i '' "s/spec.version *= *\".*\"/spec.version = \"$version\"/" "$PODSPEC_FILE"
     print_success "Updated JarvisSDK.podspec"
@@ -133,6 +138,11 @@ build_project() {
 # Validate podspec (usa el tag remoto)
 validate_podspec() {
     print_header "Validating Podspec"
+
+    if [ ! -f "$PODSPEC_FILE" ]; then
+        print_warning "JarvisSDK.podspec not found. Skipping CocoaPods validation."
+        return 0
+    fi
 
     if ! command_exists pod; then
         print_warning "CocoaPods not installed. Skipping podspec validation."
@@ -197,6 +207,11 @@ push_changes() {
 # Publish to CocoaPods
 publish_to_cocoapods() {
     print_header "Publishing to CocoaPods"
+
+    if [ ! -f "$PODSPEC_FILE" ]; then
+        print_warning "JarvisSDK.podspec not found. Skipping CocoaPods publication."
+        return 0
+    fi
 
     if ! command_exists pod; then
         print_warning "CocoaPods not installed. Skipping CocoaPods publishing."
