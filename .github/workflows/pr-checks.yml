@@ -178,7 +178,6 @@ jobs:
             - ✅ SwiftLint checks passed (if enabled)
             - ✅ Unit tests passed
             - ✅ Build successful
-            - ✅ XCFramework created
 
             ### 📦 Installation
 

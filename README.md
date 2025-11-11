@@ -73,7 +73,7 @@ A comprehensive debugging and development toolkit for iOS applications, providin
 
 **Or CocoaPods:**
 ```ruby
-pod 'JarvisSDK', '~> 1.1.7'
+pod 'JarvisSDK', '~> 1.2.0'
 ```
 
 ### 2. Initialize in App
@@ -224,7 +224,7 @@ Add to your `Package.swift` dependencies:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/jdumasleon/mobile-jarvis-ios-sdk", from: "1.1.7")
+    .package(url: "https://github.com/jdumasleon/mobile-jarvis-ios-sdk", from: "1.2.0")
 ]
 ```
 
@@ -248,7 +248,7 @@ platform :ios, '15.0'
 use_frameworks!
 
 target 'YourApp' do
-  pod 'JarvisSDK', '~> 1.1.7'
+  pod 'JarvisSDK', '~> 1.2.0'
 end
 ```
 
