@@ -15,7 +15,7 @@ Pod::Spec.new do |spec|
                       DESC
 
   spec.homepage     = "https://github.com/jdumasleon/jarvis-sdk-ios"
-  spec.license      = { :type => "MIT", :file => "LICENSE" }
+  spec.license      = { :type => "Apache-2.0", :file => "LICENSE" }
   spec.author       = { "Jo Dumas" => "jdumasleon@gmail.com" }
 
   spec.platform     = :ios, "17.0"
@@ -43,8 +43,8 @@ Pod::Spec.new do |spec|
 
   # Design System module
   spec.subspec "DesignSystem" do |ds|
-    ds.source_files = "../JarvisDesignSystem/Sources/DesignSystem/**/*.swift"
-    ds.resources = "../JarvisDesignSystem/Sources/DesignSystem/Resources/**/*.xcassets"
+    ds.source_files = "JarvisDesignSystem/Sources/DesignSystem/**/*.swift"
+    ds.resources = "JarvisDesignSystem/Sources/DesignSystem/Resources/**/*"
   end
 
   # Inspector feature module (optional)
