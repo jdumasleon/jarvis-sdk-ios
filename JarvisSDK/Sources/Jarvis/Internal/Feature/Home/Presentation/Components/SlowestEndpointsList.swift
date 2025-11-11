@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import DesignSystem
+import JarvisDesignSystem
 
 /// Slowest endpoints list showing performance bottlenecks
 struct SlowestEndpointsList: View {

@@ -7,7 +7,7 @@
 
 import SwiftUI
 import Charts
-import DesignSystem
+import JarvisDesignSystem
 
 /// Network activity area chart showing requests over time
 struct NetworkAreaChart: View {

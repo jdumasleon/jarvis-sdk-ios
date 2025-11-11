@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import DesignSystem
+import JarvisDesignSystem
 
 /// Session filter chip for toggling between filter options
 struct SessionFilterChip: View {

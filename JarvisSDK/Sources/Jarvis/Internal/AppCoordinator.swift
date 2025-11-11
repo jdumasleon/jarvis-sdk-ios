@@ -10,7 +10,7 @@ import SwiftUI
 import Presentation
 #endif
 import Common
-import DesignSystem
+import JarvisDesignSystem
 
 import JarvisInspectorPresentation
 

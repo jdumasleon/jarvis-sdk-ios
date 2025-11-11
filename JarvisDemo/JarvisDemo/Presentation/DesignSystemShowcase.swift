@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import DesignSystem
+import JarvisDesignSystem
 
 #if DEBUG
 struct DesignSystemShowcase: View {

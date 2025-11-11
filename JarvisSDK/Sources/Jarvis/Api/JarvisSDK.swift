@@ -6,7 +6,7 @@ import Domain
 import JarvisInspectorDomain
 import JarvisInspectorData
 import Common
-import DesignSystem
+import JarvisDesignSystem
 
 /// Main entry point for the Jarvis SDK
 @MainActor

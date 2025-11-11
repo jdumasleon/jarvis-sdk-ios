@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import DesignSystem
+import JarvisDesignSystem
 
 /// Bottom sheet displaying detailed app and SDK information
 struct AppDetailsSheet: View {

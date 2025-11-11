@@ -7,7 +7,7 @@
 
 import SwiftUI
 import Charts
-import DesignSystem
+import JarvisDesignSystem
 
 /// Health score gauge chart with key metrics
 struct HealthScoreGauge: View {

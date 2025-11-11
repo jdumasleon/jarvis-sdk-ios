@@ -1,5 +1,5 @@
 import SwiftUI
-import DesignSystem
+import JarvisDesignSystem
 import Foundation
 import JarvisResources
 

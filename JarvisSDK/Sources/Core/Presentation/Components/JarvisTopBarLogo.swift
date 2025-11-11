@@ -5,7 +5,7 @@
 //  Created by Jose Luis Dumas Leon   on 26/10/25.
 //
 
-import DesignSystem
+import JarvisDesignSystem
 import SwiftUI
 import JarvisResources
 

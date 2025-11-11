@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import DesignSystem
+import JarvisDesignSystem
 import Domain
 import JarvisInspectorDomain
 import Common

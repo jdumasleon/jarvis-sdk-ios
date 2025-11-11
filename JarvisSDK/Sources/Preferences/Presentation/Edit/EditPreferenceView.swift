@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import DesignSystem
+import JarvisDesignSystem
 import JarvisPreferencesDomain
 
 /// View for editing a preference

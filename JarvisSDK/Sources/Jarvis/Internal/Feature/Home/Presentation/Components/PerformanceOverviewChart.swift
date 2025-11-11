@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import DesignSystem
+import JarvisDesignSystem
 
 /// Performance overview chart component showing key metrics in a compact format
 struct PerformanceOverviewChart: View {

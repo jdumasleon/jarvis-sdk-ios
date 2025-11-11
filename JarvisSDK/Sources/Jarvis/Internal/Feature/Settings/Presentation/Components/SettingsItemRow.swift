@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import DesignSystem
+import JarvisDesignSystem
 
 /// Reusable row component for displaying a settings item
 struct SettingsItemRow: View {

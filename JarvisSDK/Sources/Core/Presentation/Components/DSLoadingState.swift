@@ -1,5 +1,5 @@
 import SwiftUI
-import DesignSystem
+import JarvisDesignSystem
 
 // MARK: - Loading State
 

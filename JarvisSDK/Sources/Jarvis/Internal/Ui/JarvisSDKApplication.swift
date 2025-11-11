@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import DesignSystem
+import JarvisDesignSystem
 import JarvisResources
 
 /// Main Jarvis SDK Application with coordinator-based navigation
