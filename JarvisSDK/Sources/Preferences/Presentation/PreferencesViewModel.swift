@@ -1,6 +1,8 @@
 import Foundation
 import Combine
+#if canImport(Presentation)
 import Presentation
+#endif
 import Domain
 import JarvisPreferencesDomain
 import JarvisPreferencesData

@@ -7,7 +7,9 @@
 
 import SwiftUI
 import DesignSystem
+#if canImport(Presentation)
 import Presentation
+#endif
 import Common
 
 /// Settings navigation view with coordinator-based routing
