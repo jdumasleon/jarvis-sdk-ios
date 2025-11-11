@@ -30,7 +30,7 @@ PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 
 # Files to update
 PODSPEC_FILE="$PROJECT_ROOT/JarvisSDK.podspec"
-PACKAGE_FILE="$PROJECT_ROOT/Package.swift"
+PACKAGE_FILE="$PROJECT_ROOT/JarvisSDK/Package.swift"
 README_FILE="$PROJECT_ROOT/README.md"
 
 # =============================================================================
@@ -311,7 +311,7 @@ main() {
     fi
 
     # Change to project root
-    cd "$PROJECT_ROOT"
+    cd "$PROJECT_ROOT" || exit 1
 
     # Check for uncommitted changes
     if [[ -n $(git status -s) ]]; then
@@ -329,6 +329,8 @@ main() {
     # Generate changelog before any changes
     generate_changelog "$VERSION"
 
+    cd "$PROJECT_ROOT/JarvisSDK" || exit 1
+    
     # Run tests
     if [ "$SKIP_TESTS" = false ]; then
         run_tests
