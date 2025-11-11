@@ -14,7 +14,7 @@ Pod::Spec.new do |spec|
                       - UIKit integration support
                       DESC
 
-  spec.homepage     = "https://github.com/jdumasleon/jarvis-ios-sdk"
+  spec.homepage     = "https://github.com/jdumasleon/jarvis-sdk-ios"
   spec.license      = { :type => "MIT", :file => "LICENSE" }
   spec.author       = { "Jo Dumas" => "jdumasleon@gmail.com" }
 
@@ -22,7 +22,7 @@ Pod::Spec.new do |spec|
   spec.swift_version = "5.9"
 
   spec.source       = {
-    :git => "https://github.com/jdumasleon/jarvis-ios-sdk.git",
+    :git => "https://github.com/jdumasleon/jarvis-sdk-ios.git",
     :tag => "#{spec.version}"
   }
 
