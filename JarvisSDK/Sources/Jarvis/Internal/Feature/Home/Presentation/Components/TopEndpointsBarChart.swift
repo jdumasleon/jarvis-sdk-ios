@@ -7,7 +7,7 @@
 
 import SwiftUI
 import Charts
-import DesignSystem
+import JarvisDesignSystem
 
 /// Top endpoints bar chart ranked by request count
 struct TopEndpointsBarChart: View {

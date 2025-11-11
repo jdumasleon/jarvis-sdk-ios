@@ -7,7 +7,7 @@
 
 import SwiftUI
 import Charts
-import DesignSystem
+import JarvisDesignSystem
 
 /// Preferences overview with donut chart, storage stats, and size distribution
 struct PreferencesOverviewChart: View {

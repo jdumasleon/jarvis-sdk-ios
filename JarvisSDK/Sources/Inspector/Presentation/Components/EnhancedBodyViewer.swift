@@ -10,7 +10,7 @@
 //
 
 import SwiftUI
-import DesignSystem
+import JarvisDesignSystem
 
 #if canImport(UIKit)
 import UIKit

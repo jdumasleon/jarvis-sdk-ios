@@ -30,7 +30,7 @@ PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 
 # Files to update
 PODSPEC_FILE="$PROJECT_ROOT/JarvisSDK.podspec"
-PACKAGE_FILE="$PROJECT_ROOT/JarvisSDK/Package.swift"
+PACKAGE_FILE="$PROJECT_ROOT/Package.swift"
 README_FILE="$PROJECT_ROOT/README.md"
 
 # =============================================================================

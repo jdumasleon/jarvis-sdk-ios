@@ -7,7 +7,7 @@
 
 import SwiftUI
 import Jarvis
-import DesignSystem
+import JarvisDesignSystem
 
 struct HomeScreen: View {
     @ObservedObject var viewModel: HomeViewModel

@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import DesignSystem
+import JarvisDesignSystem
 
 struct PreferencesScreen: View {
     @ObservedObject var viewModel: PreferencesViewModel

@@ -7,7 +7,7 @@
 
 import SwiftUI
 import Charts
-import DesignSystem
+import JarvisDesignSystem
 
 /// HTTP methods distribution donut chart
 struct HttpMethodsDonutChart: View {

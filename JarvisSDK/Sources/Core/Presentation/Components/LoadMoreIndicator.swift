@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import DesignSystem
+import JarvisDesignSystem
 
 // MARK: - Load More Indicator
 

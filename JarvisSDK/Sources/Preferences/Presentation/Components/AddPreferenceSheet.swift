@@ -1,5 +1,5 @@
 import SwiftUI
-import DesignSystem
+import JarvisDesignSystem
 import JarvisPreferencesDomain
 
 // MARK: - Add Preference Sheet

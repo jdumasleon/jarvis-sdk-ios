@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import DesignSystem
+import JarvisDesignSystem
 
 /// Rating data model
 public struct RatingData {

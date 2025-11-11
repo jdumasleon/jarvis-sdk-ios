@@ -7,7 +7,7 @@
 
 import SwiftUI
 import Jarvis
-import DesignSystem
+import JarvisDesignSystem
 
 struct ContentView: View {
     @StateObject private var homeViewModel = HomeViewModel()

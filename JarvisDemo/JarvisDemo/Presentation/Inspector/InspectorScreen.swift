@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import DesignSystem
+import JarvisDesignSystem
 
 struct InspectorScreen: View {
     @ObservedObject var viewModel: InspectorViewModel

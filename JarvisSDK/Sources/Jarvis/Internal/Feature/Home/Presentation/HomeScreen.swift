@@ -9,7 +9,7 @@ import SwiftUI
 #if canImport(Presentation)
 import Presentation
 #endif
-import DesignSystem
+import JarvisDesignSystem
 import Common
 
 /// Home navigation view with coordinator-based routing

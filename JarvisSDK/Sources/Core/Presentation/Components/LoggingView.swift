@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import DesignSystem
+import JarvisDesignSystem
 
 /// View for configuring logging settings
 public struct LoggingView: View {

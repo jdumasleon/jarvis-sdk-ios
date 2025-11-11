@@ -8,13 +8,10 @@ let package = Package(
         .macOS(.v14)
     ],
     products: [
-        // Main SDK - what external apps will import
         .library(
             name: "Jarvis",
             targets: ["Jarvis"]
         ),
-
-        // Optional: Expose Inspector API separately (if needed)
         .library(
             name: "JarvisInspector",
             targets: [
@@ -23,8 +20,6 @@ let package = Package(
                 "JarvisInspectorPresentation"
             ]
         ),
-
-        // Optional: Expose Preferences API separately (if needed)
         .library(
             name: "JarvisPreferences",
             targets: [
@@ -32,44 +27,42 @@ let package = Package(
                 "JarvisPreferencesData",
                 "JarvisPreferencesPresentation"
             ]
+        ),
+        .library(
+            name: "JarvisDesignSystem",
+            targets: ["JarvisDesignSystem"]
         )
     ],
-    dependencies: [
-        // Design System as external package
-        .package(path: "../JarvisDesignSystem")
-    ],
+    dependencies: [],
     targets: [
         // MARK: - Main SDK Target
         .target(
             name: "Jarvis",
             dependencies: [
-                // Core dependencies
                 "Common",
                 "Data",
-                .product(name: "DesignSystem", package: "JarvisDesignSystem"),
+                "JarvisDesignSystem",
                 "Domain",
                 "Navigation",
                 "Platform",
                 "Presentation",
                 "JarvisResources",
-
                 "JarvisInspectorPresentation",
                 "JarvisPreferencesPresentation"
-                
             ],
-            path: "Sources/Jarvis"
+            path: "JarvisSDK/Sources/Jarvis"
         ),
 
         // MARK: - Core Modules
         .target(
             name: "Common",
             dependencies: [],
-            path: "Sources/Core/Common"
+            path: "JarvisSDK/Sources/Core/Common"
         ),
         .target(
             name: "Domain",
             dependencies: ["Common"],
-            path: "Sources/Core/Domain"
+            path: "JarvisSDK/Sources/Core/Domain"
         ),
         .target(
             name: "Data",
@@ -78,7 +71,7 @@ let package = Package(
                 "Domain",
                 "Platform"
             ],
-            path: "Sources/Core/Data"
+            path: "JarvisSDK/Sources/Core/Data"
         ),
         .target(
             name: "Platform",
@@ -86,23 +79,23 @@ let package = Package(
                 "Common",
                 "Domain"
             ],
-            path: "Sources/Core/Platform"
+            path: "JarvisSDK/Sources/Core/Platform"
         ),
         .target(
             name: "Navigation",
             dependencies: ["Common"],
-            path: "Sources/Core/Navigation"
+            path: "JarvisSDK/Sources/Core/Navigation"
         ),
         .target(
             name: "Presentation",
             dependencies: [
                 "Common",
                 "Domain",
-                .product(name: "DesignSystem", package: "JarvisDesignSystem"),
+                "JarvisDesignSystem",
                 "Navigation",
                 "JarvisResources"
             ],
-            path: "Sources/Core/Presentation"
+            path: "JarvisSDK/Sources/Core/Presentation"
         ),
 
         // MARK: - Inspector Feature Modules
@@ -112,7 +105,7 @@ let package = Package(
                 "Domain",
                 "Common"
             ],
-            path: "Sources/Inspector/Domain"
+            path: "JarvisSDK/Sources/Inspector/Domain"
         ),
         .target(
             name: "JarvisInspectorData",
@@ -122,7 +115,7 @@ let package = Package(
                 "Platform",
                 "Common"
             ],
-            path: "Sources/Inspector/Data"
+            path: "JarvisSDK/Sources/Inspector/Data"
         ),
         .target(
             name: "JarvisInspectorPresentation",
@@ -130,12 +123,12 @@ let package = Package(
                 "JarvisInspectorDomain",
                 "JarvisInspectorData",
                 "Presentation",
-                .product(name: "DesignSystem", package: "JarvisDesignSystem"),
+                "JarvisDesignSystem",
                 "Navigation",
                 "Common",
                 "JarvisResources"
             ],
-            path: "Sources/Inspector/Presentation"
+            path: "JarvisSDK/Sources/Inspector/Presentation"
         ),
 
         // MARK: - Preferences Feature Modules
@@ -145,7 +138,7 @@ let package = Package(
                 "Domain",
                 "Common"
             ],
-            path: "Sources/Preferences/Domain"
+            path: "JarvisSDK/Sources/Preferences/Domain"
         ),
         .target(
             name: "JarvisPreferencesData",
@@ -155,7 +148,7 @@ let package = Package(
                 "Platform",
                 "Common"
             ],
-            path: "Sources/Preferences/Data"
+            path: "JarvisSDK/Sources/Preferences/Data"
         ),
         .target(
             name: "JarvisPreferencesPresentation",
@@ -163,18 +156,26 @@ let package = Package(
                 "JarvisPreferencesDomain",
                 "JarvisPreferencesData",
                 "Presentation",
-                .product(name: "DesignSystem", package: "JarvisDesignSystem"),
+                "JarvisDesignSystem",
                 "Navigation",
                 "Common",
                 "JarvisResources"
             ],
-            path: "Sources/Preferences/Presentation"
+            path: "JarvisSDK/Sources/Preferences/Presentation"
         ),
         .target(
             name: "JarvisResources",
-            path: "Sources/Resources",
+            path: "JarvisSDK/Sources/Resources",
             resources: [
                 .process("Assets.xcassets")
+            ]
+        ),
+        .target(
+            name: "JarvisDesignSystem",
+            dependencies: [],
+            path: "JarvisSDK/Sources/DesignSystem",
+            resources: [
+                .process("Resources/Colors.xcassets")
             ]
         ),
 
@@ -185,7 +186,7 @@ let package = Package(
                 "Jarvis",
                 "JarvisInspectorData"
             ],
-            path: "Tests/JarvisSDKTests"
+            path: "JarvisSDK/Tests/JarvisSDKTests"
         )
     ]
 )
