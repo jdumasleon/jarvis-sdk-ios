@@ -76,13 +76,14 @@ import Jarvis
 
 @main
 struct MyApp: App {
+     init() {
+        JarvisSDK.shared.initializeAsync()
+    }
+
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .jarvisSDK(config: JarvisConfig(
-                    enableShakeDetection: true,
-                    enableDebugLogging: true
-                ))
+                .jarvisSDK() 
         }
     }
 }
