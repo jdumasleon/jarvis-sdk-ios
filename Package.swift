@@ -13,22 +13,6 @@ let package = Package(
             targets: ["Jarvis"]
         ),
         .library(
-            name: "JarvisInspector",
-            targets: [
-                "JarvisInspectorDomain",
-                "JarvisInspectorData",
-                "JarvisInspectorPresentation"
-            ]
-        ),
-        .library(
-            name: "JarvisPreferences",
-            targets: [
-                "JarvisPreferencesDomain",
-                "JarvisPreferencesData",
-                "JarvisPreferencesPresentation"
-            ]
-        ),
-        .library(
             name: "JarvisDesignSystem",
             targets: ["JarvisDesignSystem"]
         )
