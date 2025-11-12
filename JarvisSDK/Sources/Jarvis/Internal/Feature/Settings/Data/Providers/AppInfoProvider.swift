@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import JarvisResources
 
 /// Provider for retrieving application and SDK information from Bundle
 public class AppInfoProvider {
@@ -15,15 +16,15 @@ public class AppInfoProvider {
     /// Get SDK information
     public func getSdkInfo() -> SdkInfo {
         // SDK version from the framework's bundle
-        let sdkBundle = Bundle(for: type(of: self))
-        let version = sdkBundle.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.0.0"
-        let buildNumber = sdkBundle.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "1"
-
-        return SdkInfo(
-            name: "Jarvis SDK",
-            version: version,
-            buildNumber: buildNumber
-        )
+        let sdkBundle = JarvisResourcesBundle.bundle
+        guard
+            let url = sdkBundle.url(forResource: "JarvisSDKInfo", withExtension: "plist"),
+            let dict = NSDictionary(contentsOf: url) as? [String: Any]
+        else { return SdkInfo(name: "Jarvis SDK", version: "1.0.0", buildNumber: "1") }
+        
+        let version = dict["JarvisSDKVersion"] as? String ?? "1.0.0"
+        let build   = dict["JarvisSDKBuild"] as? String ?? "1"
+        return SdkInfo(name: "Jarvis SDK", version: version, buildNumber: build)
     }
 
     /// Get host application information
@@ -57,4 +58,9 @@ public class AppInfoProvider {
         let hostAppInfo = getHostAppInfo()
         return SettingsAppInfo(sdkInfo: sdkInfo, hostAppInfo: hostAppInfo)
     }
+}
+
+
+public extension Bundle {
+    subscript(key: String) -> Any? { object(forInfoDictionaryKey: key) }
 }
