@@ -53,9 +53,7 @@ A comprehensive debugging and development toolkit for iOS applications, providin
 - [Frequently Asked Questions](#frequently-asked-questions)
 - [License](#license)
 - [Changelog](#changelog)
-  - [Version 1.1.7 (Latest)](#version-117-latest)
-  - [Version 1.1.0](#version-110)
-  - [Version 1.0.0](#version-100)
+  - [Version 1.0.0 (Latest)](#version-100-latest)
 
 ---
 
@@ -216,7 +214,7 @@ Add to your `Package.swift` dependencies:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/jdumasleon/mobile-jarvis-ios-sdk", from: "1.2.0")
+    .package(url: "https://github.com/jdumasleon/mobile-jarvis-ios-sdk", from: "1.0.0")
 ]
 ```
 
@@ -253,7 +251,7 @@ Features included:
 ### Prerequisites
 
 **🔧 Required:**
-- iOS 15.0+
+- iOS 17.0+
 - Xcode 15.0+
 - Swift 5.9+
 - SwiftUI or UIKit
@@ -1096,23 +1094,6 @@ limitations under the License.
 
 ## Changelog
 
-### Version 1.2.0 (Latest)
-- ⚡ **Performance Monitoring** - Comprehensive system performance tracking (CPU, Memory, FPS)
-- 📊 **Performance Charts** - Visual performance metrics with PerformanceOverviewChart
-- 🏠 **Enhanced Dashboard** - Integrated performance monitoring into main dashboard
-- 🔧 **Performance Manager** - Real-time performance data collection and monitoring
-- 📈 **Historical Metrics** - Track performance trends over time with configurable sampling
-- 🎯 **Battery & Thermal** - Battery level and thermal state monitoring
-- 📝 **Improved Documentation** - Complete guides for all features and integrations
-
-### Version 1.1.0
-- 🌐 **Network Activity Chart** - Visual representation of network traffic over time
-- 📊 **Dashboard Redesign** - New card-based layout with multiple chart types
-- 🎨 **Chart Animations** - Smooth entry animations for all chart components
-- 🔧 **Enhanced Metrics** - Expanded dashboard metrics with network and preferences analytics
-- 📱 **UIKit Support** - Complete UIKit integration guide and documentation
-- 🎭 **Design System Updates** - Improved components and visual consistency
-
 ### Version 1.0.0
 - 🚀 **Initial Release** - Core SDK functionality
 - 🌐 **Network Monitoring** - HTTP/HTTPS request interception via URLProtocol
@@ -1123,6 +1104,20 @@ limitations under the License.
 - 🏗️ **Modular Architecture** - Clean separation of concerns
 - 🔒 **Sensitive Data Protection** - Automatic redaction of passwords and tokens
 - 📱 **iOS 15.0+ Support** - Modern iOS compatibility
+- 🌐 **Network Activity Chart** - Visual representation of network traffic over time
+- 📊 **Dashboard Redesign** - New card-based layout with multiple chart types
+- 🎨 **Chart Animations** - Smooth entry animations for all chart components
+- 🔧 **Enhanced Metrics** - Expanded dashboard metrics with network and preferences analytics
+- 📱 **UIKit Support** - Complete UIKit integration guide and documentation
+- 🎭 **Design System Updates** - Improved components and visual consistency
+- ⚡ **Performance Monitoring** - Comprehensive system performance tracking (CPU, Memory, FPS)
+- 📊 **Performance Charts** - Visual performance metrics with PerformanceOverviewChart
+- 🏠 **Enhanced Dashboard** - Integrated performance monitoring into main dashboard
+- 🔧 **Performance Manager** - Real-time performance data collection and monitoring
+- 📈 **Historical Metrics** - Track performance trends over time with configurable sampling
+- 🎯 **Battery & Thermal** - Battery level and thermal state monitoring
+- 📝 **Improved Documentation** - Complete guides for all features and integrations
+
 
 ---
 

@@ -151,7 +151,8 @@ let package = Package(
             name: "JarvisResources",
             path: "JarvisSDK/Sources/Resources",
             resources: [
-                .process("Assets.xcassets")
+                .process("Assets.xcassets"),
+                .process("JarvisSDKInfo.plist")
             ]
         ),
         .target(
@@ -174,3 +175,4 @@ let package = Package(
         )
     ]
 )
+
