@@ -16,4 +16,21 @@ public enum JarvisResourcesBundle {
         #endif
     }
 }
+
+public enum JarvisInternalConfig {
+    public static let shared: (posthogKey: String, posthogHost: String, sentryDSN: String) = {
+        guard let url = Bundle.module.url(forResource: "JarvisInternalConfig", withExtension: "plist"),
+              let data = try? Data(contentsOf: url),
+              let dict = try? PropertyListSerialization.propertyList(from: data, format: nil) as? [String: Any]
+        else {
+            return ("", "", "")
+        }
+
+        let posthogKey = dict["PostHogKey"] as? String ?? ""
+        let posthogHost = dict["PostHogHost"] as? String ?? ""
+        let sentryDSN = dict["SentryDSN"] as? String ?? ""
+        return (posthogKey, posthogHost, sentryDSN)
+    }()
+}
+
 private final class _BundleFinder {}

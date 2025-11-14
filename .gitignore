@@ -50,6 +50,9 @@ Package.resolved
 .build/
 *.build/
 
+scripts/distribute_firebase.sh
+scripts/ios_export_options.plist
+
 # CocoaPods
 #
 # We recommend against adding the Pods directory to your .gitignore. However
