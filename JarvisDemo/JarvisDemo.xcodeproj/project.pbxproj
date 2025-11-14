@@ -7,8 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2AC5801E2EC47C6900EB834F /* Jarvis in Frameworks */ = {isa = PBXBuildFile; productRef = 2AC5801D2EC47C6900EB834F /* Jarvis */; };
-		2AC580202EC47C6900EB834F /* JarvisDesignSystem in Frameworks */ = {isa = PBXBuildFile; productRef = 2AC5801F2EC47C6900EB834F /* JarvisDesignSystem */; };
+		2A3B20B42EC64342000BEA17 /* Jarvis in Frameworks */ = {isa = PBXBuildFile; productRef = 2A3B20B32EC64342000BEA17 /* Jarvis */; };
+		2A3B20B62EC64342000BEA17 /* JarvisDesignSystem in Frameworks */ = {isa = PBXBuildFile; productRef = 2A3B20B52EC64342000BEA17 /* JarvisDesignSystem */; };
+		2ADED2CA2EC6335000ECED9D /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 2ADED2C92EC6335000ECED9D /* FirebaseAnalytics */; };
+		2ADED2CC2EC6335000ECED9D /* FirebaseAnalyticsCore in Frameworks */ = {isa = PBXBuildFile; productRef = 2ADED2CB2EC6335000ECED9D /* FirebaseAnalyticsCore */; };
+		2ADED2CE2EC6335000ECED9D /* FirebaseAppDistribution-Beta in Frameworks */ = {isa = PBXBuildFile; productRef = 2ADED2CD2EC6335000ECED9D /* FirebaseAppDistribution-Beta */; };
+		2ADED2D02EC6335000ECED9D /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 2ADED2CF2EC6335000ECED9D /* FirebaseCore */; };
+		2ADED2D22EC6335000ECED9D /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 2ADED2D12EC6335000ECED9D /* FirebaseCrashlytics */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,8 +62,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2AC580202EC47C6900EB834F /* JarvisDesignSystem in Frameworks */,
-				2AC5801E2EC47C6900EB834F /* Jarvis in Frameworks */,
+				2ADED2CA2EC6335000ECED9D /* FirebaseAnalytics in Frameworks */,
+				2ADED2CE2EC6335000ECED9D /* FirebaseAppDistribution-Beta in Frameworks */,
+				2ADED2D22EC6335000ECED9D /* FirebaseCrashlytics in Frameworks */,
+				2ADED2D02EC6335000ECED9D /* FirebaseCore in Frameworks */,
+				2ADED2CC2EC6335000ECED9D /* FirebaseAnalyticsCore in Frameworks */,
+				2A3B20B42EC64342000BEA17 /* Jarvis in Frameworks */,
+				2A3B20B62EC64342000BEA17 /* JarvisDesignSystem in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -119,198 +129,15 @@
 			);
 			name = JarvisDemo;
 			packageProductDependencies = (
-				2A139F312E9F027900C499DA /* Jarvis */,
-				2A139F332E9F027900C499DA /* JarvisInspector */,
-				2A139F352E9F027900C499DA /* JarvisPreferences */,
-				2A13A0062E9F977900C499DA /* Jarvis */,
-				2A13A0082E9F977900C499DA /* JarvisInspector */,
-				2A13A00A2E9F977900C499DA /* JarvisPreferences */,
-				2A13A00D2EA41C1200C499DA /* DesignSystem */,
-				2A13A0732EA52F3F00C499DA /* DesignSystem */,
-				2A13A0782EA5722400C499DA /* DesignSystem */,
-				2A6523072EAD6CFF0080EB38 /* DesignSystem */,
-				2A6523DE2EAD9F5B0080EB38 /* Jarvis */,
-				2A6523E02EAD9F5B0080EB38 /* JarvisInspector */,
-				2A6523E22EAD9F5B0080EB38 /* JarvisPreferences */,
-				2A6523E52EAE57850080EB38 /* Jarvis */,
-				2A6523E72EAE57850080EB38 /* JarvisInspector */,
-				2A6523E92EAE57850080EB38 /* JarvisPreferences */,
-				2A6524562EAEAA7C0080EB38 /* Jarvis */,
-				2A6524582EAEAA7C0080EB38 /* JarvisInspector */,
-				2A65245A2EAEAA7C0080EB38 /* JarvisPreferences */,
-				2A65245D2EAEBAD50080EB38 /* Jarvis */,
-				2A65245F2EAEBAD50080EB38 /* JarvisInspector */,
-				2A6524612EAEBAD50080EB38 /* JarvisPreferences */,
-				2A6524642EAFFD320080EB38 /* Jarvis */,
-				2A6524662EAFFD320080EB38 /* JarvisInspector */,
-				2A6524682EAFFD320080EB38 /* JarvisPreferences */,
-				2AD613E42EB66B5700C697C4 /* Jarvis */,
-				2AD613E62EB66B5700C697C4 /* JarvisInspector */,
-				2AD613E82EB66B5700C697C4 /* JarvisPreferences */,
-				2AD613EB2EB6B29400C697C4 /* Jarvis */,
-				2AD613ED2EB6B29400C697C4 /* JarvisInspector */,
-				2AD613EF2EB6B29400C697C4 /* JarvisPreferences */,
-				2AD613F22EB6B4A200C697C4 /* Jarvis */,
-				2AD613F42EB6B4A200C697C4 /* JarvisInspector */,
-				2AD613F62EB6B4A200C697C4 /* JarvisPreferences */,
-				2AD613F92EB6B53200C697C4 /* Jarvis */,
-				2AD613FB2EB6B53200C697C4 /* JarvisInspector */,
-				2AD613FD2EB6B53200C697C4 /* JarvisPreferences */,
-				2AD614002EB6B8A300C697C4 /* Jarvis */,
-				2AD614022EB6B8A300C697C4 /* JarvisInspector */,
-				2AD614042EB6B8A300C697C4 /* JarvisPreferences */,
-				2AD614072EB6C7B300C697C4 /* Jarvis */,
-				2AD614092EB6C7B300C697C4 /* JarvisInspector */,
-				2AD6140B2EB6C7B300C697C4 /* JarvisPreferences */,
-				2AD6140E2EB7789300C697C4 /* Jarvis */,
-				2AD614102EB7789300C697C4 /* JarvisInspector */,
-				2AD614122EB7789300C697C4 /* JarvisPreferences */,
-				2AD614152EB7ED9400C697C4 /* Jarvis */,
-				2AD614172EB7ED9400C697C4 /* JarvisInspector */,
-				2AD614192EB7ED9400C697C4 /* JarvisPreferences */,
-				2AD6141C2EB7F08D00C697C4 /* Jarvis */,
-				2AD6141E2EB7F08D00C697C4 /* JarvisInspector */,
-				2AD614202EB7F08D00C697C4 /* JarvisPreferences */,
-				2AD614232EB7F1D600C697C4 /* Jarvis */,
-				2AD614252EB7F1D600C697C4 /* JarvisInspector */,
-				2AD614272EB7F1D600C697C4 /* JarvisPreferences */,
-				2AD6142A2EB8006700C697C4 /* Jarvis */,
-				2AD6142C2EB8006700C697C4 /* JarvisInspector */,
-				2AD6142E2EB8006700C697C4 /* JarvisPreferences */,
-				2AD614312EB8056300C697C4 /* Jarvis */,
-				2AD614332EB8056300C697C4 /* JarvisInspector */,
-				2AD614352EB8056300C697C4 /* JarvisPreferences */,
-				2AD614382EB8BA4000C697C4 /* Jarvis */,
-				2AD6143A2EB8BA4000C697C4 /* JarvisInspector */,
-				2AD6143C2EB8BA4000C697C4 /* JarvisPreferences */,
-				2AD6143F2EB8C18800C697C4 /* DesignSystem */,
-				2AD614422EB8C19400C697C4 /* Jarvis */,
-				2AD614442EB8C19400C697C4 /* JarvisInspector */,
-				2AD614462EB8C19400C697C4 /* JarvisPreferences */,
-				2AD614492EB8E32900C697C4 /* DesignSystem */,
-				2AD6144C2EB96BB500C697C4 /* Jarvis */,
-				2AD6144E2EB96BB500C697C4 /* JarvisInspector */,
-				2AD614502EB96BB500C697C4 /* JarvisPreferences */,
-				2AD614532EBA262900C697C4 /* Jarvis */,
-				2AD614552EBA262900C697C4 /* JarvisInspector */,
-				2AD614572EBA262900C697C4 /* JarvisPreferences */,
-				2AD6145A2EBA57A300C697C4 /* Jarvis */,
-				2AD6145C2EBA57A300C697C4 /* JarvisInspector */,
-				2AD6145E2EBA57A300C697C4 /* JarvisPreferences */,
-				2AD614612EBA69D500C697C4 /* Jarvis */,
-				2AD614632EBA69D500C697C4 /* JarvisInspector */,
-				2AD614652EBA69D500C697C4 /* JarvisPreferences */,
-				2AD614682EBA6A7800C697C4 /* Jarvis */,
-				2AD6146A2EBA6A7800C697C4 /* JarvisInspector */,
-				2AD6146C2EBA6A7800C697C4 /* JarvisPreferences */,
-				2AD6146F2EBAA77200C697C4 /* Jarvis */,
-				2AD614712EBAA77200C697C4 /* JarvisInspector */,
-				2AD614732EBAA77200C697C4 /* JarvisPreferences */,
-				2AD614762EBAAC8300C697C4 /* Jarvis */,
-				2AD614782EBAAC8300C697C4 /* JarvisInspector */,
-				2AD6147A2EBAAC8300C697C4 /* JarvisPreferences */,
-				2AD6147D2EBAC50300C697C4 /* Jarvis */,
-				2AD6147F2EBAC50300C697C4 /* JarvisInspector */,
-				2AD614812EBAC50300C697C4 /* JarvisPreferences */,
-				2AD614862EBB5FBB00C697C4 /* Jarvis */,
-				2AD614882EBB5FBB00C697C4 /* JarvisInspector */,
-				2AD6148A2EBB5FBB00C697C4 /* JarvisPreferences */,
-				2AD6148D2EBB610400C697C4 /* Jarvis */,
-				2AD6148F2EBB610400C697C4 /* JarvisInspector */,
-				2AD614912EBB610400C697C4 /* JarvisPreferences */,
-				2AD614962EBBB89100C697C4 /* Jarvis */,
-				2AD614982EBBB89100C697C4 /* JarvisInspector */,
-				2AD6149A2EBBB89100C697C4 /* JarvisPreferences */,
-				2AD6149D2EBC10F700C697C4 /* Jarvis */,
-				2AD6149F2EBC10F700C697C4 /* JarvisInspector */,
-				2AD614A12EBC10F700C697C4 /* JarvisPreferences */,
-				2AD614A42EBC20B000C697C4 /* Jarvis */,
-				2AD614A62EBC20B000C697C4 /* JarvisInspector */,
-				2AD614A82EBC20B000C697C4 /* JarvisPreferences */,
-				2AD6157F2EBD28DC00C697C4 /* Jarvis */,
-				2AD615812EBD28DC00C697C4 /* JarvisInspector */,
-				2AD615832EBD28DC00C697C4 /* JarvisPreferences */,
-				2AD615862EBD29A600C697C4 /* Jarvis */,
-				2AD615882EBD29A600C697C4 /* JarvisInspector */,
-				2AD6158A2EBD29A600C697C4 /* JarvisPreferences */,
-				2AD6158D2EBD371700C697C4 /* Jarvis */,
-				2AD6158F2EBD371700C697C4 /* JarvisInspector */,
-				2AD615912EBD371700C697C4 /* JarvisPreferences */,
-				2AD615942EBDF10700C697C4 /* Jarvis */,
-				2AD615962EBDF10700C697C4 /* JarvisInspector */,
-				2AD615982EBDF10700C697C4 /* JarvisPreferences */,
-				2AD6159B2EBE161100C697C4 /* Jarvis */,
-				2AD6159D2EBE161100C697C4 /* JarvisInspector */,
-				2AD6159F2EBE161100C697C4 /* JarvisPreferences */,
-				2AD615A22EBE2D5000C697C4 /* Jarvis */,
-				2AD615A42EBE2D5000C697C4 /* JarvisInspector */,
-				2AD615A62EBE2D5000C697C4 /* JarvisPreferences */,
-				2AD615A92EBE33D400C697C4 /* Jarvis */,
-				2AD615AB2EBE33D400C697C4 /* JarvisInspector */,
-				2AD615AD2EBE33D400C697C4 /* JarvisPreferences */,
-				2AD615B02EBE909000C697C4 /* Jarvis */,
-				2AD615B22EBE909000C697C4 /* JarvisInspector */,
-				2AD615B42EBE909000C697C4 /* JarvisPreferences */,
-				2AD615B72EBE960700C697C4 /* Jarvis */,
-				2AD615B92EBE960700C697C4 /* JarvisInspector */,
-				2AD615BB2EBE960700C697C4 /* JarvisPreferences */,
-				2AD616282EC0ACF300C697C4 /* Jarvis */,
-				2AD6162A2EC0ACF300C697C4 /* JarvisInspector */,
-				2AD6162C2EC0ACF300C697C4 /* JarvisPreferences */,
-				2AD6162F2EC0B1C200C697C4 /* Jarvis */,
-				2AD616312EC0B1C200C697C4 /* JarvisInspector */,
-				2AD616332EC0B1C200C697C4 /* JarvisPreferences */,
-				2AD616362EC0F8AC00C697C4 /* Jarvis */,
-				2AD616382EC0F8AC00C697C4 /* JarvisInspector */,
-				2AD6163A2EC0F8AC00C697C4 /* JarvisPreferences */,
-				2AD6163D2EC202C500C697C4 /* Jarvis */,
-				2AD6163F2EC202C500C697C4 /* JarvisInspector */,
-				2AD616412EC202C500C697C4 /* JarvisPreferences */,
-				2AC7626E2EC29EB80007AC9A /* DesignSystem */,
-				2AC762712EC29ECA0007AC9A /* Jarvis */,
-				2AC762732EC29ECA0007AC9A /* JarvisInspector */,
-				2AC762752EC29ECA0007AC9A /* JarvisPreferences */,
-				2A3AF7632EC33CD00019CF55 /* DesignSystem */,
-				2A3AF7662EC33CE80019CF55 /* Jarvis */,
-				2A3AF7682EC33CE80019CF55 /* JarvisInspector */,
-				2A3AF76A2EC33CE80019CF55 /* JarvisPreferences */,
-				2A3AF84C2EC3771E0019CF55 /* DesignSystem */,
-				2A3AF84E2EC3771E0019CF55 /* Jarvis */,
-				2A3AF8502EC3771E0019CF55 /* JarvisInspector */,
-				2A3AF8522EC3771E0019CF55 /* JarvisPreferences */,
-				2A457AF12EC39BEF0016233A /* Jarvis */,
-				2A457AF32EC39BEF0016233A /* JarvisDesignSystem */,
-				2A457AF52EC39BEF0016233A /* JarvisInspector */,
-				2A457AF72EC39BEF0016233A /* JarvisPreferences */,
-				2A457AFA2EC39C550016233A /* Jarvis */,
-				2A457AFC2EC39C550016233A /* JarvisDesignSystem */,
-				2A457AFE2EC39C550016233A /* JarvisInspector */,
-				2A457B002EC39C550016233A /* JarvisPreferences */,
-				2AEA9A602EC39E06000E9F3D /* Jarvis */,
-				2AEA9A622EC39E06000E9F3D /* JarvisDesignSystem */,
-				2AEA9A642EC39E06000E9F3D /* JarvisInspector */,
-				2AEA9A662EC39E06000E9F3D /* JarvisPreferences */,
-				2AEA9AD32EC39F11000E9F3D /* Jarvis */,
-				2AEA9AD52EC39F11000E9F3D /* JarvisDesignSystem */,
-				2AEA9AD72EC39F11000E9F3D /* JarvisInspector */,
-				2AEA9AD92EC39F11000E9F3D /* JarvisPreferences */,
-				2A07C23E2EC4781E00D3D633 /* Jarvis */,
-				2A07C2402EC4781E00D3D633 /* JarvisDesignSystem */,
-				2A07C2422EC4781E00D3D633 /* JarvisInspector */,
-				2A07C2442EC4781E00D3D633 /* JarvisPreferences */,
-				2A07C2472EC4786400D3D633 /* Jarvis */,
-				2A07C24A2EC478B500D3D633 /* Jarvis */,
-				2A07C24C2EC478B500D3D633 /* JarvisDesignSystem */,
-				2A07C2B92EC478EF00D3D633 /* Jarvis */,
-				2A07C2BB2EC478EF00D3D633 /* JarvisDesignSystem */,
-				2A07C3282EC4798500D3D633 /* Jarvis */,
-				2A07C32A2EC4798500D3D633 /* JarvisDesignSystem */,
-				2A07C32C2EC4798500D3D633 /* JarvisInspector */,
-				2A07C32E2EC4798500D3D633 /* JarvisPreferences */,
-				2AC57FA92EC479E000EB834F /* Jarvis */,
-				2AC57FAB2EC479E000EB834F /* JarvisDesignSystem */,
 				2AC5801D2EC47C6900EB834F /* Jarvis */,
 				2AC5801F2EC47C6900EB834F /* JarvisDesignSystem */,
+				2ADED2C92EC6335000ECED9D /* FirebaseAnalytics */,
+				2ADED2CB2EC6335000ECED9D /* FirebaseAnalyticsCore */,
+				2ADED2CD2EC6335000ECED9D /* FirebaseAppDistribution-Beta */,
+				2ADED2CF2EC6335000ECED9D /* FirebaseCore */,
+				2ADED2D12EC6335000ECED9D /* FirebaseCrashlytics */,
+				2A3B20B32EC64342000BEA17 /* Jarvis */,
+				2A3B20B52EC64342000BEA17 /* JarvisDesignSystem */,
 			);
 			productName = JarvisDemo;
 			productReference = 2A82D16D2E25CDFC00C65589 /* JarvisDemo.app */;
@@ -395,7 +222,8 @@
 			mainGroup = 2A82D1642E25CDFC00C65589;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				2AC5801C2EC47C6900EB834F /* XCLocalSwiftPackageReference "../../mobile-jarvis-ios-sdk" */,
+				2ADED2C82EC6335000ECED9D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				2A3B20B22EC64342000BEA17 /* XCLocalSwiftPackageReference "../../mobile-jarvis-ios-sdk" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 2A82D16E2E25CDFC00C65589 /* Products */;
@@ -768,234 +596,29 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		2AC5801C2EC47C6900EB834F /* XCLocalSwiftPackageReference "../../mobile-jarvis-ios-sdk" */ = {
+		2A3B20B22EC64342000BEA17 /* XCLocalSwiftPackageReference "../../mobile-jarvis-ios-sdk" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = "../../mobile-jarvis-ios-sdk";
 		};
 /* End XCLocalSwiftPackageReference section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		2ADED2C82EC6335000ECED9D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.5.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
-		2A07C23E2EC4781E00D3D633 /* Jarvis */ = {
+		2A3B20B32EC64342000BEA17 /* Jarvis */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Jarvis;
 		};
-		2A07C2402EC4781E00D3D633 /* JarvisDesignSystem */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisDesignSystem;
-		};
-		2A07C2422EC4781E00D3D633 /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2A07C2442EC4781E00D3D633 /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2A07C2472EC4786400D3D633 /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2A07C24A2EC478B500D3D633 /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2A07C24C2EC478B500D3D633 /* JarvisDesignSystem */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisDesignSystem;
-		};
-		2A07C2B92EC478EF00D3D633 /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2A07C2BB2EC478EF00D3D633 /* JarvisDesignSystem */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisDesignSystem;
-		};
-		2A07C3282EC4798500D3D633 /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2A07C32A2EC4798500D3D633 /* JarvisDesignSystem */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisDesignSystem;
-		};
-		2A07C32C2EC4798500D3D633 /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2A07C32E2EC4798500D3D633 /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2A139F312E9F027900C499DA /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2A139F332E9F027900C499DA /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2A139F352E9F027900C499DA /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2A13A0062E9F977900C499DA /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2A13A0082E9F977900C499DA /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2A13A00A2E9F977900C499DA /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2A13A00D2EA41C1200C499DA /* DesignSystem */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = DesignSystem;
-		};
-		2A13A0732EA52F3F00C499DA /* DesignSystem */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = DesignSystem;
-		};
-		2A13A0782EA5722400C499DA /* DesignSystem */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = DesignSystem;
-		};
-		2A3AF7632EC33CD00019CF55 /* DesignSystem */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = DesignSystem;
-		};
-		2A3AF7662EC33CE80019CF55 /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2A3AF7682EC33CE80019CF55 /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2A3AF76A2EC33CE80019CF55 /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2A3AF84C2EC3771E0019CF55 /* DesignSystem */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = DesignSystem;
-		};
-		2A3AF84E2EC3771E0019CF55 /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2A3AF8502EC3771E0019CF55 /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2A3AF8522EC3771E0019CF55 /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2A457AF12EC39BEF0016233A /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2A457AF32EC39BEF0016233A /* JarvisDesignSystem */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisDesignSystem;
-		};
-		2A457AF52EC39BEF0016233A /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2A457AF72EC39BEF0016233A /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2A457AFA2EC39C550016233A /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2A457AFC2EC39C550016233A /* JarvisDesignSystem */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisDesignSystem;
-		};
-		2A457AFE2EC39C550016233A /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2A457B002EC39C550016233A /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2A6523072EAD6CFF0080EB38 /* DesignSystem */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = DesignSystem;
-		};
-		2A6523DE2EAD9F5B0080EB38 /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2A6523E02EAD9F5B0080EB38 /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2A6523E22EAD9F5B0080EB38 /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2A6523E52EAE57850080EB38 /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2A6523E72EAE57850080EB38 /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2A6523E92EAE57850080EB38 /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2A6524562EAEAA7C0080EB38 /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2A6524582EAEAA7C0080EB38 /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2A65245A2EAEAA7C0080EB38 /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2A65245D2EAEBAD50080EB38 /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2A65245F2EAEBAD50080EB38 /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2A6524612EAEBAD50080EB38 /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2A6524642EAFFD320080EB38 /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2A6524662EAFFD320080EB38 /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2A6524682EAFFD320080EB38 /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2AC57FA92EC479E000EB834F /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2AC57FAB2EC479E000EB834F /* JarvisDesignSystem */ = {
+		2A3B20B52EC64342000BEA17 /* JarvisDesignSystem */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = JarvisDesignSystem;
 		};
@@ -1007,541 +630,30 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = JarvisDesignSystem;
 		};
-		2AC7626E2EC29EB80007AC9A /* DesignSystem */ = {
+		2ADED2C92EC6335000ECED9D /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = DesignSystem;
+			package = 2ADED2C82EC6335000ECED9D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
 		};
-		2AC762712EC29ECA0007AC9A /* Jarvis */ = {
+		2ADED2CB2EC6335000ECED9D /* FirebaseAnalyticsCore */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
+			package = 2ADED2C82EC6335000ECED9D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsCore;
 		};
-		2AC762732EC29ECA0007AC9A /* JarvisInspector */ = {
+		2ADED2CD2EC6335000ECED9D /* FirebaseAppDistribution-Beta */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
+			package = 2ADED2C82EC6335000ECED9D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = "FirebaseAppDistribution-Beta";
 		};
-		2AC762752EC29ECA0007AC9A /* JarvisPreferences */ = {
+		2ADED2CF2EC6335000ECED9D /* FirebaseCore */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
+			package = 2ADED2C82EC6335000ECED9D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCore;
 		};
-		2AD613E42EB66B5700C697C4 /* Jarvis */ = {
+		2ADED2D12EC6335000ECED9D /* FirebaseCrashlytics */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2AD613E62EB66B5700C697C4 /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2AD613E82EB66B5700C697C4 /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2AD613EB2EB6B29400C697C4 /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2AD613ED2EB6B29400C697C4 /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2AD613EF2EB6B29400C697C4 /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2AD613F22EB6B4A200C697C4 /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2AD613F42EB6B4A200C697C4 /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2AD613F62EB6B4A200C697C4 /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2AD613F92EB6B53200C697C4 /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2AD613FB2EB6B53200C697C4 /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2AD613FD2EB6B53200C697C4 /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2AD614002EB6B8A300C697C4 /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2AD614022EB6B8A300C697C4 /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2AD614042EB6B8A300C697C4 /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2AD614072EB6C7B300C697C4 /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2AD614092EB6C7B300C697C4 /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2AD6140B2EB6C7B300C697C4 /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2AD6140E2EB7789300C697C4 /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2AD614102EB7789300C697C4 /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2AD614122EB7789300C697C4 /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2AD614152EB7ED9400C697C4 /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2AD614172EB7ED9400C697C4 /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2AD614192EB7ED9400C697C4 /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2AD6141C2EB7F08D00C697C4 /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2AD6141E2EB7F08D00C697C4 /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2AD614202EB7F08D00C697C4 /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2AD614232EB7F1D600C697C4 /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2AD614252EB7F1D600C697C4 /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2AD614272EB7F1D600C697C4 /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2AD6142A2EB8006700C697C4 /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2AD6142C2EB8006700C697C4 /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2AD6142E2EB8006700C697C4 /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2AD614312EB8056300C697C4 /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2AD614332EB8056300C697C4 /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2AD614352EB8056300C697C4 /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2AD614382EB8BA4000C697C4 /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2AD6143A2EB8BA4000C697C4 /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2AD6143C2EB8BA4000C697C4 /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2AD6143F2EB8C18800C697C4 /* DesignSystem */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = DesignSystem;
-		};
-		2AD614422EB8C19400C697C4 /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2AD614442EB8C19400C697C4 /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2AD614462EB8C19400C697C4 /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2AD614492EB8E32900C697C4 /* DesignSystem */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = DesignSystem;
-		};
-		2AD6144C2EB96BB500C697C4 /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2AD6144E2EB96BB500C697C4 /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2AD614502EB96BB500C697C4 /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2AD614532EBA262900C697C4 /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2AD614552EBA262900C697C4 /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2AD614572EBA262900C697C4 /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2AD6145A2EBA57A300C697C4 /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2AD6145C2EBA57A300C697C4 /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2AD6145E2EBA57A300C697C4 /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2AD614612EBA69D500C697C4 /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2AD614632EBA69D500C697C4 /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2AD614652EBA69D500C697C4 /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2AD614682EBA6A7800C697C4 /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2AD6146A2EBA6A7800C697C4 /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2AD6146C2EBA6A7800C697C4 /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2AD6146F2EBAA77200C697C4 /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2AD614712EBAA77200C697C4 /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2AD614732EBAA77200C697C4 /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2AD614762EBAAC8300C697C4 /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2AD614782EBAAC8300C697C4 /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2AD6147A2EBAAC8300C697C4 /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2AD6147D2EBAC50300C697C4 /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2AD6147F2EBAC50300C697C4 /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2AD614812EBAC50300C697C4 /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2AD614862EBB5FBB00C697C4 /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2AD614882EBB5FBB00C697C4 /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2AD6148A2EBB5FBB00C697C4 /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2AD6148D2EBB610400C697C4 /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2AD6148F2EBB610400C697C4 /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2AD614912EBB610400C697C4 /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2AD614962EBBB89100C697C4 /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2AD614982EBBB89100C697C4 /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2AD6149A2EBBB89100C697C4 /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2AD6149D2EBC10F700C697C4 /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2AD6149F2EBC10F700C697C4 /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2AD614A12EBC10F700C697C4 /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2AD614A42EBC20B000C697C4 /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2AD614A62EBC20B000C697C4 /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2AD614A82EBC20B000C697C4 /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2AD6157F2EBD28DC00C697C4 /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2AD615812EBD28DC00C697C4 /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2AD615832EBD28DC00C697C4 /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2AD615862EBD29A600C697C4 /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2AD615882EBD29A600C697C4 /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2AD6158A2EBD29A600C697C4 /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2AD6158D2EBD371700C697C4 /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2AD6158F2EBD371700C697C4 /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2AD615912EBD371700C697C4 /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2AD615942EBDF10700C697C4 /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2AD615962EBDF10700C697C4 /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2AD615982EBDF10700C697C4 /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2AD6159B2EBE161100C697C4 /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2AD6159D2EBE161100C697C4 /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2AD6159F2EBE161100C697C4 /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2AD615A22EBE2D5000C697C4 /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2AD615A42EBE2D5000C697C4 /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2AD615A62EBE2D5000C697C4 /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2AD615A92EBE33D400C697C4 /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2AD615AB2EBE33D400C697C4 /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2AD615AD2EBE33D400C697C4 /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2AD615B02EBE909000C697C4 /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2AD615B22EBE909000C697C4 /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2AD615B42EBE909000C697C4 /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2AD615B72EBE960700C697C4 /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2AD615B92EBE960700C697C4 /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2AD615BB2EBE960700C697C4 /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2AD616282EC0ACF300C697C4 /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2AD6162A2EC0ACF300C697C4 /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2AD6162C2EC0ACF300C697C4 /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2AD6162F2EC0B1C200C697C4 /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2AD616312EC0B1C200C697C4 /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2AD616332EC0B1C200C697C4 /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2AD616362EC0F8AC00C697C4 /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2AD616382EC0F8AC00C697C4 /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2AD6163A2EC0F8AC00C697C4 /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2AD6163D2EC202C500C697C4 /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2AD6163F2EC202C500C697C4 /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2AD616412EC202C500C697C4 /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2AEA9A602EC39E06000E9F3D /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2AEA9A622EC39E06000E9F3D /* JarvisDesignSystem */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisDesignSystem;
-		};
-		2AEA9A642EC39E06000E9F3D /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2AEA9A662EC39E06000E9F3D /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
-		};
-		2AEA9AD32EC39F11000E9F3D /* Jarvis */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Jarvis;
-		};
-		2AEA9AD52EC39F11000E9F3D /* JarvisDesignSystem */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisDesignSystem;
-		};
-		2AEA9AD72EC39F11000E9F3D /* JarvisInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisInspector;
-		};
-		2AEA9AD92EC39F11000E9F3D /* JarvisPreferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JarvisPreferences;
+			package = 2ADED2C82EC6335000ECED9D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

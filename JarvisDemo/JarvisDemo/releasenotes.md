@@ -1,0 +1,45 @@
+## Release notes
+
+- [fix] update the readme
+- [feat] made last changes
+- [feat] remove export the inspector and the preferences on the jarvis sdk spm package
+- [feat] moving the packages
+- [feat] update readme
+- [feat] update
+- [fix] fixing some imports and add licence
+- Release version 1.2.0
+- [ci] updates
+- [ci] update publish scripts
+- Release version 1.2.0
+- Release version 1.2.0
+- [ci] testing
+- [ci] testing
+- [ci] fixing and working on the pr-check.yml
+- [ci] remove setup xcode step
+- [ci] adding tests and fix jarvis sdk package.swift
+- [ci] fixing xcode version for the github action
+- [ci] add new tests
+- [ci] fox xcode version github action
+- feat: add home analytics module and CI
+- feat: integrate home module and presentation components
+- feat: introduce reusable presentation layer components
+- feat: enhance inspector networking experience
+- feat: implement coordinator architecture and complete rating functionality
+- Add public initializer to JarvisTopBarLogo
+- Fix FAB visibility when closing JarvisSDKApplication
+- Implement Jarvis SDK scaffold application structure
+- Revise README for clarity and visual appeal
+- [feat] add the readme
+- Add comprehensive iOS SDK documentation
+- Add FAB animations, shake detection, truncation support, and iOS-style preference details
+- Migrate to unified Firebase-style Swift Package structure
+- Fix iOS demo app compilation errors and build configuration
+- Add iOS clean architecture configuration guide
+- Add comprehensive .gitignore for iOS project
+- Add Swift Package Manager configuration and test structure
+- Fix Xcode project configuration and update module imports
+- Refactor iOS demo app to follow clean architecture pattern
+- Refactor iOS demo app to follow clean architecture pattern
+- [feat] add swiftlint, swiftformat and periphery configurations
+- [feat] create the sdk and demo app project
+- Initial commit

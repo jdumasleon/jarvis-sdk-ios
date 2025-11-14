@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>PostHogKey</key>
+	<string>phc_mC9xTMHwKBfDuPbaIOn8DqVvzaeRspfjdrNwE8rIaMV</string>
+	<key>PostHogHost</key>
+	<string>https://eu.i.posthog.com</string>
+	<key>SentryDSN</key>
+	<string>https://333911c5af17005a8876dca4224ad3cc@o4509924208476160.ingest.de.sentry.io/4510360312479824</string>
+</dict>
+</plist>

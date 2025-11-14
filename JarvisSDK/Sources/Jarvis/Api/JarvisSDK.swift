@@ -6,7 +6,9 @@ import Domain
 import JarvisInspectorDomain
 import JarvisInspectorData
 import Common
+import JarvisResources
 import JarvisDesignSystem
+import Data
 
 /// Main entry point for the Jarvis SDK
 @MainActor
@@ -28,6 +30,12 @@ public final class JarvisSDK: ObservableObject {
 
     // Performance monitoring
     internal let performanceMonitor = PerformanceMonitorManager()
+
+    // Platform services (analytics, crash reporting)
+    private var platform: JarvisPlatform?
+
+    // Network cleanup scheduler
+    private var cleanupScheduler: NetworkCleanupScheduler?
 
     // MARK: - Internal State
     private var previousActiveState = false
@@ -300,8 +308,54 @@ public final class JarvisSDK: ObservableObject {
     }
 
     private func initializeCore() async {
-        // TODO: Initialize core platform services
+        // Initialize platform services (analytics, crash reporting)
+        await initializePlatform()
+
+        // Initialize network cleanup scheduler
+        initializeNetworkCleanup()
+
         JarvisLogger.shared.debug("Core systems initialized")
+    }
+
+    private func initializePlatform() async {
+        // Initialize platform services with internal configuration
+        // Use no-op implementations if keys are empty
+        let config = JarvisInternalConfig.shared
+        
+        // Create analytics instance (use no-op if key is empty)
+        let analytics: Analytics = !config.posthogKey.isEmpty
+                ? PostHogAnalytics(apiKey: config.posthogKey, host: config.posthogHost)
+                : NoOpAnalytics()
+
+        // Create crash reporter instance (use no-op if DSN is empty)
+        let crashReporter: CrashReporter = !config.sentryDSN.isEmpty
+                ? SentryCrashReporter(dsn: config.sentryDSN)
+                : NoOpCrashReporter()
+
+        // Create platform coordinator
+        platform = JarvisPlatform(analytics: analytics, crashReporter: crashReporter)
+        await platform?.initialize()
+
+        if !config.posthogKey.isEmpty || !config.sentryDSN.isEmpty {
+            JarvisLogger.shared.info("Platform services initialized")
+        } else {
+            JarvisLogger.shared.debug("Platform services initialized with no-op implementations (no keys configured)")
+        }
+    }
+
+    private func initializeNetworkCleanup() {
+        // Initialize network cleanup scheduler
+        cleanupScheduler = NetworkCleanupScheduler()
+
+        // Run cleanup once immediately
+        Task {
+            do {
+                try await cleanupScheduler?.performCleanup()
+                JarvisLogger.shared.info("Network cleanup completed successfully")
+            } catch {
+                JarvisLogger.shared.warning("Network cleanup failed: \(error.localizedDescription)")
+            }
+        }
     }
 
     private func initializeNetworkInspection() async {

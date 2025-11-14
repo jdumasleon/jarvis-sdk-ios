@@ -120,6 +120,19 @@ public class NetworkTransactionStorage {
         try coreDataStack.save()
     }
 
+    public func deleteOldTransactions(beforeTimestamp: TimeInterval) throws {
+        let context = coreDataStack.context
+        let cutoffDate = Date(timeIntervalSince1970: beforeTimestamp)
+
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "NetworkTransactionEntity")
+        fetchRequest.predicate = NSPredicate(format: "startTime < %@", cutoffDate as NSDate)
+
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+
+        try context.execute(deleteRequest)
+        try coreDataStack.save()
+    }
+
     // MARK: - Conversion
 
     private func convertToEntity(_ managedObject: NetworkTransactionManagedObject) -> NetworkTransactionEntity {

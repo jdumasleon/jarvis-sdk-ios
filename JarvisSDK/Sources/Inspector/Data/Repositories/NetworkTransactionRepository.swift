@@ -122,6 +122,12 @@ public class NetworkTransactionRepository: NetworkTransactionRepositoryProtocol 
         }
     }
 
+    public func deleteOldTransactions(beforeTimestamp: TimeInterval) async throws {
+        try await MainActor.run {
+            try NetworkTransactionStorage.shared.deleteOldTransactions(beforeTimestamp: beforeTimestamp)
+        }
+    }
+
     // MARK: - Conversion Helpers
 
     private func convertEntityToTransaction(_ entity: NetworkTransactionEntity) -> NetworkTransaction? {

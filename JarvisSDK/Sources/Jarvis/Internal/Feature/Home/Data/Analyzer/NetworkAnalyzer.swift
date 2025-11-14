@@ -122,17 +122,28 @@ public final class NetworkAnalyzer {
     private func downsampleDataPoints(_ points: [TimeSeriesDataPoint], targetCount: Int) -> [TimeSeriesDataPoint] {
         guard points.count > targetCount else { return points }
 
-        let step = Double(points.count) / Double(targetCount)
-        var result: [TimeSeriesDataPoint] = []
+        let bucketSize = Int(ceil(Double(points.count) / Double(targetCount)))
+        var aggregated: [TimeSeriesDataPoint] = []
+        var index = 0
 
-        for i in 0..<targetCount {
-            let index = Int(Double(i) * step)
-            if index < points.count {
-                result.append(points[index])
-            }
+        while index < points.count {
+            let end = min(index + bucketSize, points.count)
+            let slice = points[index..<end]
+            let totalValue = slice.reduce(Float(0)) { $0 + $1.value }
+            guard let firstPoint = slice.first else { break }
+
+            aggregated.append(
+                TimeSeriesDataPoint(
+                    timestamp: firstPoint.timestamp,
+                    value: totalValue,
+                    label: firstPoint.label
+                )
+            )
+
+            index += bucketSize
         }
 
-        return result
+        return aggregated
     }
 
     // MARK: - HTTP Method Analysis

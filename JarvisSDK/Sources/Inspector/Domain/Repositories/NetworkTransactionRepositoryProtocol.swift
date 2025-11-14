@@ -13,4 +13,5 @@ public protocol NetworkTransactionRepositoryProtocol {
     func fetchByMethod(_ method: String) async throws -> [NetworkTransaction]
     func fetchByStatusCode(_ statusCode: Int) async throws -> [NetworkTransaction]
     func fetchFiltered(by filter: TransactionFilter) async throws -> [NetworkTransaction]
+    func deleteOldTransactions(beforeTimestamp: TimeInterval) async throws
 }

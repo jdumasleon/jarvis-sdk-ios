@@ -17,7 +17,10 @@ let package = Package(
             targets: ["JarvisDesignSystem"]
         )
     ],
-    dependencies: [],
+    dependencies: [
+        .package(url: "https://github.com/PostHog/posthog-ios.git", from: "3.0.0"),
+        .package(url: "https://github.com/getsentry/sentry-cocoa.git", from: "8.0.0")
+    ],
     targets: [
         // MARK: - Main SDK Target
         .target(
@@ -31,6 +34,7 @@ let package = Package(
                 "Platform",
                 "Presentation",
                 "JarvisResources",
+                "JarvisInspectorDomain",
                 "JarvisInspectorPresentation",
                 "JarvisPreferencesPresentation"
             ],
@@ -61,7 +65,9 @@ let package = Package(
             name: "Platform",
             dependencies: [
                 "Common",
-                "Domain"
+                "Domain",
+                .product(name: "PostHog", package: "posthog-ios"),
+                .product(name: "Sentry", package: "sentry-cocoa")
             ],
             path: "JarvisSDK/Sources/Core/Platform"
         ),
@@ -152,7 +158,8 @@ let package = Package(
             path: "JarvisSDK/Sources/Resources",
             resources: [
                 .process("Assets.xcassets"),
-                .process("JarvisSDKInfo.plist")
+                .process("JarvisSDKInfo.plist"),
+                .process("JarvisInternalConfig.plist")
             ]
         ),
         .target(
