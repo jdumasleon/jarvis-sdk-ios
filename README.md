@@ -64,7 +64,7 @@ A comprehensive debugging and development toolkit for iOS applications, providin
 **Swift Package Manager (SPM):**
 ```swift
 // In Xcode: File > Add Package Dependencies
-// URL: https://github.com/jdumasleon/mobile-jarvis-ios-sdk
+// URL: https://github.com/jdumasleon/jarvis-ios-sdk
 ```
 
 ### 2. Initialize in App
@@ -204,7 +204,7 @@ The Jarvis iOS SDK is available through multiple distribution channels:
 
 1. Open your project in Xcode
 2. Go to **File > Add Package Dependencies**
-3. Enter the repository URL: `https://github.com/jdumasleon/mobile-jarvis-ios-sdk`
+3. Enter the repository URL: `https://github.com/jdumasleon/jarvis-ios-sdk`
 4. Select version: **1.1.7** or **"Up to Next Major Version"**
 5. Click **Add Package**
 6. Select your target and click **Add Package**
@@ -215,7 +215,7 @@ Add to your `Package.swift` dependencies:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/jdumasleon/mobile-jarvis-ios-sdk", from: "1.0.0")
+    .package(url: "https://github.com/jdumasleon/jarvis-ios-sdk", from: "1.0.0")
 ]
 ```
 
@@ -225,7 +225,7 @@ Then add to your target:
 .target(
     name: "YourTarget",
     dependencies: [
-        .product(name: "Jarvis", package: "mobile-jarvis-ios-sdk")
+        .product(name: "Jarvis", package: "jarvis-ios-sdk")
     ]
 )
 ```
@@ -748,8 +748,8 @@ The SDK includes a comprehensive demo app showcasing all features:
 
 ```bash
 # Clone the repository
-git clone https://github.com/jdumasleon/mobile-jarvis-ios-sdk.git
-cd mobile-jarvis-ios-sdk
+git clone https://github.com/jdumasleon/jarvis-ios-sdk.git
+cd jarvis-ios-sdk
 
 # Open in Xcode
 open JarvisDemo/JarvisDemo.xcodeproj
@@ -979,7 +979,7 @@ Check Xcode console for Jarvis log messages:
 ### Support
 
 For issues and questions:
-- **GitHub Issues**: [Create an issue](https://github.com/jdumasleon/mobile-jarvis-ios-sdk/issues)
+- **GitHub Issues**: [Create an issue](https://github.com/jdumasleon/jarvis-ios-sdk/issues)
 - **Email**: jdumasleon@gmail.com
 - **Documentation**: Check this README and code examples
 - **Demo App**: Review the included demo application
