@@ -13,6 +13,8 @@
 		2A8995532ED6018400DF5AE9 /* JarvisDesignSystem in Frameworks */ = {isa = PBXBuildFile; productRef = 2AC5801F2EC47C6900EB834F /* JarvisDesignSystem */; };
 		2AC31B952EDB93CF003DDE3D /* Jarvis in Frameworks */ = {isa = PBXBuildFile; productRef = 2AC31B942EDB93CF003DDE3D /* Jarvis */; };
 		2AC31B972EDB93CF003DDE3D /* JarvisDesignSystem in Frameworks */ = {isa = PBXBuildFile; productRef = 2AC31B962EDB93CF003DDE3D /* JarvisDesignSystem */; };
+		2AC31C0D2EDBAE19003DDE3D /* Jarvis in Frameworks */ = {isa = PBXBuildFile; productRef = 2AC31C0C2EDBAE19003DDE3D /* Jarvis */; };
+		2AC31C0F2EDBAE19003DDE3D /* JarvisDesignSystem in Frameworks */ = {isa = PBXBuildFile; productRef = 2AC31C0E2EDBAE19003DDE3D /* JarvisDesignSystem */; };
 		2ADED2CA2EC6335000ECED9D /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 2ADED2C92EC6335000ECED9D /* FirebaseAnalytics */; };
 		2ADED2CC2EC6335000ECED9D /* FirebaseAnalyticsCore in Frameworks */ = {isa = PBXBuildFile; productRef = 2ADED2CB2EC6335000ECED9D /* FirebaseAnalyticsCore */; };
 		2ADED2CE2EC6335000ECED9D /* FirebaseAppDistribution-Beta in Frameworks */ = {isa = PBXBuildFile; productRef = 2ADED2CD2EC6335000ECED9D /* FirebaseAppDistribution-Beta */; };
@@ -66,11 +68,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2AC31C0F2EDBAE19003DDE3D /* JarvisDesignSystem in Frameworks */,
 				2A8995532ED6018400DF5AE9 /* JarvisDesignSystem in Frameworks */,
 				2A8995522ED6018400DF5AE9 /* Jarvis in Frameworks */,
 				2ADED2CA2EC6335000ECED9D /* FirebaseAnalytics in Frameworks */,
 				2ADED2CE2EC6335000ECED9D /* FirebaseAppDistribution-Beta in Frameworks */,
 				2ADED2D22EC6335000ECED9D /* FirebaseCrashlytics in Frameworks */,
+				2AC31C0D2EDBAE19003DDE3D /* Jarvis in Frameworks */,
 				2AC31B952EDB93CF003DDE3D /* Jarvis in Frameworks */,
 				2ADED2D02EC6335000ECED9D /* FirebaseCore in Frameworks */,
 				2ADED2CC2EC6335000ECED9D /* FirebaseAnalyticsCore in Frameworks */,
@@ -148,6 +152,8 @@
 				2A3B20B52EC64342000BEA17 /* JarvisDesignSystem */,
 				2AC31B942EDB93CF003DDE3D /* Jarvis */,
 				2AC31B962EDB93CF003DDE3D /* JarvisDesignSystem */,
+				2AC31C0C2EDBAE19003DDE3D /* Jarvis */,
+				2AC31C0E2EDBAE19003DDE3D /* JarvisDesignSystem */,
 			);
 			productName = JarvisDemo;
 			productReference = 2A82D16D2E25CDFC00C65589 /* JarvisDemo.app */;
@@ -233,7 +239,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				2ADED2C82EC6335000ECED9D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
-				2AC31B932EDB93CF003DDE3D /* XCLocalSwiftPackageReference "../../mobile-jarvis-ios-sdk" */,
+				2AC31C0B2EDBAE19003DDE3D /* XCLocalSwiftPackageReference "../../mobile-jarvis-ios-sdk" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 2A82D16E2E25CDFC00C65589 /* Products */;
@@ -606,7 +612,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		2AC31B932EDB93CF003DDE3D /* XCLocalSwiftPackageReference "../../mobile-jarvis-ios-sdk" */ = {
+		2AC31C0B2EDBAE19003DDE3D /* XCLocalSwiftPackageReference "../../mobile-jarvis-ios-sdk" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = "../../mobile-jarvis-ios-sdk";
 		};
@@ -637,6 +643,14 @@
 			productName = Jarvis;
 		};
 		2AC31B962EDB93CF003DDE3D /* JarvisDesignSystem */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JarvisDesignSystem;
+		};
+		2AC31C0C2EDBAE19003DDE3D /* Jarvis */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Jarvis;
+		};
+		2AC31C0E2EDBAE19003DDE3D /* JarvisDesignSystem */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = JarvisDesignSystem;
 		};

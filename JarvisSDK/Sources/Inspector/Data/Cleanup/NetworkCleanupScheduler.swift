@@ -1,6 +1,6 @@
 import Foundation
 import JarvisInspectorDomain
-import Common
+import JarvisCommon
 
 /// Simple network cleanup utility
 /// Deletes network transactions older than 24 hours

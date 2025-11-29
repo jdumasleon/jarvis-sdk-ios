@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Common
+import JarvisCommon
 import JarvisInspectorPresentation
 import JarvisPreferencesPresentation
 

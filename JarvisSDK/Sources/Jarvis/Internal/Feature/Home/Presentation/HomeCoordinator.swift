@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import Common
+import JarvisCommon
 
 /// Home feature coordinator
 /// Manages navigation within the Home tab

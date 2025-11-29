@@ -7,9 +7,9 @@
 
 import SwiftUI
 #if canImport(Presentation)
-import Presentation
+import JarvisPresentation
 #endif
-import Common
+import JarvisCommon
 import JarvisDesignSystem
 
 import JarvisInspectorPresentation

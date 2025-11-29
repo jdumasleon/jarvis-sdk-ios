@@ -7,7 +7,7 @@
 
 import Foundation
 import Combine
-import Common
+import JarvisCommon
 
 /// Home screen view model
 @MainActor

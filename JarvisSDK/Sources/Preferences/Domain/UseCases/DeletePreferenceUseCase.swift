@@ -6,8 +6,8 @@
 //
 
 import Foundation
-import Common
-import Domain
+import JarvisCommon
+import JarvisDomain
 
 /// Delete a host app preference
 public struct DeletePreferenceUseCase: UseCase {

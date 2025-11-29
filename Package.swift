@@ -22,17 +22,17 @@ let package = Package(
         .package(url: "https://github.com/getsentry/sentry-cocoa.git", from: "8.0.0")
     ],
     targets: [
-        // MARK: - Main SDK Target
+        // Main SDK
         .target(
             name: "Jarvis",
             dependencies: [
-                "Common",
-                "Data",
+                "JarvisCommon",
+                "JarvisData",
                 "JarvisDesignSystem",
-                "Domain",
-                "Navigation",
-                "Platform",
-                "Presentation",
+                "JarvisDomain",
+                "JarvisNavigation",
+                "JarvisPlatform",
+                "JarvisPresentation",
                 "JarvisResources",
                 "JarvisInspectorDomain",
                 "JarvisInspectorPresentation",
@@ -41,59 +41,58 @@ let package = Package(
             path: "JarvisSDK/Sources/Jarvis"
         ),
 
-        // MARK: - Core Modules
+        // Core modules (renombrados)
         .target(
-            name: "Common",
-            dependencies: [],
+            name: "JarvisCommon",
             path: "JarvisSDK/Sources/Core/Common"
         ),
         .target(
-            name: "Domain",
-            dependencies: ["Common"],
+            name: "JarvisDomain",
+            dependencies: ["JarvisCommon"],
             path: "JarvisSDK/Sources/Core/Domain"
         ),
         .target(
-            name: "Data",
+            name: "JarvisData",
             dependencies: [
-                "Common",
-                "Domain",
-                "Platform"
+                "JarvisCommon",
+                "JarvisDomain",
+                "JarvisPlatform"
             ],
             path: "JarvisSDK/Sources/Core/Data"
         ),
         .target(
-            name: "Platform",
+            name: "JarvisPlatform",
             dependencies: [
-                "Common",
-                "Domain",
+                "JarvisCommon",
+                "JarvisDomain",
                 .product(name: "PostHog", package: "posthog-ios"),
                 .product(name: "Sentry", package: "sentry-cocoa")
             ],
             path: "JarvisSDK/Sources/Core/Platform"
         ),
         .target(
-            name: "Navigation",
-            dependencies: ["Common"],
+            name: "JarvisNavigation",
+            dependencies: ["JarvisCommon"],
             path: "JarvisSDK/Sources/Core/Navigation"
         ),
         .target(
-            name: "Presentation",
+            name: "JarvisPresentation",
             dependencies: [
-                "Common",
-                "Domain",
+                "JarvisCommon",
+                "JarvisDomain",
                 "JarvisDesignSystem",
-                "Navigation",
+                "JarvisNavigation",
                 "JarvisResources"
             ],
             path: "JarvisSDK/Sources/Core/Presentation"
         ),
 
-        // MARK: - Inspector Feature Modules
+        // Inspector
         .target(
             name: "JarvisInspectorDomain",
             dependencies: [
-                "Domain",
-                "Common"
+                "JarvisDomain",
+                "JarvisCommon"
             ],
             path: "JarvisSDK/Sources/Inspector/Domain"
         ),
@@ -101,9 +100,9 @@ let package = Package(
             name: "JarvisInspectorData",
             dependencies: [
                 "JarvisInspectorDomain",
-                "Data",
-                "Platform",
-                "Common"
+                "JarvisData",
+                "JarvisPlatform",
+                "JarvisCommon"
             ],
             path: "JarvisSDK/Sources/Inspector/Data"
         ),
@@ -112,21 +111,21 @@ let package = Package(
             dependencies: [
                 "JarvisInspectorDomain",
                 "JarvisInspectorData",
-                "Presentation",
+                "JarvisPresentation",
                 "JarvisDesignSystem",
-                "Navigation",
-                "Common",
+                "JarvisNavigation",
+                "JarvisCommon",
                 "JarvisResources"
             ],
             path: "JarvisSDK/Sources/Inspector/Presentation"
         ),
 
-        // MARK: - Preferences Feature Modules
+        // Preferences
         .target(
             name: "JarvisPreferencesDomain",
             dependencies: [
-                "Domain",
-                "Common"
+                "JarvisDomain",
+                "JarvisCommon"
             ],
             path: "JarvisSDK/Sources/Preferences/Domain"
         ),
@@ -134,9 +133,9 @@ let package = Package(
             name: "JarvisPreferencesData",
             dependencies: [
                 "JarvisPreferencesDomain",
-                "Data",
-                "Platform",
-                "Common"
+                "JarvisData",
+                "JarvisPlatform",
+                "JarvisCommon"
             ],
             path: "JarvisSDK/Sources/Preferences/Data"
         ),
@@ -145,14 +144,16 @@ let package = Package(
             dependencies: [
                 "JarvisPreferencesDomain",
                 "JarvisPreferencesData",
-                "Presentation",
+                "JarvisPresentation",
                 "JarvisDesignSystem",
-                "Navigation",
-                "Common",
+                "JarvisNavigation",
+                "JarvisCommon",
                 "JarvisResources"
             ],
             path: "JarvisSDK/Sources/Preferences/Presentation"
         ),
+
+        // Resources & DS
         .target(
             name: "JarvisResources",
             path: "JarvisSDK/Sources/Resources",
@@ -164,14 +165,13 @@ let package = Package(
         ),
         .target(
             name: "JarvisDesignSystem",
-            dependencies: [],
             path: "JarvisSDK/Sources/DesignSystem",
             resources: [
                 .process("Resources/Colors.xcassets")
             ]
         ),
 
-        // MARK: - Tests
+        // Tests
         .testTarget(
             name: "JarvisSDKTests",
             dependencies: [
@@ -182,4 +182,3 @@ let package = Package(
         )
     ]
 )
-

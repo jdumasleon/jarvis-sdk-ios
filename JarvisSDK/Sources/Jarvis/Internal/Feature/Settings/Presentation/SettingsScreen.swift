@@ -8,9 +8,9 @@
 import SwiftUI
 import JarvisDesignSystem
 #if canImport(Presentation)
-import Presentation
+import JarvisPresentation
 #endif
-import Common
+import JarvisCommon
 
 /// Settings navigation view with coordinator-based routing
 @MainActor

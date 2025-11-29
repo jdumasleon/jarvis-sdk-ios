@@ -1,12 +1,12 @@
 import Foundation
 import Combine
 #if canImport(Presentation)
-import Presentation
+import JarvisPresentation
 #endif
-import Domain
+import JarvisDomain
 import JarvisPreferencesDomain
 import JarvisPreferencesData
-import Common
+import JarvisCommon
 
 /// View model for preferences inspector
 @MainActor

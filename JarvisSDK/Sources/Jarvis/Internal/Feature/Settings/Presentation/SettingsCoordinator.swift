@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import Common
+import JarvisCommon
 
 /// Settings feature coordinator
 /// Manages navigation within the Settings tab

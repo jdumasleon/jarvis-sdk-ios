@@ -7,10 +7,10 @@
 
 import SwiftUI
 #if canImport(Presentation)
-import Presentation
+import JarvisPresentation
 #endif
 import JarvisDesignSystem
-import Common
+import JarvisCommon
 
 /// Home navigation view with coordinator-based routing
 @MainActor

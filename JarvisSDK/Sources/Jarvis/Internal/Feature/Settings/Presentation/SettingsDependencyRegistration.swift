@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import Common
+import JarvisCommon
 
 /// Centralized dependency registration for Settings feature module
 @MainActor

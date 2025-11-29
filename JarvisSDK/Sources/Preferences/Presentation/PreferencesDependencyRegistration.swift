@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import Common
+import JarvisCommon
 import JarvisPreferencesDomain
 import JarvisPreferencesData
 import JarvisPreferencesPresentation

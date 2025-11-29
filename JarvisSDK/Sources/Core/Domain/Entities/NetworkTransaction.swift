@@ -1,5 +1,5 @@
 import Foundation
-import Common
+import JarvisCommon
 
 /// Represents a complete network transaction (request + response)
 public struct NetworkTransaction: Identifiable, Equatable, Hashable {

@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import Common
+import JarvisCommon
 
 /// Network Inspector feature coordinator
 /// Manages navigation within the Inspector tab

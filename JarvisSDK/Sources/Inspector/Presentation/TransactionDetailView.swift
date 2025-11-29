@@ -7,9 +7,9 @@
 
 import SwiftUI
 import JarvisDesignSystem
-import Domain
+import JarvisDomain
 import JarvisInspectorDomain
-import Common
+import JarvisCommon
 
 /// Detail view for a network transaction with tabs (Overview, Request, Response)
 struct TransactionDetailView: View {

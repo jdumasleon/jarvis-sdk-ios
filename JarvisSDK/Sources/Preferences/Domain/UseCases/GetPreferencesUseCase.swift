@@ -6,8 +6,8 @@
 //
 
 import Foundation
-import Common
-import Domain
+import JarvisCommon
+import JarvisDomain
 
 /// Get all host app preferences
 public struct GetPreferencesUseCase: UseCase {

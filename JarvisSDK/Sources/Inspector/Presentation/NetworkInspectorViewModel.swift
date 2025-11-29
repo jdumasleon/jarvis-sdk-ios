@@ -1,11 +1,11 @@
 import Foundation
 import Combine
 #if canImport(Presentation)
-import Presentation
+import JarvisPresentation
 #endif
-import Domain
+import JarvisDomain
 import JarvisInspectorDomain
-import Common
+import JarvisCommon
 
 /// View model for network inspector
 @MainActor

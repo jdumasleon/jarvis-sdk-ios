@@ -1,6 +1,6 @@
 import Foundation
-import Common
-import Domain
+import JarvisCommon
+import JarvisDomain
 
 /// Filter network transactions use case
 public struct FilterNetworkTransactionsUseCase: UseCase {

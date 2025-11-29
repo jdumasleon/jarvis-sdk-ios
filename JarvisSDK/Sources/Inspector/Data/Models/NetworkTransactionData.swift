@@ -1,6 +1,6 @@
 import Foundation
-import Common
-import Data
+import JarvisCommon
+import JarvisData
 
 /// Network transaction data model
 public struct NetworkTransactionData: JarvisModel {

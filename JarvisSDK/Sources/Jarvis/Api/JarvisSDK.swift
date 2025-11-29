@@ -1,14 +1,14 @@
 import Foundation
 import SwiftUI
 import Combine
-import Platform
-import Domain
+import JarvisPlatform
+import JarvisDomain
 import JarvisInspectorDomain
 import JarvisInspectorData
-import Common
+import JarvisCommon
 import JarvisResources
 import JarvisDesignSystem
-import Data
+import JarvisData
 
 /// Main entry point for the Jarvis SDK
 @MainActor

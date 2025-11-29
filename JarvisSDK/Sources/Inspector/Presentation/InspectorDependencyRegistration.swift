@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import Common
+import JarvisCommon
 
 import JarvisInspectorDomain
 import JarvisInspectorData

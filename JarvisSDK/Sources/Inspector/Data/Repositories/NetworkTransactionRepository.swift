@@ -1,7 +1,7 @@
 import Foundation
-import Common
-import Data
-import Domain
+import JarvisCommon
+import JarvisData
+import JarvisDomain
 import JarvisInspectorDomain
 
 /// Repository for network transaction data with Core Data persistent storage

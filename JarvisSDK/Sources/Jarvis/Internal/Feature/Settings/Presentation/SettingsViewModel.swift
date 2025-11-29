@@ -8,9 +8,9 @@
 import SwiftUI
 import Combine
 #if canImport(Presentation)
-import Presentation
+import JarvisPresentation
 #endif
-import Common
+import JarvisCommon
 
 /// ViewModel for Settings screen
 @MainActor

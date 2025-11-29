@@ -1,6 +1,6 @@
 import Foundation
-import Common
-import Domain
+import JarvisCommon
+import JarvisDomain
 
 /// Protocol for network transaction repository
 public protocol NetworkTransactionRepositoryProtocol {

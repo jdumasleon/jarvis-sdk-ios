@@ -6,8 +6,8 @@
 //
 
 import SwiftUI
-import Domain
-import Common
+import JarvisDomain
+import JarvisCommon
 import JarvisPreferencesDomain
 
 /// Preferences feature coordinator

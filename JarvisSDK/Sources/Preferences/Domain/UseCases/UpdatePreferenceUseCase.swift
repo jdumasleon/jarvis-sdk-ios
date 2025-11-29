@@ -6,8 +6,8 @@
 //
 
 import Foundation
-import Common
-import Domain
+import JarvisCommon
+import JarvisDomain
 
 /// Update a host app preference
 public struct UpdatePreferenceUseCase: UseCase {
