@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import Domain
+import JarvisDomain
 import JarvisPreferencesDomain
 
 /// Maps raw data to basic dashboard metrics

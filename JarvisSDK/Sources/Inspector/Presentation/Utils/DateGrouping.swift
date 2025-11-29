@@ -1,5 +1,5 @@
 import Foundation
-import Domain
+import JarvisDomain
 import JarvisInspectorDomain
 
 /// Utility for grouping network transactions by date

@@ -1,5 +1,5 @@
 import Foundation
-import Domain
+import JarvisDomain
 import JarvisInspectorDomain
 
 /// UI state for network inspector

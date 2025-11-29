@@ -1,6 +1,6 @@
 import Foundation
-import Platform
-import Domain
+import JarvisPlatform
+import JarvisDomain
 import JarvisInspectorDomain
 
 /// Network traffic interceptor

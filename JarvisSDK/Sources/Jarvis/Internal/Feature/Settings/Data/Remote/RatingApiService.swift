@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import Data
+import JarvisData
 
 /// API service for rating operations using GraphQL
 protocol RatingApiService {

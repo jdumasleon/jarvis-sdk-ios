@@ -1,5 +1,5 @@
 import Foundation
-import Domain
+import JarvisDomain
 import JarvisPreferencesDomain
 
 /// UI state for preferences inspector

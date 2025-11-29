@@ -7,7 +7,7 @@
 
 import SwiftUI
 import JarvisDesignSystem
-#if canImport(Presentation)
+#if canImport(JarvisPresentation)
 import JarvisPresentation
 #endif
 import JarvisCommon

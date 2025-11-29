@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import Domain
+import JarvisDomain
 
 /// Analyzes network transactions to generate enhanced metrics and chart data
 public final class NetworkAnalyzer {

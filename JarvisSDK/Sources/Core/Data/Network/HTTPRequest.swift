@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import Domain
+import JarvisDomain
 
 /// Represents an HTTP request
 public struct HTTPRequest: Sendable {

@@ -1,5 +1,5 @@
 import Foundation
-import Domain
+import JarvisDomain
 
 /// Filter for network transactions
 public struct TransactionFilter {

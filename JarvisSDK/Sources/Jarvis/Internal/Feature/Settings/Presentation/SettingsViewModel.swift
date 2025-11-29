@@ -7,7 +7,7 @@
 
 import SwiftUI
 import Combine
-#if canImport(Presentation)
+#if canImport(JarvisPresentation)
 import JarvisPresentation
 #endif
 import JarvisCommon

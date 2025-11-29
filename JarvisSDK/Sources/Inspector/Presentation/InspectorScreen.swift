@@ -1,8 +1,8 @@
 import SwiftUI
 import JarvisDesignSystem
-import Domain
-#if canImport(Presentation)
-import Presentation
+import JarvisDomain
+#if canImport(JarvisPresentation)
+import JarvisPresentation
 #endif
 import JarvisInspectorDomain
 

@@ -520,7 +520,7 @@ private struct EmptyTransactionView: View {
 // MARK: - Previews
 
 #if DEBUG
-import Common
+import JarvisCommon
 
 #Preview("Transaction Detail - Success") {
     let mockTransaction = NetworkTransaction(

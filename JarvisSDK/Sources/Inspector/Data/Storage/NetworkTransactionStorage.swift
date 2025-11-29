@@ -1,6 +1,6 @@
 import Foundation
 import CoreData
-import Domain
+import JarvisDomain
 
 /// Core Data-based storage for network transactions
 /// Replaces previous JSON/in-memory storage for better performance and persistence

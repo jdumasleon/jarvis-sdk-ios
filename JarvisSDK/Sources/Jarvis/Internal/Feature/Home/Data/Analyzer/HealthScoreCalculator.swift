@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import Domain
+import JarvisDomain
 import JarvisPreferencesDomain
 
 /// Calculates application health score with weighted factors

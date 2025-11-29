@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import Domain
+import JarvisDomain
 import JarvisPreferencesDomain
 
 /// Mapper for enhanced dashboard metrics with advanced analytics
