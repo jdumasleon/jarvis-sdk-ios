@@ -408,12 +408,6 @@ public struct JarvisSDKModifier: ViewModifier {
     @StateObject private var jarvis = JarvisSDK.shared
     @State private var showingInspector = false
 
-    let config: JarvisConfig
-
-    public init(config: JarvisConfig = JarvisConfig()) {
-        self.config = config
-    }
-
     public func body(content: Content) -> some View {
         ZStack {
             content
@@ -457,7 +451,7 @@ public struct JarvisSDKModifier: ViewModifier {
         }
         .onShake {
             JarvisLogger.shared.debug("Shake detected in modifier - isActive: \(jarvis.isActive), initialized: \(jarvis.isInitialized)")
-            if config.enableShakeDetection {
+            if jarvis.getConfiguration().enableShakeDetection {
                 Task { @MainActor in
                     if jarvis.isActive {
                         JarvisLogger.shared.debug("Showing overlay (already active)")
@@ -472,7 +466,7 @@ public struct JarvisSDKModifier: ViewModifier {
             }
         }
         .task {
-            await jarvis.initialize(config: config)
+            await jarvis.initialize(config: jarvis.getConfiguration())
         }
         .animation(.spring(response: 0.4, dampingFraction: 0.8), value: jarvis.isActive)
     }
@@ -482,7 +476,7 @@ public extension View {
     /// Add Jarvis SDK integration to any SwiftUI view
     /// - Parameter config: Configuration for the SDK
     /// - Returns: View with Jarvis SDK integration
-    func jarvisSDK(config: JarvisConfig = JarvisConfig()) -> some View {
-        modifier(JarvisSDKModifier(config: config))
+    func jarvisSDK() -> some View {
+        modifier(JarvisSDKModifier())
     }
 }

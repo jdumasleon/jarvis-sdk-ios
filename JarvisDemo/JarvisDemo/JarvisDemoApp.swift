@@ -21,8 +21,10 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 struct JarvisDemoApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     
+    let jarvisConfig = JarvisConfig(enableInternalTracking: false)
+    
     init() {
-        JarvisSDK.shared.initializeAsync()
+        JarvisSDK.shared.initializeAsync(config: jarvisConfig)
     }
 
     var body: some Scene {
