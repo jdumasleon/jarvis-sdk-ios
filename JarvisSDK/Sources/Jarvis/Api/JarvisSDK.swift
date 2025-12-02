@@ -319,16 +319,16 @@ public final class JarvisSDK: ObservableObject {
 
     private func initializePlatform() async {
         // Initialize platform services with internal configuration
-        // Use no-op implementations if keys are empty
+        // Use no-op implementations if keys are empty or tracking is disabled
         let config = JarvisInternalConfig.shared
-        
-        // Create analytics instance (use no-op if key is empty)
-        let analytics: Analytics = !config.posthogKey.isEmpty
+
+        // Create analytics instance (use no-op if key is empty or disabled via config)
+        let analytics: Analytics = (!config.posthogKey.isEmpty && configuration.enableInternalTracking)
                 ? PostHogAnalytics(apiKey: config.posthogKey, host: config.posthogHost)
                 : NoOpAnalytics()
 
-        // Create crash reporter instance (use no-op if DSN is empty)
-        let crashReporter: CrashReporter = !config.sentryDSN.isEmpty
+        // Create crash reporter instance (use no-op if DSN is empty or disabled via config)
+        let crashReporter: CrashReporter = (!config.sentryDSN.isEmpty && configuration.enableInternalTracking)
                 ? SentryCrashReporter(dsn: config.sentryDSN)
                 : NoOpCrashReporter()
 
@@ -336,10 +336,29 @@ public final class JarvisSDK: ObservableObject {
         platform = JarvisPlatform(analytics: analytics, crashReporter: crashReporter)
         await platform?.initialize()
 
-        if !config.posthogKey.isEmpty || !config.sentryDSN.isEmpty {
-            JarvisLogger.shared.info("Platform services initialized")
+        if (!config.posthogKey.isEmpty && configuration.enableInternalTracking) ||
+           (!config.sentryDSN.isEmpty && configuration.enableInternalTracking) {
+            var services: [String] = []
+            if !config.posthogKey.isEmpty && configuration.enableInternalTracking {
+                services.append("PostHog analytics")
+            }
+            if !config.sentryDSN.isEmpty && configuration.enableInternalTracking {
+                services.append("Sentry crash reporting")
+            }
+            JarvisLogger.shared.info("Platform services initialized: \(services.joined(separator: ", "))")
         } else {
-            JarvisLogger.shared.debug("Platform services initialized with no-op implementations (no keys configured)")
+            var reasons: [String] = []
+            if config.posthogKey.isEmpty {
+                reasons.append("PostHog: no API key")
+            } else if !configuration.enableInternalTracking {
+                reasons.append("PostHog: disabled in config")
+            }
+            if config.sentryDSN.isEmpty {
+                reasons.append("Sentry: no DSN")
+            } else if !configuration.enableInternalTracking {
+                reasons.append("Sentry: disabled in config")
+            }
+            JarvisLogger.shared.debug("Platform services initialized with no-op implementations (\(reasons.joined(separator: ", ")))")
         }
     }
 

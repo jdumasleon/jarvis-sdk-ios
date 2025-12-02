@@ -6,17 +6,20 @@ public struct JarvisConfig {
     public let networkInspection: NetworkInspectionConfig
     public let enableDebugLogging: Bool
     public let enableShakeDetection: Bool
+    public let enableInternalTracking: Bool
 
     public init(
         preferences: PreferencesConfig = PreferencesConfig(),
         networkInspection: NetworkInspectionConfig = NetworkInspectionConfig(),
         enableDebugLogging: Bool = false,
-        enableShakeDetection: Bool = true
+        enableShakeDetection: Bool = true,
+        enableInternalTracking: Bool = true
     ) {
         self.preferences = preferences
         self.networkInspection = networkInspection
         self.enableDebugLogging = enableDebugLogging
         self.enableShakeDetection = enableShakeDetection
+        self.enableInternalTracking = enableInternalTracking
     }
 
     /// Builder pattern for convenient configuration
@@ -25,6 +28,7 @@ public struct JarvisConfig {
         private var networkInspection: NetworkInspectionConfig = NetworkInspectionConfig()
         private var enableDebugLogging: Bool = false
         private var enableShakeDetection: Bool = true
+        private var enableInternalTracking: Bool = true
 
         public init() {}
 
@@ -62,12 +66,18 @@ public struct JarvisConfig {
             return self
         }
 
+        public func enableInternalTracking(_ enabled: Bool) -> Builder {
+            self.enableInternalTracking = enabled
+            return self
+        }
+
         public func build() -> JarvisConfig {
             return JarvisConfig(
                 preferences: preferences,
                 networkInspection: networkInspection,
                 enableDebugLogging: enableDebugLogging,
-                enableShakeDetection: enableShakeDetection
+                enableShakeDetection: enableShakeDetection,
+                enableInternalTracking: enableInternalTracking
             )
         }
     }
